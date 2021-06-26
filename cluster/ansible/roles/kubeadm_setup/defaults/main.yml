@@ -1,0 +1,5 @@
+---
+# defaults file for kubeadm_setup
+k8s:
+  lb_endpont: k8s-haproxy:6443
+  cri_socket: unix:///var/run/containerd/containerd.sock

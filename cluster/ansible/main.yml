@@ -1,0 +1,242 @@
+---
+# - hosts: bastion
+#   become: yes
+#   roles:
+#   - haproxy
+#   - nfs_server
+
+- name: Common Setups
+  hosts: all
+  become: yes
+  vars: 
+    users:
+      - name: cunha
+        key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBUvPJF9IVUGklmPtXR/WCsxN4BmFcdX49IiClg3n+wQ cunha@x1
+
+  tasks:
+    - name: Ensure group "{{user}}" exists
+      ansible.builtin.group:
+        name: "{{ item.name }}"
+        state: present
+        system: no
+      with_items:  "{{ users }}"
+
+    - name: Add the user "{{item}}"
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        shell: /bin/bash
+        groups:
+        - sudo
+        - "{{ item.name }}"
+        append: yes
+      with_items: "{{ users }}"
+
+    - name: Set authorized key, removing all the authorized keys already set
+      ansible.posix.authorized_key:
+        user: cunha
+        key: "{{ item.key }}"
+        state: present
+        exclusive: True
+      with_items: "{{ users }}"
+
+
+    # - name: Install minimal
+    #   package:
+    #     name: nfs-common
+#     - name: Turnoff swapp
+#       command: swapoff -a
+#     - name: Disable swap permanently, persist reboots
+#       replace:
+#         path: /etc/fstab
+#         regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+#         replace: '#\1\2\3swap\4'
+#         backup: yes
+#     - name: Change hostname
+#       ansible.builtin.hostname:
+#         name: k8s-{{ inventory_hostname }}
+#       when:
+#         ansible_fqdn != ansible_ssh_host
+
+    # - name: restart machine
+    #   command: shutdown -r now "Ansible updates triggered"
+    #   async: 0
+    #   poll: 0
+    #   ignore_errors: True
+    #   when:
+    #     reboot is defined
+
+    # - name: Waiting for server to come back up
+    #   local_action: wait_for host="k8s-{{ inventory_hostname }}" port=22 state=started
+
+    # - name: Fix /etc/hosts removing the old hostname
+    #   tags:
+    #     - hosts
+    #   lineinfile:
+    #     state: present
+    #     dest: /etc/hosts
+    #     line: "{{ ansible_default_ipv4.address }} k8s-{{ inventory_hostname }} {{ ansible_hostname }}"
+    #     regexp: "^{{ ansible_default_ipv4.address }}"
+    #   when:
+    #     ansible_fqdn != inventory_hostname
+    # - name: Fix /etc/hosts K8s-haproxy
+    #   tags:
+    #     - hosts
+    #   lineinfile:
+    #     state: present
+    #     dest: /etc/hosts
+    #     line: "{{ ip_loadbalancer }} k8s-haproxy"
+    #     regexp: "^{{ ip_loadbalancer }}"
+
+    # - name: Validate ansible_fqdn == inventory_hostname
+    #   tags:
+    #     - validate
+    #   assert:
+    #     that:
+    #       ansible_fqdn == 'k8s-{{ inventory_hostname }}'
+
+  # roles:
+  #   - ubuntu_update
+    # - node_exporter
+
+
+# - hosts:
+  # - masters
+  # - workers
+  # become: yes
+  # vars:
+  #   hostname:
+  #     enabled: False
+  # roles:
+  # - kubeadm_install
+
+# - hosts: ufmg-master01
+#   become: yes
+#   vars:
+#     hostname:
+#       enabled: False
+#   roles:
+#   - kubeadm_setup
+#   tasks:
+#   - name: Register IP
+#     shell: "echo {{ ansible_default_ipv4.address }}"
+#     register: K8S_MASTER_NODE_IP
+
+
+# - hosts: ufmg-master02
+#   become: yes
+#   gather_facts: True
+#   vars:
+#     token: "{{ hostvars['K8S_TOKEN_HOLDER']['token'] }}"
+#     hash: "{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }}"
+#     certkey: "{{hostvars['K8S_TOKEN_HOLDER']['certkey']}}"
+#   tasks:
+#     - name: Register ip
+#       debug:
+#         msg: "{{ ansible_facts['enp1s0']['ipv4']['address'] }}"
+
+#     - name: Register TOKEN
+#       debug:
+#         msg: "{{ hostvars['K8S_TOKEN_HOLDER'] }}"
+
+#     - name: Try joing cluster
+#       block:
+#         - name: "Kubeadm join prepare phase"
+#           shell: |
+#             kubeadm join  phase control-plane-prepare all  --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+#               --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+#               {{ ip_loadbalancer }}:6443 --control-plane --certificate-key {{ hostvars['K8S_TOKEN_HOLDER']['certkey'] }} --v=5
+
+#     - name: "Kubeadm join kubelet phase"
+#       shell: |
+#         kubeadm join  phase kubelet-start  --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+#           --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+#           {{ ip_loadbalancer }}:6443 --v=5
+
+# - hosts: ufmg-master01
+#   become: yes
+#   tasks:
+#     - name: Kubernetes wait readness
+#       shell: |
+#         [ $(kubectl get no | grep ' Ready' | wc -l) = 2 ]
+#       retries: 5
+#       delay: 60
+#       register: result
+#       until: result is succeeded
+
+# - hosts: ufmg-master02
+#   become: yes
+#   gather_facts: False
+#   tasks:
+#     - name: "Kubeadm join prepare phase"
+#       shell: |
+#         kubeadm join  phase control-plane-join all --control-plane
+
+
+# - hosts: ufmg-master03
+#   become: yes
+#   gather_facts: True
+#   vars:
+#     token: "{{ hostvars['K8S_TOKEN_HOLDER']['token'] }}"
+#     hash: "{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }}"
+#     certkey: "{{hostvars['K8S_TOKEN_HOLDER']['certkey']}}"
+#   tasks:
+#     - name: Register ip
+#       debug:
+#         msg: "{{ ansible_facts['enp1s0']['ipv4']['address'] }}"
+
+#     - name: Register TOKEN
+#       debug:
+#         msg: "{{ hostvars['K8S_TOKEN_HOLDER'] }}"
+
+#     - name: "Kubeadm join prepare phase"
+#       block:
+#         - shell: |
+#             kubeadm join  phase control-plane-prepare all  --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+#               --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+#               {{ ip_loadbalancer }}:6443 --control-plane --certificate-key {{ hostvars['K8S_TOKEN_HOLDER']['certkey'] }} --v=5
+
+#     - name: "Kubeadm join kubelet phase"
+#       shell: |
+#         kubeadm join  phase kubelet-start  --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+#           --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+#           {{ ip_loadbalancer }}:6443 --v=5
+
+# - hosts: ufmg-master01
+#   become: yes
+#   tasks:
+#     - name: Kubernetes wait readness
+#       shell: |
+#         [ $(kubectl get no | grep ' Ready' | wc -l) = 2 ]
+#       retries: 5
+#       delay: 60
+#       register: result
+#       until: result is succeeded
+
+# - hosts: ufmg-master03
+#   become: yes
+#   gather_facts: False
+#   tasks:
+#     - name: "Kubeadm join prepare phase"
+#       shell: |
+#         kubeadm join  phase control-plane-join all --control-plane
+
+# - hosts:
+#   - workers
+#   become: yes
+#   gather_facts: false
+#   tasks:
+#     - name: Reboot host and wait for it to restart
+#       reboot:
+#         msg: "Reboot initiated by Ansible"
+#         connect_timeout: 5
+#         reboot_timeout: 600
+#         pre_reboot_delay: 0
+#         post_reboot_delay: 30
+#         test_command: whoami
+
+#     - name: "Kubeadm join"
+#       shell: |
+#         kubeadm join --token={{ hostvars['K8S_TOKEN_HOLDER']['token'] }} \
+#         --discovery-token-ca-cert-hash sha256:{{ hostvars['K8S_TOKEN_HOLDER']['hash'] }} \
+#         {{ ip_loadbalancer }}:6443
+

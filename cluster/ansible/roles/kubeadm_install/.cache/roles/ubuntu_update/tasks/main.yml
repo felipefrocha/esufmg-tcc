@@ -1,0 +1,46 @@
+---
+# tasks file for config_ubuntu
+- name: Set a hostname
+  hostname:
+    name: "{{ hostname }}"
+
+- name: add docker requirements
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates 
+      - curl 
+      - gnupg-agent 
+      - software-properties-common
+      - wget
+    state: present
+    update_cache: yes
+
+- name: Install prerequisites 
+  apt:
+    name: 
+    - python3-pip
+    - python3-setuptools
+    - virtualenv
+    state: present
+
+- name: Update pip
+  shell: pip3 install -U pip 
+
+- name: ensure ntpd is at the latest version
+  apt: 
+    name: ntp
+    state: latest
+    update_cache: yes
+  notify:
+  - restart ntp
+
+- name: Upgrade the OS (apt-get full-upgrade)
+  apt:
+    upgrade: full
+
+- name: Set authorized key taken from file
+  ansible.posix.authorized_key:
+    user: vagrant
+    state: present
+    key: "{{ lookup('file', '/home/rocha/.ssh/id_ed25519.pub') }}"

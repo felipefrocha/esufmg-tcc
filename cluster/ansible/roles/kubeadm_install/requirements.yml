@@ -1,0 +1,5 @@
+---
+- src: https://github.com/felipefrocha/ansible-role-ubuntu-update.git
+  version: main
+  scm: git
+  name: ubuntu_update

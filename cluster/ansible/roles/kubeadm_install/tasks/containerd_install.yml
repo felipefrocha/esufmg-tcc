@@ -1,0 +1,101 @@
+---
+# - name: Get version
+#   get_url:
+#     url: https://api.github.com/repos/containerd/containerd/releases
+#     headers:
+#       Accept: application/vnd.github.v3+json
+#   register: version
+
+- name: Create conf directory
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    mode: 0755
+    
+- name: Create file module conf
+  block:
+    - ansible.builtin.file:
+        path: "{{ containerd.files.module_load }}"
+        state: file
+        owner: root
+        group: root
+        mode: 0644
+  rescue:
+    - ansible.builtin.file:
+        path: "{{ containerd.files.module_load }}"
+        state: touch
+        mode: 0644
+  always:
+    - name: Ensure modules loads are in file
+      lineinfile:
+        path: "{{ containerd.files.module_load }}"
+        state: present
+        regexp: '^{{ item }}.*'
+        line: "{{ item }}"
+      with_items: "{{ k8s.kernel.modules }}"
+
+- name: Template for Networking Config
+  ansible.builtin.template:
+    src: 99-kubernetes-cri.conf.j2
+    dest: "{{ containerd.files.sysctl_bridge }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install containerd link
+  block:
+    - name: Get Containerd
+      get_url:
+        url: "https://github.com/containerd/containerd/releases/download/v{{ containerd.version }}/containerd-{{ containerd.version }}-linux-amd64.tar.gz"
+        dest: /tmp/containerd.tar.gz
+
+    - name: Uncompress test
+      ansible.builtin.unarchive:
+        src: /tmp/containerd.tar.gz
+        dest: /usr/
+        remote_src: yes
+    
+    - name: Template for Containerd Service
+      ansible.builtin.template:
+        src: containerd.service.j2
+        dest: /etc/systemd/system/containerd.service
+        owner: root
+        group: root
+        mode: 0644
+      notify: Containerd Service Enable
+
+    - name: Containerd Service Enable
+      ansible.builtin.systemd:
+        name: containerd.service
+        state: started
+        daemon_reload: yes
+        enabled: yes
+  when: not package.enabled
+
+- name: Install without package Manager
+  block:
+    - name: Install Containerd
+      apt:
+        name: containerd
+        state: present
+        update_cache: yes
+  when: package.enabled
+
+- name: Template for Containerd Config
+  block:
+    - ansible.builtin.file:
+        path: /etc/containerd/config.toml
+        state: file
+        owner: root
+        group: root
+        mode: 0644
+  rescue:
+    - name: Template for Networking Config
+      ansible.builtin.template:
+        src: containerd.toml.j2
+        dest: "/etc/containerd/config.toml"
+        owner: root
+        group: root
+        mode: 0644
+
+  

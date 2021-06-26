@@ -1,0 +1,68 @@
+---
+# tasks file for prometheus_node_exporter
+
+- name: Ensure group "node_exporter" exists
+  ansible.builtin.group:
+    name: node_exporter
+    state: present
+    system: no
+
+- name: Add the user 'node_exporter' 
+  ansible.builtin.user:
+    name: node_exporter
+    shell: /sbin/nologin
+    groups: node_exporter
+    append: yes
+
+- name: Download node_exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    mode: '0777'
+
+- name: Unarchive a file that is already on the remote machine
+  ansible.builtin.unarchive:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp/
+    remote_src: yes
+
+- name: Create executable node_exporter 
+  ansible.builtin.copy:
+    src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter"
+    dest: /usr/sbin/node_exporter
+    owner: node_exporter
+    group: node_exporter
+    remote_src: yes
+    mode: 0755
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/sysconfig/
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+    mode: 0755
+
+- name: File config config node exporter
+  ansible.builtin.copy:
+    src: files/sysconfig.node_exporter
+    dest: "/etc/sysconfig/node_exporter"
+    owner: node_exporter
+    group: node_exporter
+    mode: 0644
+
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /var/lib/node_exporter/textfile_collector
+    state: directory
+    owner: node_exporter
+    group: node_exporter
+    mode: 0755
+
+- name: Config node exporter systemd
+  ansible.builtin.copy:
+    src: files/node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    mode: 0644
+  notify: Config Node Exporter

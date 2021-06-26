@@ -1,0 +1,30 @@
+---
+# defaults file for config_ubuntu
+ssh_pubkey_path: ~/.ssh/id_ed25519.pub
+
+hostname:
+  enabled: False
+  name: 'k8s-{{ inventory_hostname }}'
+
+ubuntu:
+  packages:
+    - apt-transport-https
+    - ca-certificates 
+    - curl 
+    - gnupg-agent 
+    - software-properties-common
+    - wget
+    - conntrack
+    - selinux-utils
+    - htop
+    - lvm2
+
+python:
+  enabled: True
+  packages:
+    - python3-pip
+    - python3-setuptools
+    - virtualenv
+  requirements:
+    - pip
+    - anisble

@@ -1,0 +1,17 @@
+---
+# tasks file for haproxy
+
+- name: Configure HA Proxy Load balancer
+  package:
+    name: haproxy
+    state: present
+    
+- name: Change configuration in HA Proxy
+  template:
+    dest: "/etc/haproxy/haproxy.cfg"
+    src: "files/haproxy/haproxy.cfg"
+
+- name: Restart HA Proxy service
+  service:
+    name: haproxy
+    state: restarted

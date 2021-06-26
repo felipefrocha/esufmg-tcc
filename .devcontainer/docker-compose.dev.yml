@@ -1,0 +1,32 @@
+---
+version: "3.9"
+services:
+  # ---------------------
+  # Definição do serviço 
+  # ---------------------  
+  api:
+    # Nome da Imagem na sua maquina
+    image: ghcr.io/felipefrocha/action-docker-build-latex:main
+    # Definindo environment
+    # environment:
+    # Definindo Host name (Container)
+    hostname: latexbuilder
+    # Definindo o usuário e grupo como os logados na maquina Host (permissão)
+    # user: "${UID}:${GID}"
+    # Definindo onde o container deve inicializar
+    working_dir: /app
+    # Security docker
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    # Limitando recursos
+    cpu_count: 1
+    cpu_shares: 1024
+    mem_limit: 2024m
+    mem_reservation: 1024m
+    # Mapeando o Sua pasta de desenvolvimento para o Container
+    volumes:
+      - ../:/app
+    # Comando fake para manter o container rodando
+    command: /bin/sh -c "while sleep 1000; do :; done"
