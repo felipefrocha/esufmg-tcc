@@ -8,55 +8,55 @@
 \section{Motivação}
 \label{sec:motivacao}
 
-No contexto da análise de dados, diferentes ferramentas estão disponíveis para transformá-los em informação, contudo o uso dessas ferramentas na área da saúde ainda é pouco significativo \cite{galvao_desafios_2019}. Frente a uma tendência crescente de interconexão entre diferentes áreas do conhecimento e do potencial da análise de dados possibilita para melhoraria do sistema de saúde, se faz necessário propor e validar estratégias que permitam o avanço na integração de dados entre diferentes Sistemas de Informação em Saúde (SIS), e que facilitem o processamento e análise do grande volume de dados produzidos e disponibilizados nesses sistemas \cite{galvao_desafios_2019,mehta_concurrence_2018}. 
+No contexto da análise de dados, diferentes ferramentas estão disponíveis para transformá-los em informação, contudo o uso dessas ferramentas na área da saúde ainda é pouco significativo \cite{galvao_desafios_2019}. Frente a uma tendência crescente de interconexão entre diferentes áreas do conhecimento e do potencial da análise de dados possibilita para melhoraria do sistema de saúde, se faz necessário propor e validar estratégias que permitam o avanço na integração de dados entre diferentes Sistemas de Informação em Saúde (SIS), e que facilitem o processamento e análise do grande volume de dados produzidos e disponibilizados nesses sistemas \cite{galvao_desafios_2019,mehta_concurrence_2018}.
 
-Atualmente, conforme determinação do Decreto nº 8.777, de 11 de maio de 2016, que instituiu a Política de Dados Abertos do Poder Executivo Federal (BRASIL, 2016), diversos dados dos SIS são disponibilizados de forma pública. No entanto, apenas a disponibilização dos dados em si não garante que os mesmos poderão ser analisados e com isso produzir informação relevante para as políticas públicas na área da saúde. 
+Atualmente, conforme determinação do Decreto nº 8.777, de 11 de maio de 2016, que instituiu a Política de Dados Abertos do Poder Executivo Federal \cite{brasildisponibilidade2016}, diversos dados dos SIS são disponibilizados de forma pública. No entanto, apenas a disponibilização dos dados em si não garante que os mesmos poderão ser analisados e com isso produzir informação relevante para as políticas públicas na área da saúde.
 
 \section{Justificativa}
 \label{sec:justificativa}
 
-Contudo, como observado nos últimos 10 anos \ref{tab:orcamento}, a disponibilidade recursos financeiros efetivos para ciência e tecnologia no Brasil têm oscilado. Nos anos de 2018 a 2021 sofreu reduções acentuadas, o que torna o acesso a recursos que viabilizem a realização de análise dos dados em ferramentas e infra estruturas tradicionais ou ainda a proposta de novos, limitados.
+Contudo, como observado nos últimos 10 anos (Tabela \ref{tab:orcamento}), a disponibilidade recursos financeiros efetivos para ciência e tecnologia no Brasil têm oscilado. Nos anos de 2018 a 2021 sofreu reduções acentuadas, o que torna o acesso a recursos que viabilizem a realização de análise dos dados em ferramentas e infra estruturas tradicionais ou ainda a proposta de novos, limitados.
 
 \begin{table}[htpb]
-\caption{Pagamento efetivo - Ministério da Ciência e Tecnologia}
-\label{tab:orcamento}
-\begin{tabular}{cc}
-\hline
-\textbf{Ano}        & \textbf{Objetivo}    \\
-\hline
-2010 & R\$ 6.288.931.123,00 \\
-2011 & R\$ 5.918.584.706,00 \\
-2012 & R\$ 6.918.288.201,00 \\
-2013 & R\$ 7.787.464.592,00 \\
-2014 & R\$ 8.598.785.224,00 \\
-2015 & R\$ 7.964.319.815,00 \\
-2016 & R\$ 8.404.014.691,00 \\
-2017 & R\$ 9.085.620.227,00 \\
-2018 & R\$ 9.157.748.260,00 \\
-2019 & R\$ 8.812.096.752,00 \\
-2020 & R\$ 7.859.851.948,00 \\
-2021 & R\$ 6.142.873.884,00
-\end{tabular}
-    \centering
-    \begin{tablenotes}
-      \small
-      \item{Fonte: SIOP consulta realizada em Janeiro de 2022}
-    \end{tablenotes}
+  \caption{Pagamento efetivo - Ministério da Ciência e Tecnologia}
+  \label{tab:orcamento}
+  \begin{tabular}{cc}
+    \hline
+    \textbf{Ano} & \textbf{Objetivo}    \\
+    \hline
+    2010         & R\$ 6.288.931.123,00 \\
+    2011         & R\$ 5.918.584.706,00 \\
+    2012         & R\$ 6.918.288.201,00 \\
+    2013         & R\$ 7.787.464.592,00 \\
+    2014         & R\$ 8.598.785.224,00 \\
+    2015         & R\$ 7.964.319.815,00 \\
+    2016         & R\$ 8.404.014.691,00 \\
+    2017         & R\$ 9.085.620.227,00 \\
+    2018         & R\$ 9.157.748.260,00 \\
+    2019         & R\$ 8.812.096.752,00 \\
+    2020         & R\$ 7.859.851.948,00 \\
+    2021         & R\$ 6.142.873.884,00
+  \end{tabular}
+  \centering
+  \begin{tablenotes}
+    \small
+    \item{Fonte: SIOP consulta realizada em Janeiro de 2022}
+  \end{tablenotes}
 \end{table}
 
-Tomando como exemplo os bancos de “Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados”, objeto deste trabalho, estão disponíveis cerca de 70 GB e com mais de 500 milhões de linhas de dados sobre a comercialização de medicamentos no país. Logo, tão importante quanto a disponibilidade pública dos dados é fundamental encontrar estratégias técnicas e economicamente viáveis a fim de possibilitar que pesquisadores em todo o país possam contribuir com a análise e a interpretação desses dados, mesmo frente a baixa disponibilidade de recursos financeiros e de infraestrutura, como servidores de alta performance (HPC), por exemplo. 
+Tomando como exemplo os bancos de “Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados”, objeto deste trabalho, estão disponíveis cerca de 70 GB e com mais de 500 milhões de linhas de dados sobre a comercialização de medicamentos no país. Logo, tão importante quanto a disponibilidade pública dos dados é fundamental encontrar estratégias técnicas e economicamente viáveis a fim de possibilitar que pesquisadores em todo o país possam contribuir com a análise e a interpretação desses dados, mesmo frente a baixa disponibilidade de recursos financeiros e de infraestrutura, como servidores de alta performance (HPC), por exemplo.
 
 \section{Objetivos}
 \label{sec:objetivos}
-Diante disso, com a realização desse trabalho espera-se oferecer uma alternativa para análise de grandes volumes de dados que possua baixo custo financeiro, menor complexidade de configuração, maior efetividade (menor tempo de análise) e que não seja dependente da disponibilidade ou uso de recursos dedicados, como HPC, às análises, como é o caso de outras alternativas open source atualmente disponíveis - ex.: OpenStack, CloudStack etc. 
+Diante disso, com a realização desse trabalho espera-se oferecer uma alternativa para análise de grandes volumes de dados que possua baixo custo financeiro, menor complexidade de configuração, maior efetividade (menor tempo de análise) e que não seja dependente da disponibilidade ou uso de recursos dedicados, como HPC, às análises, como é o caso de outras alternativas open source atualmente disponíveis - ex.: OpenStack, CloudStack etc.
 
-Deste modo, espera-se demonstrar comparativamente a implementação de uma solução para análise de dados em plataformas de orquestração de containers, que permita recrutar computadores comuns para essa análise. E assim, espera-se, superar de maneira custo-efetiva um problema de restrição orçamentária e técnica para instituições públicas e grupos de pesquisa que realizam análises de grande volumes de dados, no caso desse trabalho para área da saúde, utilizando uma tecnologia já amplamente empregada no setor privado. O que viabiliza o suporte de estudantes e/ou profissionais das áreas de Engenharias e Computação. Espera-se ainda, contribuir para que os dados públicos em saúde sejam analisados com  maior frequência e menor restrição, gerando indicadores melhores e atualizados para melhor tomada de decisão em saúde. 
+Deste modo, espera-se demonstrar comparativamente a implementação de uma solução para análise de dados em plataformas de orquestração de containers, que permita recrutar computadores comuns para essa análise. E assim, espera-se, superar de maneira custo-efetiva um problema de restrição orçamentária e técnica para instituições públicas e grupos de pesquisa que realizam análises de grande volumes de dados, no caso desse trabalho para área da saúde, utilizando uma tecnologia já amplamente empregada no setor privado. O que viabiliza o suporte de estudantes e/ou profissionais das áreas de Engenharias e Computação. Espera-se ainda, contribuir para que os dados públicos em saúde sejam analisados com  maior frequência e menor restrição, gerando indicadores melhores e atualizados para melhor tomada de decisão em saúde.
 
 \section{Definição e abordagem}
 \label{sec:abordagem}
 
-A proposta do trabalho visa comparar a utilização de cluster de Kubernetes® como plataforma de orquestração de cargas de trabalho em dois tipos ambientes virtualizados, utilizando como carga de trabalho a análise de tendência de consumo de azitromicina no Brasil entre os anos de 2014 e 2021. Tendo como principal resultado uma análise comparativa de desempenho dos ambientes e uma proposta de utilização dessa plataforma em computadores do tipo desktop como alternativa a HPC. 
-A utilização da plataforma visa validar seu uso para orquestração de tarefas em paralelo, durante a análise permitindo o uso de diversas máquinas. Para esse trabalho a comparação será em virtuais (VMs) e containers aninhados, no caso deste trabalho 6, com capacidades de processamento semelhantes a computadores desktop de 2 GB (Gigabytes) de RAM (Random Access Memory) e 1 vCPU (virtual Central Process Unit). Essa restrição para ambiente virtualizado será realizada por configuração de API do hypervisor ou por restrição de cgroups. Permitindo que a análise de grandes massas de dados (maiores que 50 GB) possam ser feitas sem o uso de HPC. 
+A proposta do trabalho visa comparar a utilização de cluster de Kubernetes\textregistered como plataforma de orquestração de cargas de trabalho em dois tipos ambientes virtualizados, utilizando como carga de trabalho a análise de tendência de consumo de azitromicina no Brasil entre os anos de 2014 e 2021. Tendo como principal resultado uma análise comparativa de desempenho dos ambientes e uma proposta de utilização dessa plataforma em computadores do tipo desktop como alternativa a HPC.
+A utilização da plataforma visa validar seu uso para orquestração de tarefas em paralelo, durante a análise permitindo o uso de diversas máquinas. Para esse trabalho a comparação será em virtuais (VMs) e containers aninhados, no caso deste trabalho 6, com capacidades de processamento semelhantes a computadores desktop de 2 GB (Gigabytes) de RAM (Random Access Memory) e 1 vCPU (virtual Central Process Unit). Essa restrição para ambiente virtualizado será realizada por configuração de API do hypervisor ou por restrição de cgroups. Permitindo que a análise de grandes massas de dados (maiores que 50 GB) possam ser feitas sem o uso de HPC.
 
 A abordagem de DevOps (BASS et al, 2015) para tornar o provisionamento, integração e deploy da infra estrutura, bem como os componentes de análise desse utilizados neste trabalho incluem o conceito de CI (continuous integration), CD (continuous delivery)  IaC (Infrastructure as Code) visa tornar a configuração e disponibilização desse cluster mais ágil, diminuindo assim a necessidade de operação e também de manutenção do mesmo.
 

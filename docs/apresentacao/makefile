@@ -2,12 +2,10 @@ SHELL:=/bin/bash
 
 
 # Definição de variáveis
-SOURCE      = meu-trabalho
+SOURCE      = Apresentacao
 LATEXMK     = latexmk
 GHOSTSCRIPT = gs
 PDFVIEWER   = evince
-
-
 
 # Executa o processo de limpeza, compilação e abertura do arquivo
 all: clean compile open

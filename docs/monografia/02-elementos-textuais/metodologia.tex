@@ -40,6 +40,8 @@ Essa arquitetura recomendada, garante a alta disponibilidade do cluster importan
 
 Toda a implementação da solução e os componentes relacionados serão conteinerizados, possibilitando  sua orquestração pelo cluster de Kubernetes\textregistered. Apenas as configurações dos clusters em si e seu provisionamento não estarão conteinerizados. Esses serão disponibilizados em outro repositório específico. 
 Para ciclo de vida da aplicação e configurações gerais da solução será utilizado uma estratégia de organização de código em monorepo, facilitando a visualização, centralização, sincronização, padronização como benefícios primários e demonstrados na literatura reforçando a adoção dessa estratégia \cite{brito_monorepos_2018}.
+
+
 \section{Configuração e provisionamento do cluster}
 Para provisionamento do \emph{cluster} utilizaremos Ansible\textregistered da empresa RedHat\textregistered. Sua adoção se deu pela característica minimalista de configuração inicial, facilidade de uso e uma característica fundamental que diminui o \emph{overhead} de operação necessária para sua utilização, não possuir agente instalado nas no inventário de máquinas gerenciadas. 
 
@@ -53,15 +55,16 @@ O banco de dados “Vendas de Medicamentos Controlados e Antimicrobianos - Medic
 Como caso base para comparação e teste do modelo proposto, em termos de tempo para processamento da análise proposta acima,  utilizaremos um único computador (desktop) com capacidade equivalente a 8 computadores de menor capacidade (1vCPU e 2GB De RAM) designados com nós do cluster, portanto contendo recursos de  8 vCPUs e 16GB de RAM. 
 
 \section{Monitoramento}
+\label{cap:monitor}
 
 Serão utilizados para monitoramento de execução das cargas de trabalho Prometheus\textregistered  e para visualização dos dados Grafana\textregistered, ambos sendo configurados a partir do provisionamento do cluster, ainda com a ferramenta proposta inicialmente Ansible\textregistered. Dessa forma será possível avaliar parâmetros de taxa de lotação das máquinas base, pelo parâmetro de processador e memória, operações de leitura e escrita no disco e também tráfego de rede. Por meio dessas ferramentas será possível ainda, avaliar dados de tempo de execução de cargas de trabalho em ambos os ambientes propostos e assim poder compará-los sob eficiência de uso de hardware.
 
 \section{Comparação entre tipos de virtualização}
 
-A arquitetura do tipo x86 foi o tipo mais comum de arquitetura de computadores e boa parte da tecnologia de virtualização inicialmente foi desenvolvida nessa arquitetura (FAYYA, 2013). Nesse contexto será também utilizado na construção desse trabalho virtualizações com guest e host OS  em x86, para garantir que outros estudos possam ser relacionados na obtenção dos resultados desse trabalho.
+A arquitetura do tipo x86 foi o tipo mais comum de arquitetura de computadores e boa parte da tecnologia de virtualização inicialmente foi desenvolvida nessa arquitetura \cite{fayyad_benchmarking_2013}. Nesse contexto será também utilizado na construção desse trabalho virtualizações com guest e host OS  em x86, para garantir que outros estudos possam ser relacionados na obtenção dos resultados desse trabalho.
 Como descrito anteriormente, serão utilizadas maquinas virtuais com 2GB de RAM e containers com limitações de mesmo tamanho para a realização de configuração do cluster nesses ambientes, e a partir destes a execução dos workloads.
 
-O tipo de teste de aplicação será um macrobenchmark (system level benchmark) \cite{huge2008,scheepers2014virtualization} comparando parâmetros de uso de CPU, memória e tempo de execução da carga de trabalho proposta na sessão 3.1.5 deste trabalho. Os parâmetros serão avaliados  tanto na máquina de suporte a virtualização e também nas máquinas virtuais e containers, bem como o tempo provisionamento do container da carga de trabalho, tempo de execução e quantidades de falhas.
+O tipo de teste de aplicação será um macrobenchmark (system level benchmark) \cite{huge2008,scheepers2014virtualization} comparando parâmetros de uso de CPU, memória e tempo de execução da carga de trabalho proposta na sessão \ref{cap:monitor} deste trabalho. Os parâmetros serão avaliados  tanto na máquina de suporte a virtualização e também nas máquinas virtuais e containers, bem como o tempo provisionamento do container da carga de trabalho, tempo de execução e quantidades de falhas.
 
 Esse método USE (Usage, Saturation and Errors) \cite{greg2022} será utilizado para extrair e apresentar métricas e avaliar possíveis problemas, sendo que esse não é o foco do trabalho, mas captura de forma adequada os parâmetros de hardware citados acima.
 
@@ -70,7 +73,7 @@ Para controle de tempo será por meio de ferramentas de APM (Application Perform
 
 \section{Cronograma}
 A primeira parte do Trabalho de Conclusão de Curso consiste em um estudo dos métodos de virtualização, plataformas elegidas como possíveis soluções e a composição de arquitetura da plataforma de orquestração das cargas de trabalho. Bem como a construção de um modelo inicial de assim como a definição de uma arquitetura de referência a ser refinada no TCC II junto aos demais diagramas do sistema. A solução proposta para realizar tanto a orquestração como também a comparação das cargas de trabalho também serão validadas durante a execução do TCC II.
-Na \ref{fig:cronograma} é apresentado o cronograma total:
+Na Figura \ref{fig:cronograma} é apresentado o cronograma total do projeto:
 
 \begin{landscape}
 \begin{figure}[!ht]
