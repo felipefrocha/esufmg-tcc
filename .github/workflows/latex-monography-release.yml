@@ -9,7 +9,7 @@ on:
 name: Upload TCC Monography
 
 env:
-  PATH: ./
+  ENV_PATH: ./
 
 jobs:
   build:
