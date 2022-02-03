@@ -1,0 +1,20 @@
+{
+  "name": "Node",
+  "dockerComposeFile": ["docker-compose.dev.yml"],
+  "service": "api",
+  "settings": {
+    "terminal.integrated.profiles.linux": {
+      "zsh (login)": {
+        "path": "bash",
+        "args": ["-l"]
+      }
+    }
+  },
+  "extensions": [
+    "james-yu.latex-workshop"
+  ],
+  "forwardPorts": [3000],
+  "workspaceFolder": "/app",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "node"
+}

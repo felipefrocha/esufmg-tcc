@@ -69,6 +69,7 @@ clean:
 	@find . -type f -iname "*.synctex*" -delete
 	@find . -type f -iname "*.toc" -delete
 	@find . -type f -iname "*.vrb" -delete
+	@find . -type f -iname "Apresentacao.pdf" -delete
 	@echo "Pronto."
 
 # Visualiza o arquivo PDF gerado

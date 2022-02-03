@@ -235,7 +235,7 @@
 % -- 
 
 \begin{frame}{Sumário}
-  \tableofcontents
+  \tableofcontents[hideallsubsections]
 \end{frame}
 
 % 	\begin{figure}
@@ -250,31 +250,6 @@
 % --
 
 % -- 
-% Objetivos
-% -- 
-\section{Objetivo}
-
-\begin{frame}{Objetivo}
-  Realizar a comparação de desempenho de orquestração de recursos em cluster de baixo custo em ambientes virtualizados:
-  completa,
-  Sistema Operacional; para o processamento e a análise de dados em saúde, como tendência de consumo de azitromicina entre os anos 2014 e 2021.
-\end{frame}
-
-% -- 
-% Objetivos - Específicos
-% -- 
-\subsection{Objetivos específicos}
-
-\begin{frame}
-  \begin{itemize}
-    \item Realizar a orquestração de recursos em cluster de baixo custo;
-    \item Comparar o desempenho de clusters em ambientes virtualizados;
-    \item Validar o uso de um cluster de utilização compartilhada para processamento de dados distribuídos;
-    \item Propor um método de análise em cluster Kubernetes\textregistered com uso de computadores desktops;
-  \end{itemize}
-\end{frame}
-
-% -- 
 % Introdução
 % -- 
 \section{Introdução}
@@ -286,10 +261,11 @@
 
 \begin{frame}{Introdução - Motivação}
   \begin{itemize}[]
-    \item Uso de ferramentas de analise dados em saúde \cite{galvao_desafios_2019}
-    \item Integração de Sistemas de Informação em Saúde e necessidade de facilitar processo de análise de grandes volumes de dados \cite{galvao_desafios_2019,mehta_concurrence_2018}
-    \item Disponibilidade de dados pelo Decreto nº 8.777 \cite{brasildisponibilidade2016} e a necessidade de extração de informações.
+    \item Uso de ferramentas de analise dados em saúde 
+    \item Integração de Sistemas de Informação em Saúde e necessidade de facilitar processo de análise de grandes volumes de dados 
+    \item Disponibilidade de dados pelo Decreto nº 8.777 e a necessidade de extração de informações.
   \end{itemize}
+  %\cite{galvao_desafios_2019,mehta_concurrence_2018,brasildisponibilidade2016}
 \end{frame}
 
 
@@ -329,7 +305,7 @@
                 \item Aumento do dólar em mais de $3,27\%$
               \end{itemize}
         \item Disponibilidade de estratégias de análise
-        \item Tomada de decisão em saúde, mais de 152mi de Brasileiros dependem exclusivamente do SUS (UNASUS, 2021)
+        \item Tomada de decisão em saúde, mais de 152mi de Brasileiros dependem exclusivamente do SUS %(UNASUS, 2021)
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
@@ -367,12 +343,35 @@
   \begin{itemize}
     \item Aplicação de abordagem DevOps:
           \begin{itemize}
-            \item \emph{Shift Right} - Fazes finais do \emph{SDLC}
+            \item \emph{Shift Right} - Fazes finais do \emph{SDLC} (Ciclo de vida de )
             \item CI (integração contínua) e CD (entrega contínua) - deploy da aplicação e inicio do monitoramento
             \item IaC (infraestrutura como código) - acuracia na repetição dos procedimentos de provisionamento de recursos e configuração.
           \end{itemize}
     \item Uso de metodos do tipo USE (utilização, saturação e erro) para comparação entre as cargas de trabalhos e ambientes de simulação e virtualização
   \end{itemize}
+\end{frame}
+
+
+% -- 
+% Objetivos
+% -- 
+\section{Objetivo}
+ %[allowframebreaks]
+\begin{frame}{Objetivo}
+  \begin{itemize}
+    \item[] \textbf{Objetivos Geral:}
+    \item[] 
+      \begin{itemize}
+        \item[] Realizar a comparação de desempenho de orquestração de recursos em cluster de baixo custo em ambientes virtualizados, para o processamento e a análise dos dados.
+      \end{itemize}    
+    \item[] \textbf{Objetivos Específicos:}
+      \begin{itemize}
+        \item Realizar a orquestração de recursos em cluster de baixo custo;
+        \item Comparar o desempenho de clusters em ambientes virtualizados;
+        \item Validar o uso de um cluster de utilização compartilhada para processamento de dados distribuídos;
+        \item Propor um método de análise em cluster Kubernetes com uso de computadores desktops;
+      \end{itemize}  
+  I\end{itemize}  
 \end{frame}
 
 
@@ -388,10 +387,10 @@
 
 \begin{frame}{Revisão de literatura- Análise de dados}
   \begin{itemize}
-    \item Complexidade de tomar descisão em saúde \cite{andrade_tomada_2008,resende2009}
-    \item Definição de Big Data 5 Vs, complexidade e Destruturação  \cite{laney20013d,oracle2013,intel2012}
-    \item Complexidade de relacionar dados por multifatoriedade \cite{faceli2011}
-    \item Não consolidação de métodos de uso de Big Data em saúde, especialmente em estudos quantitativos, foco em custo e decisões clínicas \cite{nishita2018}
+    \item Complexidade de tomar descisão em saúde %\cite{andrade_tomada_2008,resende2009}
+    \item Definição de Big Data 5 Vs, complexidade e Destruturação  %\cite{laney20013d,oracle2013,intel2012}
+    \item Complexidade de relacionar dados por multifatoriedade %\cite{faceli2011}
+    \item Não consolidação de métodos de uso de Big Data em saúde, especialmente em estudos quantitativos, foco em custo e decisões clínicas %\cite{nishita2018}
   \end{itemize}
 \end{frame}
 
@@ -400,7 +399,7 @@
 % -- 
 \subsection{Alternativas open source}
 
-\begin{frame}{Revisão de literatura- Alternativas open source}
+\begin{frame}{Revisão de literatura - Alternativas open source}
   \begin{itemize}
     \item Agrupamento em categorias:
           \begin{itemize}
@@ -409,7 +408,7 @@
                     \item Tecnologias: OpenStack\textregistered, CloudStack\textregistered
 
                     \item Requisitos exigentes
-                    \item Complexidade: SaaS, PaaS e SaaS \cite{openstack,cloudstack,mell_nist_2011}
+                    \item Complexidade: SaaS, PaaS e SaaS %\cite{openstack,cloudstack,mell_nist_2011}
                   \end{itemize}
 
           \end{itemize}
@@ -450,8 +449,8 @@
       \begin{itemize}
         \item Kubernetes\textregistered:
               \begin{itemize}
-                \item Origem de 15 anos de trabalho da Google (Borg) \cite{verma_large-scale_2015}
-                \item estrutura de objetos componentizados \cite{kubernetes2022}
+                \item Origem de 15 anos de trabalho da Google (Borg) %\cite{verma_large-scale_2015}
+                \item estrutura de objetos componentizados %\cite{kubernetes2022}
                       \begin{itemize}
                         \item Kube-apiserver
                         \item Kube-scheduler
@@ -482,7 +481,7 @@
 \subsection{Disponibilidade dos recursos deste trabalho}
 
 \begin{frame}{Método - Disponibilidade dos recursos deste trabalho}
-  Todos os componentes definidos nesse trabalho estarão contidos em um ou mais repositórios públicos, garantindo assim a livre apreciação da comunidade não só científica, mas a todos os interessados na contribuição ou utilização sob a licença pública geral GNU versão 3 \cite{foss2022}.
+  Todos os componentes definidos nesse trabalho estarão contidos em um ou mais repositórios públicos, garantindo assim a livre apreciação da comunidade não só científica, mas a todos os interessados na contribuição ou utilização sob a licença pública geral GNU versão 3 %\cite{foss2022}.
   \hyperlinkpresentationend{https://github.com/felipefrocha/esufmg-tcc Repositório}
 \end{frame}
 
@@ -528,7 +527,7 @@
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
-        \item Multi-master Etcd atachado \cite{kubernetes2022, etcd2022}
+        \item Multi-master Etcd atachado %\cite{kubernetes2022, etcd2022}
         \item Arquitetura sugerida para produção
         \item Alta disponibilidade do cluster
         \item Recursos limitados
@@ -552,7 +551,7 @@
           \end{itemize}
     \item Ciclo de vida da aplicação
           \begin{itemize}
-            \item Monorepo \cite{brito_monorepos_2018}
+            \item Monorepo %\cite{brito_monorepos_2018}
             \item Padronização de código
             \item Sincronização
             \item Deploy em Pipeline
@@ -571,7 +570,7 @@
     \item \emph{Agentless}
     \item Idempotência
     \item Gerenciamento de inventário
-    \item SSH - Escolha do algoritimo de criptografia \cite{noauthor_rfc4254_nodate}
+    \item SSH - Escolha do algoritimo de criptografia %\cite{noauthor_rfc4254_nodate}
   \end{itemize}
 \end{frame}
 
@@ -611,12 +610,12 @@
 
 \begin{frame}{Método - Comparação entre tipos de virtualização}
   \begin{itemize}
-    \item A arquitetura x86 comum e maior poder computacional \cite{fayyad_benchmarking_2013}
-    \item macrobenchmark (system level benchmark) \cite{huge2008,scheepers2014virtualization}
+    \item A arquitetura x86 comum e maior poder computacional %\cite{fayyad_benchmarking_2013}
+    \item macrobenchmark (system level benchmark) %\cite{huge2008,scheepers2014virtualization}
     \item Parametros de tempo, taxa de utilização de memoria e processamento
     \item Maquina hospedeira e virtuais serão avaliadas durante o processamento
-    \item Metodo USE de avaliação \cite{greg2022}
-    \item APM Application Performance Management) associada a aplicação da carga de trabalho por \emph{OpenTelemetry} \cite{tang2021systematical}
+    \item Metodo USE de avaliação %\cite{greg2022}
+    \item APM Application Performance Management) associada a aplicação da carga de trabalho por \emph{OpenTelemetry} %\cite{tang2021systematical}
   \end{itemize}
 \end{frame}
 
