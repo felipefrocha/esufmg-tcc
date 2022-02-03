@@ -26,11 +26,6 @@ jobs:
           username: felipefrocha
           password: ${{ secrets.GCR_PAT }}
       
-      - name: Build project # This would actually build your project, using zip for an example artifact
-        uses: felipefrocha/action-docker-build-latex@v1.1.2
-        with:
-          docs-folder: ${{ env.PATH }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,6 +39,7 @@ jobs:
       
       - name: Move PDF
         run: |
+          docker run --rm -it -v $PWD:/app -w /app --entrypoint '' ghcr.io/felipefrocha/action-docker-build-latex:main bash -c "cd docs/apresentacao/ && make all
           zip tcc-files.zip docs/monografia/meu-trabalho.pdf docs/apresentacao/apresentacao.pdf
           
       

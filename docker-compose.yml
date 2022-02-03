@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   latex:
-    image: ghcr.io/felipefrocha/action-docker-build-latex:main 
+    image: ghcr.io/felipefrocha/action-docker-build-latex:main
     volumes:
       - ./:/app
     working_dir: /app
