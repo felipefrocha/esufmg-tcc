@@ -8,11 +8,11 @@ services:
     # Nome da Imagem na sua maquina
     image: ghcr.io/felipefrocha/action-docker-build-latex:main
     # Definindo environment
-    #environment:
+    # environment:
     # Definindo Host name (Container)
     hostname: latexbuilder
     # Definindo o usuário e grupo como os logados na maquina Host (permissão)
-    user: "${UID}:${GID}"
+    # user: "${UID}:${GID}"
     # Definindo onde o container deve inicializar
     working_dir: /app
     # Security docker
