@@ -640,33 +640,35 @@
   \begin{columns}
     \begin{column}{0.5\textwidth}
       
-  \begin{itemize}
-    \item Máquinas \emph{Host} e \emph{Guests} arquitetura x86 
-    \item Definição máquina \emph{host}:
-    \begin{itemize}
-      \item o \emph{host} será um laptop, contendo configuração de 4vCPUs e 16GB de RAM
-      \item Hospedará as maquinas virtualizadas, pertencentes ao cluster
-      
-    \end{itemize}
-    \item Definição máquina \emph{guest}:
-    \begin{itemize}
-      \item como ja descrtio em 2 cenários: Virtualização completa, e em containers
-      \item Nós do Cluster kubernetes (objeto de monitoramento)
-    \end{itemize}
+      \begin{itemize}
+        \item Máquinas \emph{Host} e \emph{Guests} arquitetura x86
+        \item Definição máquina \emph{host}:
+              \begin{itemize}
+                \item o \emph{host} será um laptop, contendo configuração de 4vCPUs e 16GB de RAM
+                \item Hospedará as maquinas virtualizadas, pertencentes ao cluster
+                      
+              \end{itemize}
+        \item Definição máquina \emph{guest}:
+              \begin{itemize}
+                \item como ja descrtio em 2 cenários: Virtualização completa, e em containers
+                \item Nós do Cluster kubernetes (objeto de monitoramento)
+              \end{itemize}
+      \end{itemize}
+    \end{column}
     \begin{column}{0.5\textwidth}
       \includegraphics[[width=1\textwidth]{SCKET.png}
-  \end{column}
+    \end{column}
   \end{columns}
-    
-    \framebreak
-    \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
-    \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
-    \item Taxa de Utilização de CPU e Memória 
-    \item Taxa de saturação de CPU e Memória
-    \item[] Métricas de APM:
-    \item Tempo Médio de todas as cargas de trabalho e variabilidade
-    \item[] Método base utilizado para coleta de informações:
-    \item Metodo USE de avaliação (Checklist Linux)
+  
+  \framebreak
+  \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
+  \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
+  \item Taxa de Utilização de CPU e Memória 
+  \item Taxa de saturação de CPU e Memória
+  \item[] Métricas de APM:
+  \item Tempo Médio de todas as cargas de trabalho e variabilidade
+  \item[] Método base utilizado para coleta de informações:
+  \item Metodo USE de avaliação (Checklist Linux)
   \end{itemize}
 \end{frame}
 
