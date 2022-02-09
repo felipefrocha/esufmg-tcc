@@ -100,7 +100,7 @@
 	\draw[line width=0.4mm,ver1] ([shift={(-0.3cm,0.2cm)}]current page.south east) -- ([shift={(-0.26cm,0.2cm)}]current page.south east);
 	
 	% --- Logo 
-	\node[xshift=-1.5cm,yshift=-1cm] at (current page.north east) {\includegraphics[scale=0.15]{logo_ufmg.jpg}};
+	\node[xshift=-1.5cm,yshift=-0.8cm] at (current page.north east) {\includegraphics[scale=0.15]{logo_ufmg.jpg}};
 	
 	\end{tikzpicture}
 }
@@ -148,8 +148,27 @@
 % --
 % Customiza o footline 
 % --
-\setbeamertemplate{footline}{}
-
+\defbeamertemplate{footline}{centered page number}
+{%
+  \hspace*{\fill}%
+  \usebeamercolor[fg]{page number in head/foot}%
+  \usebeamerfont{page number in head/foot}%
+  \insertpagenumber\,/\,\insertpresentationendpage%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}%
+  \hspace*{\fill}\vskip6pt%
+}
+\setbeamertemplate{footline}[centered page number]
 
 % --
 % Customiza o headline 
@@ -219,9 +238,9 @@
 % --
 % Inclui o sumário antes de cada seção
 % --
-\AtBeginSection{%
+\AtBeginSubsection{%
   \begin{frame}
-    \tableofcontents[currentsection, subsectionstyle=show/show/hide]
+    \tableofcontents[currentsection,sectionstyle=show/shaded,subsectionstyle=show/hide/hide]
   \end{frame}
 }
 % -- 
@@ -251,19 +270,17 @@
 % -- 
 % Introdução
 % -- 
-\section{Introdução}
-
+\section{Contexto e Motivação}
 % -- 
-% Introdução - Motivação
+% Motivação
 % -- 
-\subsection{Introdução - Contexto e Motivação}
-
-\begin{frame}[t,allowframebreaks]{Contexto e Motivação}
+\begin{frame}[allowframebreaks]{Contexto e Motivação}
   \begin{columns}
-    \begin{column}[t]{0.5\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{itemize}
-        \item[] A todo momento nós geramos milhoes de dados que são coletados por diferentes meios
-        \item[] Várias ferramentas estão disponíveis para Transforma-los em informações e embasar descisões
+        \item[] A todo momento nós geramos milhões de dados que são coletados por diferentes meios
+        \item[]
+        \item[] Existem várias ferramentas disponíveis para transformá-los em informações e embasar decisões
       \end{itemize}
       %\cite{galvao_desafios_2019,mehta_concurrence_2018,brasildisponibilidade2016}
     \end{column}
@@ -272,55 +289,83 @@
         \includegraphics[width=1\textwidth]{sis.png}
       \end{center}
     \end{column}
-    \begin{column}{0.5\textwidth}
-      
-    \end{column}
   \end{columns}
   \framebreak
   \begin{columns}
     \begin{column}{0.5\textwidth}
-      \includegraphics[width=1\textwidth,height=.75\textheight]{growthhealth.png}
+    \begin{center}
+      \includegraphics[width=.9\textwidth,height=.75\textheight]{growthhealth.png}
+      \end{center}
     \end{column}
-    \begin{column}[t]{0.6\textwidth}
+    \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item[] Isso também acontece na área da saúde
-        \item[] Porém o uso dessas ferramentas nessa área, para transformar dados em informação, ainda é pouco significativo
+        \item[]
+        \item[] Porém o uso de ferramentas de \emph{big data} em saúde ainda é pouco significativo
+        \item[]
+        \item[] Boa parte dessas ferramentas implica processamento distribuído
       \end{itemize}
     \end{column}
   \end{columns}
   \framebreak
-  %\begin{center}
+  \begin{columns}%\begin{center}
+      \begin{column}{0.5\textwidth}
   \begin{itemize}
-    \item: Tendência crescente de trabalho interdisciplinar
-    \item: Potencial de melhora do sistema de Saúde através de análise de dados
-    \item: Necessário Propor e Validar estratégias que sejam viáveis e facilitem o processamento de analise de grande volume de dados produzido na área
+    \item[] Potencial de melhora do sistema de saúde através de análise de dados
+    \item[]
+    \item[] Integrar times com trabalho interdisciplinar
+    \item[]
+    \item[] Uso de ferramentas e recursos já disponíveis de maneira correta
+    %item[] Plataformas de isolamento entre sistemas
   \end{itemize}
-  %\end{center}
-  \framebreak
-  \begin{itemize}
-    \item: No Brasil, dados do Sistema de Informação em Sáude (SIS) são disponibilizados desde 2016
-    \item: \textbf{Faltam recursos} e Estratégias Viáveis para essa elboração.
-  \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \begin{center}
+        \includegraphics[width=1\textwidth]{interdisciplinar.png}
+      \end{center}
+      \end{column}
+   %\item Necessário propor e validar estratégias que sejam viáveis e facilitem o processamento de analise de grande volume de dados produzido na área
+  \end{columns}
+ %\end{center}
+ %\framebreak
+ % \begin{itemize}
+ %   \item No Brasil, dados do Sistema de Informação em Sáude (SIS) são disponibilizados desde 2016
+ %   \item \textbf{Faltam recursos} e estratégias viáveis para essa elaboração.
+ % \end{itemize}
 \end{frame}
 
 
+\section{Justificativa}
 
 % -- 
-% Introdução - Justificava
+% Justificava
 % -- 
-\subsection{Justificativa}
+\subsection{Justificativa Social}
 
-\begin{frame}{Introdução - Justificativa}
+\begin{frame}{Justificativa Social}
+
+      \begin{itemize}
+            \item Tomada de decisão em saúde
+            \item Escala: $152$ \textbf{milhões} dependem exclusivamente do SUS
+            \item Restrição: Gasto de $R\$3.83$ por pessoa por dia
+            \item Volume de dados disponibilizados 
+            \item \textbf{Assertividade}
+      \begin{itemize}
+          \item Ações em saúde
+          \item políticas publicas
+      \end{itemize}
+      \end{itemize}
+ 
+\end{frame}
+
+\subsection{Justificativa Econômica}
+
+\begin{frame}{Justificativa Econômica}
   \begin{columns}
     \begin{column}{0.5\textwidth}
-      \begin{itemize}
-        \item Restrição Orçamentária
               \begin{itemize}
-                \item Diminuição de verbas para ciência e técnologia $-2,32\%$, mesmo com o aumento de base de alunos
-                \item Aumento do dólar em mais de $3,27\%$ diminuindo o poder de compra
-                \item Tomada de decisão em saúde, mais de 152mi de Brasileiros dependem exclusivamente do SUS %(UNASUS, 2021)
-              \end{itemize}
-        \item Necessidade de dispor estratégias de análise de dados
+                \item Gasto na disponibilização dos dados
+                \item Diminuição de verbas para ciência e tecnologia -$2,32\%$
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
@@ -332,65 +377,41 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Introdução - Justificativa}
+\begin{frame}{Justificativa Econômica}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
-        \item Restrição Orçamentária
-              \begin{itemize}
-                \item Diminuição de verbas para ciência e técnologia $-2,32\%$, mesmo com o aumento de base de alunos
-                \item Aumento do dólar em mais de $3,27\%$ diminuindo o poder de compra
-                \item Tomada de decisão em saúde, mais de 152mi de Brasileiros dependem exclusivamente do SUS %(UNASUS, 2021)
-              \end{itemize}
-        \item Necessidade de dispor estratégias de análise de dados
+            \item Aumento do dólar em mais de $327\%$ diminuindo o poder de compra
+            \item Aumento do custo de hardware e máquinas
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=1\textwidth]{variacaodolar.png}
+        \includegraphics[width=1\textwidth]{variacaodolar.png}        \includegraphics[width=1\textwidth]{hardwarecost.png}
       \end{center}
     \end{column}
   \end{columns}
 \end{frame}
 
-% -- 
-% Introdução - Abordagem
-% --
-\subsection{Abordagem}
-\begin{frame}{Introdução - Abordagem}
-  Utilizar um Cluster Kubernetes como plataforma de orquestração de cargas de trabalho em ambiente virtual.
-  \begin{itemize}
-    \item Cargas de trabalho:
-          \begin{itemize}
-            \item Analise de tendencia de uso de azitromicina entre 2014 e 2021
-          \end{itemize}
-    \item Ambientes virtualizados (simulando \emph{Host} do cluster):
-          \begin{itemize}
-            \item completa - \emph{Hypervisor} tipo 2
-            \item sistema operacional - contêineres
-          \end{itemize}
-          \framebreak
-    \item Ambiente virtual:
-          \begin{itemize}
-            \item[] Simulação de máquina de baixo poder computacional:
-            \item 1 vCPU
-            \item 2 GB de RAM
-            \item 6-8 máquinas
-          \end{itemize}
-  \end{itemize}
-  Essa Abordagem visa comparar o desempenho desses ambientes simulados, e validar o uso de computadores de baixo poder computacional, no processo de análise de dados de grande volume
-\end{frame}
+\subsection{Justificativa Técnica}
 
-\begin{frame}{Introdução - Abordagem}
-  O uso de conceitos, métodose o uso de ferramentas complementares na aplicação da cultura DevOps em ambientes produtivos, permitirá o deployment simplificado melhorando a agilidade e diminuindo a complexidade e operação/sustentação do cluster
-  \begin{itemize}
-    \item Conceitos como:
-          \begin{itemize}
-            \item CI (integração contínua)
-            \item CD (entrega contínua)
-          \end{itemize}
-    \item Uso do metodo USE (utilização, saturação e erro). Esse método propoe um checklist de métricas a serem coletadas e a avaliação de três paramêtros por meio dessas métricas, relacioando assim o performance da carga de trabalho (aplicação) e o desempenho dos nós do cluster sob monitoramento.
-  \end{itemize}
+\begin{frame}{Justificativa Técnica}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+            \item Necessário ser interdisciplinar
+            \item Avaliar alternativas de processamento de dados 
+            \item Amenizar questões orçamentárias
+            \item Melhorar uso dos recursos já existentes
+      \end{itemize}
+  \end{column}
+    \begin{column}{0.5\textwidth}  %%<--- here
+      \begin{center}
+        \includegraphics[width=1\textwidth]{lab.jpg}        
+        \includegraphics[width=1\textwidth]{hpc.jpeg}        
+      \end{center}
+    \end{column}
+  \end{columns}
 \end{frame}
 
 
@@ -399,35 +420,35 @@
 % -- 
 \section{Objetivo}
 %[allowframebreaks]
-\begin{frame}{Objetivo}
+\begin{frame}[allowframebreaks]{Objetivo}
   \begin{itemize}
     \item[] \textbf{Objetivos Geral:}
     \item[]
           \begin{itemize}
-            \item[] Realizar a comparação de desempenho de orquestração de recursos em cluster de baixo custo em ambientes virtualizados, para o processamento e a análise dos dados.
+            \item[] Realizar a comparação de desempenho de orquestração de recursos em \emph{cluster} de baixo custo em ambientes virtualizados, para o processamento e a análise dos dados.
           \end{itemize}
     \item[] \textbf{Objetivos Específicos:}
           \begin{itemize}
-            \item Realizar a orquestração de recursos em cluster de baixo custo;
+            \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
             \item Comparar o desempenho de clusters em ambientes virtualizados;
-            \item Validar o uso de um cluster de utilização compartilhada para processamento de dados distribuídos;
-            \item Propor um método de análise em cluster Kubernetes com uso de computadores desktops;
+            \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
+            \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
           \end{itemize}
           I\end{itemize}
 \end{frame}
 
 
-% -- 
+% -- F
 % Revisão de Literatura
 % -- 
 \section{Revisão de literatura}
 
 % -- 
-% Revisão de Literatura - Análise de dados
+%  Análise de dados
 % -- 
 \subsection{Análise de dados}
 
-\begin{frame}{Revisão de literatura- Análise de dados}
+\begin{frame}{Análise de dados}
   \begin{itemize}
     \item Descisões em saúde costumam ser complexas - precisam de suporte científico (dados) e avaliação de Contexto
     \item Com o crescimento dos 3V's de dados na área da saúde (Big Data) processar e analisar esses dados tornouse fundamental para tomada de descisões adequadas
@@ -442,11 +463,11 @@
 \end{frame}
 
 % -- 
-% Revisão de Literatura - Alternativas open source
+%  Alternativas open source
 % -- 
-\subsection{Alternativas open source}
+\subsection{Alternativas \emph{open source}}
 
-\begin{frame}{Revisão de literatura - Alternativas open source}
+\begin{frame}{Alternativas \emph{open source}}
   \begin{itemize}
     \item Considerando
           \begin{itemize}
@@ -457,7 +478,7 @@
           \begin{itemize}
             \item Soluções de Computação em nuvem privada:
                   \begin{itemize}
-                    \item Se extendem para além do proposito desse trabalho
+                    \item Se estendem para além do proposito desse trabalho
                     \item Requisitos de hardware elevados
                     \item Complexidade de configuração devido a sua abrangência
                   \end{itemize}
@@ -466,7 +487,7 @@
 \end{frame}
 
 
-\begin{frame}{Revisão de literatura- Alternativas open source}
+\begin{frame}{Alternativas \emph{open source}}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -489,11 +510,11 @@
 \end{frame}
 
 % -- 
-% Revisão de Literatura - Cluster orquestrador de container
+%  Cluster orquestrador de container
 % -- 
 \subsection{Cluster orquestrador de container}
 
-\begin{frame}{Revisão de literatura- Cluster orquestrador de container}
+\begin{frame}{Cluster orquestrador de container}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -526,28 +547,68 @@
 \section{Método}
 
 % -- 
-% Método - Especificação dos nós integrantes cluster de baixo custo
-% -- 
-\subsection{Especificação dos nós integrantes cluster de baixo custo}
+% Abordagem
+% --
+\subsection{Abordagem}
+\begin{frame}[allowframebreaks]{Abordagem}
+  Utilizar um Cluster Kubernetes como plataforma de orquestração de cargas de trabalho em ambiente virtual.
+  \begin{itemize}
+    \item Cargas de trabalho:
+          \begin{itemize}
+            \item Analise de tendencia de uso de azitromicina entre 2014 e 2021
+          \end{itemize}
+        \item Ambientes virtualizados (\emph{Host} do cluster):
+          \begin{itemize}
+            \item completa - \emph{Hypervisor} tipo 2
+            \item sistema operacional - contêineres
+        \end{itemize}
+    
+        \item máquinas subutilizadas
+        \item redução do CAPEX
+    \end{itemize}
+\end{frame}
 
-\begin{frame}{Método - Especificação dos nós integrantes cluster de baixo custo}
+\begin{frame}{Abordagem}
+  O uso de conceitos e metodologias de DevOps:
+  \begin{itemize}
+            \item CI (integração contínua)
+            \item CD (entrega contínua)
+    \item Monitoramento
+        \begin{itemize}
+            \item método USE, parâmetros de utilização, saturação e erro 
+            \item métricas definidas por parâmetro
+            \item relaciona desempenho dos nós virtuais.
+        \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% -- 
+% Especificação dos nós integrantes \emph{cluster} 
+% -- 
+\subsection{Especificações}
+
+\begin{frame}[allowframebreaks]{Especificações}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
-        \item Cluster Simulado:
+        \item Cluster:
               \begin{itemize}
                 \item Virtualização:
                       \begin{itemize}
                         \item Maquinas Virtuais (VMs) (\emph{Hypervisor} tipo 2)
                         \item Contêineres Aninhados (Docker In Docker, ou DinD)
                       \end{itemize}
-                \item Especificações de hardware 1vCPU, 2 GB de RAM;
               \end{itemize}
-        \item provisionamento em 2 etapas
-        \item máquinas subutilizadas
-        \item CAPEX
-              
-      \end{itemize}
+        \begin{itemize}
+            \item Ambiente Virtual:
+              \begin{itemize}
+              \item  arquitetura: \textbf{amd64}
+                \item 1 vCPU
+                \item 2 GB de RAM
+                \item 6-8 máquinas
+              \end{itemize}
+        \end{itemize}
+    \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
@@ -555,93 +616,13 @@
       \end{center}
     \end{column}
   \end{columns}
-\end{frame}
-
-
-% -- 
-% Método - Plataforma de orquestração de carga de trabalho
-% -- 
-\subsection{Plataforma de orquestração de carga de trabalho}
-
-\begin{frame}{Método - Plataforma de orquestração de carga de trabalho}
+  
+  \framebreak
+  
   \begin{columns}
     \begin{column}{0.5\textwidth}
+    
       \begin{itemize}
-        \item Arquitetura sugerida para produção:
-              \begin{itemize}
-                \item Multi-master com Etcd junto ao nó master
-              \end{itemize}
-        \item Alta disponibilidade do cluster
-        \item Recursos de hardware limitados
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}  %%<--- here
-      \begin{center}
-        \includegraphics[width=1\textwidth]{kubeadm-ha-topology-stacked-etcd.png}
-      \end{center}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Método - Plataforma de orquestração de carga de trabalho}
-  \begin{itemize}
-    \item Implantação da carga de Trabalho
-          \begin{itemize}
-            \item Container
-            \item Parametrizável
-            \item Volume compartilhado
-          \end{itemize}
-  \end{itemize}
-\end{frame}
-
-% -- 
-% Método - Configuração e provisionamento do cluster
-% -- 
-\subsection{Configuração e provisionamento do cluster}
-
-\begin{frame}{Método - Configuração e provisionamento do cluster}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      \begin{itemize}
-        \item[] O uso de gereniadores de configuração garantem o versionamento das configurações permitindo maio controle sobre as propriedades dos \emph{assets} gerenciados (Ansible\textregistered)
-        \item \emph{Agentless}
-        \item Idempotência
-        \item Gerenciamento de inventário
-        \item SSH - Escolha do algoritimo de criptografia %\cite{noauthor_rfc4254_nodate}
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \includegraphics[width=1\textwidth]{ansible arch.png}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-% -- 
-% Método - Monitoramento
-% -- 
-\subsection{Monitoramento}
-
-\begin{frame}{Método - Monitoramento}
-  \begin{itemize}
-    \item \emph{OpenTelemetry}
-    \item \emph{Prometheus} Monitoramento de sistemas e Banco de dados de series temporais
-    \item \emph{Grafana} - Dashboard e observabilidade
-    \item Parametros de tempo, taxa de utilização de memoria e processamento
-  \end{itemize}
-\end{frame}
-
-
-% -- 
-% Método - Comparação entre tipos de virtualização
-% -- 
-\subsection{Comparação entre tipos de virtualização}
-
-\begin{frame}{Método - Comparação entre tipos de virtualização}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-      
-      \begin{itemize}
-        \item Máquinas \emph{Host} e \emph{Guests} arquitetura x86
         \item Definição máquina \emph{host}:
               \begin{itemize}
                 \item o \emph{host} será um laptop, contendo configuração de 4vCPUs e 16GB de RAM
@@ -656,42 +637,92 @@
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \includegraphics[[width=0.5\textwidth]{SCKET.png}
+      \includegraphics[width=1\textwidth]{SCKET.png}
     \end{column}
   \end{columns}
-  
-  \framebreak
-  \begin{itemize}
-      
-  \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
-  \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
-  \item Taxa de Utilização de CPU e Memória 
-  \item Taxa de saturação de CPU e Memória
-  \item[] Métricas de APM:
-  \item Tempo Médio de todas as cargas de trabalho e variabilidade
-  \item[] Método base utilizado para coleta de informações:
-  \item Metodo USE de avaliação (Checklist Linux)
-  \end{itemize}
-  
 \end{frame}
 
 
 % -- 
-% Método - Análise de dados
+% Plataforma de orquestração de carga de trabalho
+% -- 
+\subsection{Arquitetura Orquestrador}
+
+\begin{frame}{Arquitetura Orquestrador}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{kubeadm-ha-topology-stacked-etcd.png}
+    %\caption{Caption}
+    \label{fig:k8s-arch}
+\end{figure}
+\end{frame}
+% -- 
+% Configuração e provisionamento do cluster
+% -- 
+\subsection{Gerenciamento de configuração}
+
+\begin{frame}{Gerenciamento de configuração}
+      \begin{figure}
+          \centering
+      \includegraphics[width=.8\textwidth]{ansible arch.png}
+          %\caption{Caption}
+          \label{fig:ansiblearch}
+      \end{figure}
+      
+\end{frame}
+
+% -- 
+% Monitoramento
+% -- 
+\subsection{Monitoramento}
+
+\begin{frame}{Monitoramento}
+  \begin{itemize}
+    \item \emph{OpenTelemetry}
+    \item \emph{Prometheus} Monitoramento de sistemas e Banco de dados de series temporais
+    \item \emph{Grafana} - Dashboard e observabilidade
+    \item Parametros de tempo, taxa de utilização de memoria e processamento
+  \end{itemize}
+\end{frame}
+
+
+% -- 
+% Comparação entre tipos de virtualização
+% -- 
+\subsection{Comparação entre tipos de virtualização}
+
+\begin{frame}[allowframebreaks]{Comparação entre tipos de virtualização}
+  
+  \begin{itemize}
+      \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
+      \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
+      \item Taxa de Utilização de CPU e Memória 
+      \item Taxa de saturação de CPU e Memória
+      \item[] Métricas de APM:
+      \item Tempo Médio de todas as cargas de trabalho e variabilidade
+      \item[] Método base utilizado para coleta de informações:
+      \item Metodo USE de avaliação (Checklist Linux)
+  \end{itemize}
+  
+  Caso base - comparação com processo de análise em \emph{bare metal} 4vCPU, 16 GB de RAM - totalizando o poder computacional total do \emph{cluster} proposto
+\end{frame}
+
+
+% -- 
+% Análise de dados
 % -- 
 \subsection{Análise de dados}
 
-\begin{frame}{Método - Exemplo da Análise de dados}
+\begin{frame}{Exemplo da Análise de dados}
   \begin{itemize}
     \item Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados
     \item $530 \cdot 10^{6}$ linhas com mais de 70 GB
     \item Análise de tendência do consumo de azitromicina
-    \item Caso base - comparação com processo de análise em \emph{bare metal} 8vCPU, 16 GB de RAM - totalizando o poder computacional total do cluster proposto
   \end{itemize}
 \end{frame}
 
 % -- 
-% Método - Cronograma
+% Cronograma
 % -- 
 \subsection{Cronograma}
 
@@ -707,13 +738,15 @@
 
 \begin{frame}{Conclusão}
   \begin{itemize}
-    \item Avaliação de diferentes tipos de virtualização
-    \item Seleção de plataforma de orquestração de cargas de trabalhos com base em requisitos e restrições
-    \item Analise dos impactos socio-econômicos oriundos da restrição orçamentária a pesquisa de uma forma geral
-    \item Desenho de uma estratégia de extração de informações relevantes de uma base de dados com volume considerável
-    \item Entendimento da complexidade dos fatores considerados no processo de descisão em saúde
+    \item Entendimento da complexidade dos fatores considerados no processo de decisão em saúde
+    \item Análise dos impactos sociais-econômicos relativos a restrição orçamentária na ciência
+    \item Seleção de tecnologias com base em requisitos e restrições
+    \item Desenho de uma estratégia de extração de informações em saúde
+    \item Avaliação de diferentes tipos de virtualização e sua utilização
   \end{itemize}
-  Trabalhos futuros contemplarão a implementação, testes e coletas de dados para avaliação comparativa das virtualizações propostas no ambiente simulado. Baseado nesses resultados pode se evoluir essa discussão na forma de recrutamento de computadores para o cluster de maneira a garantir o isolamento da maquina base.
+  Trabalhos futuros contemplarão a implementação, testes e coletas de dados para avaliação comparativa das virtualizações propostas. 
+  
+  Baseado nesses resultados pode se evoluir essa discussão na forma de recrutamento de computadores para o \emph{cluster} de maneira a garantir o isolamento da maquina base.
 \end{frame}
 
 
