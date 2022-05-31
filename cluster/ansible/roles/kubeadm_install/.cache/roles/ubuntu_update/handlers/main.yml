@@ -1,0 +1,6 @@
+---
+# handlers file for config_ubuntu
+  - name: restart ntp
+    service: 
+      name: ntp
+      state: restarted

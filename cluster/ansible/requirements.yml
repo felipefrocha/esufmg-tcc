@@ -1,0 +1,15 @@
+---
+- src: https://github.com/felipefrocha/ansible-role-ubuntu-update.git
+  version: main
+  scm: git
+  name: ubuntu_update
+
+- src: https://github.com/felipefrocha/ansible-role-kubeadm-install.git
+  version: main
+  scm: git
+  name: kubeadm_install
+
+- src: https://github.com/felipefrocha/ansible-role-kubeadm-setup.git
+  version: main
+  scm: git
+  name: kubeadm_setup

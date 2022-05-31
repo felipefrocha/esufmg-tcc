@@ -1,0 +1,82 @@
+---
+# tasks file for config_ubuntu
+- name: Set a hostname
+  hostname:
+    name: "{{ hostname.name }}"
+  when: hostname.enabled
+
+- name: Register current User
+  become: no
+  shell: id -u -n
+  register: current_user
+  changed_when: False
+
+- name: Current User
+  debug:
+    msg: "{{ current_user.stdout }}"
+
+- name: Install packages
+  apt:
+    name: "{{ ubuntu.packages }}"
+    state: present
+    update_cache: yes
+
+- name: Installed packages
+  debug:
+    msg: "{{ ubuntu.packages }}"
+
+- block:
+  - name: Install Python3
+    apt:
+      name: "{{ python.packages }}"
+      state: present
+      update_cache: yes
+    when: python.requirements is defined
+
+  - name: Installed Python packages
+    debug:
+      msg: "{{ python.packages }}"
+
+  - name: Install/upgrade Pip Packages
+    pip:
+      name: "{{ python.requirements }}"
+      extra_args: -U
+  - name: Installed Pip packages
+    debug:
+      msg: "{{ python.requirements }}"
+  when: python.enabled
+
+
+- name: Ensure ntpd is at the latest version
+  apt: 
+    name: ntp
+    state: latest
+    update_cache: yes
+  notify:
+  - restart ntp
+
+- name: Upgrade the OS (apt-get full-upgrade)
+  apt:
+    upgrade: full
+    autoremove: yes
+    autoclean: yes
+
+- name: Set authorized key taken from file
+  ansible.posix.authorized_key:
+    user: "{{ current_user.stdout }}"
+    state: present
+    key: "{{ lookup('file', ssh_pubkey_path) }}"
+
+- name: Create netplan directories if they do not exist
+  file:
+    path: /etc/netplan
+    state: directory
+    mode: '0644'
+
+- name: Template for Networking Config
+  ansible.builtin.template:
+    src: 99-configmtu.j2
+    dest: /etc/netplan/99-configmtu.yaml
+    owner: root
+    group: root
+    mode: 0644

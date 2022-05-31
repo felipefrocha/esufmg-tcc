@@ -1,0 +1,15 @@
+---
+# handlers file for kubeadm_install
+- name: Containerd Service Enable
+  ansible.builtin.systemd:
+    name: containerd.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+
+- name: Kubelet Service Enable
+  ansible.builtin.systemd:
+    name: kubelet.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

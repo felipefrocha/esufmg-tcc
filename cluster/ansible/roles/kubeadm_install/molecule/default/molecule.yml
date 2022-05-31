@@ -1,0 +1,40 @@
+---
+molecule:
+  raw_ssh_args:
+    - -o StrictHostKeyChecking=false
+    - -o UserKnownHostsFile=/dev/null
+ansible:
+  host_key_checking: False
+  raw_ssh_args:
+    - -o UserKnownHostsFile=/dev/null
+    - -o IdentitiesOnly=yes
+    - -o ControlMaster=auto
+    - -o ControlPersist=60s
+dependency:
+  name: galaxy
+  options:
+    ignore-certs: True
+    ignore-errors: True
+    role-file: requirements.yml
+driver:
+  name: docker
+platforms:
+  # - name: instance
+  #   image: docker.io/pycontribs/centos:8
+  #   pre_build_image: true
+  - name: ubuntu
+    image: geerlingguy/docker-ubuntu2004-ansible
+    privileged: True
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - SYS_ADMIN
+    command: "/lib/systemd/systemd"
+    pre_build_image: true
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

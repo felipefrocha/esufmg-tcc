@@ -1,0 +1,40 @@
+---
+- name: Install needed
+  package:
+    name: 
+     - nfs-kernel-server 
+     - portmap
+    state: present
+
+# https://wiki.debian.org/NFSServerSetup
+- name: NFSv4 Only debian 
+  template:
+    dest: "/etc/default/{{item}}"
+    src: "files/{{item}}"
+  with_items: 
+  - nfs-common
+  - nfs-kernel-server
+
+- name: Ensure pod inside volumes directory exists 
+  file:
+    path: /export/volumes/pod
+    state: directory 
+    recurse: yes
+    mode: 0777
+
+- name: Ensure required entries are made to hosts file. # Notes 1232 #insecure
+  lineinfile:
+    path: /etc/exports
+    state: present
+    line: "{{ item }}"
+  with_items:
+    - '/export/volumes  150.164.10.0/25(rw,no_root_squash,no_subtree_check)' 
+
+- name: Restart nfs-kernel-server.service 
+  ansible.builtin.systemd:
+    daemon_reload: yes
+    state: started
+    name: nfs-kernel-server.service
+
+- name: Re-export the share
+  command: exportfs -rav

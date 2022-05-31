@@ -1,0 +1,8 @@
+---
+# handlers file for prometheus_node_exporter
+- name: Config Node Exporter
+  ansible.builtin.systemd:
+    name: node_exporter.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes

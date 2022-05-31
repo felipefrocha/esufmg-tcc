@@ -1,0 +1,19 @@
+version: '3.4'
+services:
+  lb:
+    build:
+      context : ./
+      dockerfile: Dockerfile
+    ports:
+      - "6443:6443"
+      - "2379:2379"
+      - "2380:2380"
+      - "10250:10250"
+      - "10251:10251"
+      - "10252:10252"
+    restart: always
+    networks: 
+      - k8s_api
+
+networks: 
+  k8s_api: {}

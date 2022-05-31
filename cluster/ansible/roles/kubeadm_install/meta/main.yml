@@ -1,0 +1,27 @@
+galaxy_info:
+  role_name: kubeadm_install
+  author: Felipe Rocha
+  description: Install and preconfigure microk8s
+  company: Raipe Systems
+
+  license: MIT
+
+  min_ansible_version: 2.10
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - 18.04
+    - 20.04
+    
+  galaxy_tags:
+    - kubeamd
+    - k8s
+    - ubuntu
+    - install
+    - configure
+
+dependencies: 
+  - src: https://github.com/felipefrocha/ansible-role-ubuntu-update.git
+    version: main
+    name: ubuntu_update

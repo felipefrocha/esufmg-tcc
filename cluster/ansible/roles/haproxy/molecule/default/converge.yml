@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ufmg.haproxy"
+      include_role:
+        name: "ufmg.haproxy"

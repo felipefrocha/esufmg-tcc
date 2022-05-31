@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include ufmg.nfs_server"
+      include_role:
+        name: "ufmg.nfs_server"

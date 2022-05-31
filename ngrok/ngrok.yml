@@ -1,0 +1,9 @@
+authtoken: ''
+region: us
+tunnels:
+#  web:
+#    proto: http
+#    addr: 80
+  ssh:
+    proto: tcp
+    addr: 22
