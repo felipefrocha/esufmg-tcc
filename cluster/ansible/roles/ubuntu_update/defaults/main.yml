@@ -17,6 +17,7 @@ ubuntu:
     - conntrack
     - selinux-utils
     - htop
+    - lvm2
 
 python:
   enabled: True

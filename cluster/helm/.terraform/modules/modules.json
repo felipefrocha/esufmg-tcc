@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"monitoring_grafana","Source":"./modules/grafana","Dir":"modules/grafana"},{"Key":"","Source":"","Dir":"."},{"Key":"monitoring_prometheus","Source":"./modules/prometheus","Dir":"modules/prometheus"},{"Key":"shared_postgres","Source":"./modules/postgres","Dir":"modules/postgres"}]}
