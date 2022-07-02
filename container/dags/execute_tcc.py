@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import os
+import logging
 import re
 from typing import Callable
 import signal
@@ -13,9 +14,6 @@ import psycopg2
 from sqlalchemy import create_engine
 import numpy as np
 from scipy.stats import kendalltau
-try:
-    from kubernetes.client import models as k8s
-
 
 from airflow import DAG, XComArg
 from airflow.models import Variable
@@ -25,6 +23,20 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 
+
+log = logging.getLogger(__name__)
+
+worker_container_repository = conf.get('kubernetes', 'worker_container_repository')
+worker_container_tag = conf.get('kubernetes', 'worker_container_tag')
+
+try:
+    from kubernetes.client import models as k8s
+except ImportError:
+    log.warning(
+        "The example_kubernetes_executor example DAG requires the kubernetes provider."
+        " Please install it with: pip install apache-airflow[cncf.kubernetes]"
+    )
+    k8s = None
 
 S3_BUCKET = os.environ["S3_BUCKET"]
 ATIVOS = {'AZITROMICINA': 1, 'AZITROMICINA DI-HIDRATADA': 2}
@@ -172,4 +184,5 @@ def azitromicina_consuption():
 
     resume(lines=outputs)
 
-dag = azitromicina_consuption()
+if k8s:
+    dag = azitromicina_consuption()
