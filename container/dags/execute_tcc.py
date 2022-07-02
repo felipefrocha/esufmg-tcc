@@ -17,6 +17,7 @@ from scipy.stats import kendalltau
 
 from airflow import DAG, XComArg
 from airflow.models import Variable
+from airflow.configuration import conf
 from airflow.decorators import task, dag
 from airflow.utils.dates import days_ago
 from airflow.operators.python import PythonOperator
@@ -127,7 +128,7 @@ def azitromicina_consuption():
         dirname = os.path.dirname(os.path.abspath(file_name))
         date_executed = re.search("(20[0-9]{,})", file_name).group()
 
-        print(file_name, dirname, date_executed)
+        log.info(file_name, dirname, date_executed)
 
         if not os.path.isdir(dirname):
             Path(dirname).mkdir(parents=True, exist_ok=True)
