@@ -69,6 +69,7 @@ default_args = {
 }
 
 resource_config = {
+    "testes": {},
     "analytics": {
         "pod_override": k8s.V1Pod(
             spec=k8s.V1PodSpec(
@@ -81,24 +82,23 @@ resource_config = {
                                 'memory': "512Mi"
                             },
                             limits={
-                                'cpu': "1000m",
+                                'cpu': "512m",
                                 'memory': "2Gi"
                             }
                         ),
                     ),
                 ],
-            )
+            ),
         ),
-
     }
 }
 
 
-@dag(dag_id='datasus_drugs_azitromicina_consumption',
+@dag(dag_id='azitromicina_consumption',
      schedule_interval=None,
      tags=['analytics', 'tcc', '2022', 'dcc'],
      default_args=default_args)
-def run_etl():
+def azitromicina_consuption():
 
     files = S3ListOperator(
         task_id="get_input",
@@ -171,5 +171,4 @@ def run_etl():
 
     resume(lines=outputs)
 
-
-dag = run_etl()
+dag = azitromicina_consuption()

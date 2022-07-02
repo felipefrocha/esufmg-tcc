@@ -393,11 +393,9 @@ kerberos:
     # provide the right configuration.
 
     [logging]
-    remote_logging = True
-    remote_base_log_folder = s3://bancodoutorado/logs/
-    remote_log_conn_id = MyS3Conn
-    # Use server-side encryption for logs stored in S3
-    encrypt_s3_logs = False
+    default = "FILE:{{ template "airflow_logs_no_quote" . }}/kerberos_libs.log"
+    kdc = "FILE:{{ template "airflow_logs_no_quote" . }}/kerberos_kdc.log"
+    admin_server = "FILE:{{ template "airflow_logs_no_quote" . }}/kadmind.log"
 
     [libdefaults]
     default_realm = FOO.COM
