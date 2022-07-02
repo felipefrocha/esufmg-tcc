@@ -58,29 +58,6 @@ UFS = {
 'TO': 27
 }
 
-
-
-def import_data():
-    import boto3
-    s3 = boto3.resource('s3')
-
-    S3_BUCKET = os.environ["S3_BUCKET"]
-
-    response = s3.meta.client.list_objects_v2(
-        Bucket=S3_BUCKET,
-        Prefix="filterd"
-    )
-    print(response)
-
-    objects = list(map(lambda x: x["Key"], response["Contents"]))
-    print(len(objects))
-
-    for object in objects:
-        filename = object.split('/')[1]
-        s3.meta.client.download_file(S3_BUCKET, object, f'/tmp/{filename}')
-        print(object)
-
-
 default_args = {
     'owner': 'Felipe Rocha',
     'depends_on_past': False,
@@ -88,18 +65,10 @@ default_args = {
     'email': ['feliperocha@ufmg.br'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 3,
+    'retries': 1,
 }
 
 resource_config = {
-    "common": {
-        "KubernetesExecutor": {
-            "request_memory": "200Mi",
-            "limit_memory": "200Mi",
-            "request_cpu": "200m",
-            "limit_cpu": "200m"
-        }
-    },
     "analytics": {
         "pod_override": k8s.V1Pod(
             spec=k8s.V1PodSpec(
@@ -124,19 +93,7 @@ resource_config = {
     }
 }
 
-def create_task(execute: Callable, type: str):
-    resorce_restriction = type
-    return PythonOperator(
-        task_id='import_task',
-        python_callable=execute,
-        op_args=None,
-        start_date=days_ago(0),
-        owner='airflow',
-        executor_config=resource_config[resorce_restriction]
-    )
-
-
-@dag(dag_id='datasus_drugs_azitromicina_consuption',
+@dag(dag_id='datasus_drugs_azitromicina_consumption',
      schedule_interval=None,
      tags=['analytics', 'tcc', '2022', 'dcc'],
      default_args=default_args)
@@ -148,13 +105,17 @@ def run_etl():
         prefix='extended/EDA_Industrializados_20201',
     )
 
-    @task(task_id='process_datas',executor_config=resource_config["analytics"])
+    print(files)
+
+    @task(task_id='process_data_sets',executor_config=resource_config["analytics"])
     def run_process(aws_conn_id, bucket, file):
         
         hook = S3Hook(aws_conn_id=aws_conn_id)
         file_name = f'/tmp/{file}'
         dirname = os.path.dirname(os.path.abspath(file_name))
         date_executed = re.search("(20[0-9]{,})",file_name).group()
+
+        print(file_name, dirname, date_executed)
 
         if not os.path.isdir(dirname):
             Path(dirname).mkdir(parents=True, exist_ok=True)
