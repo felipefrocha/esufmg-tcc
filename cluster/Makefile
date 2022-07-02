@@ -8,7 +8,8 @@ WHALE = "🇩"
 ONI = "👹"
 PHONY=help
 
-all: clear docker_lb vagrant
+tag?=tcc-airflow
+
 
 setup: ## Install all requirements for your system
 	@echo Installing packages
@@ -31,6 +32,9 @@ cms: ## Configure bastion host
 ansible_roles: ## Install all required roles
 	@cd ansible \
 		&& ansible-galaxy install --roles-path ./roles -r requirements.yml 
+
+k8s:
+	@cd terraform && terraform apply -var="dag_tag=${tag}" -auto-approve
 
 help: ## this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
