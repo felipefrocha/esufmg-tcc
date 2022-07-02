@@ -26,36 +26,36 @@ from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 
 
 S3_BUCKET = os.environ["S3_BUCKET"]
-ATIVOS = {'AZITROMICINA':1, 'AZITROMICINA DI-HIDRATADA': 2}
+ATIVOS = {'AZITROMICINA': 1, 'AZITROMICINA DI-HIDRATADA': 2}
 
 UFS = {
-'AC': 1,
-'AL': 2,
-'AM': 3,
-'AP': 4,
-'BA': 5,
-'CE': 6,
-'DF': 7,
-'ES': 8,
-'GO': 9,
-'MA': 10,
-'MG': 11,
-'MS': 12,
-'MT': 13,
-'PA': 14,
-'PB': 15,
-'PE': 16,
-'PI': 17,
-'PR': 18,
-'RJ': 19,
-'RN': 20,
-'RO': 21,
-'RR': 22,
-'RS': 23,
-'SC': 24,
-'SE': 25,
-'SP': 26,
-'TO': 27
+    'AC': 1,
+    'AL': 2,
+    'AM': 3,
+    'AP': 4,
+    'BA': 5,
+    'CE': 6,
+    'DF': 7,
+    'ES': 8,
+    'GO': 9,
+    'MA': 10,
+    'MG': 11,
+    'MS': 12,
+    'MT': 13,
+    'PA': 14,
+    'PB': 15,
+    'PE': 16,
+    'PI': 17,
+    'PR': 18,
+    'RJ': 19,
+    'RN': 20,
+    'RO': 21,
+    'RR': 22,
+    'RS': 23,
+    'SC': 24,
+    'SE': 25,
+    'SP': 26,
+    'TO': 27
 }
 
 default_args = {
@@ -76,11 +76,11 @@ resource_config = {
                     k8s.V1Container(
                         name="base",
                         resources=k8s.V1ResourceRequirements(
-                            requests = {
+                            requests={
                                 'cpu': "250m",
                                 'memory': "512Mi"
                             },
-                            limits = {
+                            limits={
                                 'cpu': "1000m",
                                 'memory': "2Gi"
                             }
@@ -89,9 +89,10 @@ resource_config = {
                 ],
             )
         ),
-        
+
     }
 }
+
 
 @dag(dag_id='datasus_drugs_azitromicina_consumption',
      schedule_interval=None,
@@ -105,15 +106,13 @@ def run_etl():
         prefix='extended/EDA_Industrializados_20201',
     )
 
-    print(files)
-
-    @task(task_id='process_data_sets',executor_config=resource_config["analytics"])
+    @task(task_id='process_data_sets', executor_config=resource_config["analytics"])
     def run_process(aws_conn_id, bucket, file):
-        
+
         hook = S3Hook(aws_conn_id=aws_conn_id)
         file_name = f'/tmp/{file}'
         dirname = os.path.dirname(os.path.abspath(file_name))
-        date_executed = re.search("(20[0-9]{,})",file_name).group()
+        date_executed = re.search("(20[0-9]{,})", file_name).group()
 
         print(file_name, dirname, date_executed)
 
@@ -124,29 +123,35 @@ def run_etl():
 
         df_result = None
 
-
         try:
             with open(file=file_name, mode='r', encoding='ISO-8859-1') as csv_file:
                 df = pd.read_csv(csv_file, iterator=True,
-                                chunksize=5000, low_memory=True, delimiter=';')
+                                 chunksize=5000, low_memory=True, delimiter=';')
 
                 df_result = pd.concat([chunk[chunk["PRINCIPIO_ATIVO"].str.contains(
                     "AZITROMICINA", na=False)] for chunk in df])
 
-            df_qtd = df_result[["ANO_VENDA","MES_VENDA","UF_VENDA","QTD_VENDIDA"]].dropna()
-            
-            tau = kendalltau(df_qtd["UF_VENDA"].replace(UFS),df_result["QTD_VENDIDA"])
+            df_qtd = df_result[["ANO_VENDA", "MES_VENDA",
+                                "UF_VENDA", "QTD_VENDIDA"]].dropna()
 
-            df_tau = pd.DataFrame({"date": date_executed,"correlation": tau[0],"pvalue":tau[1]})
-            
-            df_sum = df_qtd.groupby(["ANO_VENDA","MES_VENDA","UF_VENDA"]).sum()
-                        
+            tau = kendalltau(df_qtd["UF_VENDA"].replace(
+                UFS), df_result["QTD_VENDIDA"])
+
+            df_tau = pd.DataFrame(
+                {"date": date_executed, "correlation": tau[0], "pvalue": tau[1]})
+
+            df_sum = df_qtd.groupby(
+                ["ANO_VENDA", "MES_VENDA", "UF_VENDA"]).sum()
+
             conn_string = f'postgresql+psycopg2://postgres:N3w4dm1nS@postgres.default.svc.cluster.local:5432/tccanalytics'
 
             with create_engine(conn_string, pool_size=5, max_overflow=10) as conn:
-                df_result.to_sql("azitromicina_consuption", conn, if_exists="append", index=False, chunksize=1000,method="multi")
-                df_tau.to_sql("correlation_per_month", conn, if_exists="append", index=False, chunksize=1000,method="multi")
-                df_result.to_sql("summary", conn, if_exists="append", index=False, chunksize=1000,method="multi")
+                df_result.to_sql("azitromicina_consuption", conn, if_exists="append",
+                                 index=False, chunksize=1000, method="multi")
+                df_tau.to_sql("correlation_per_month", conn, if_exists="append",
+                              index=False, chunksize=1000, method="multi")
+                df_result.to_sql("summary", conn, if_exists="append",
+                                 index=False, chunksize=1000, method="multi")
 
             return f'{date_executed} - {tau}'
 
