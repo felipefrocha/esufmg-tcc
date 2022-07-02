@@ -234,6 +234,8 @@ allowPodLaunching: true
 env: 
 - name: "AIRFLOW__CORE__LOAD_EXAMPLES"
   value: "False"
+- name: "AIRFLOW__CORE__DAGBAG_IMPORT_TIMEOUT"
+  value: "300"
 
 # Secrets for all airflow containers
 secret: []
