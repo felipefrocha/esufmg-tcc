@@ -1,3 +1,4 @@
+apache-airflow[cncf.kubernetes]
 boto3
 pandas
 pathlib2
@@ -7,4 +8,3 @@ psycopg2
 sqlalchemy
 pyparsing
 urllib3
-apache-airflow[cncf.kubernetes]

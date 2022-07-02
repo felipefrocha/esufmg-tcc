@@ -13,8 +13,9 @@ import psycopg2
 from sqlalchemy import create_engine
 import numpy as np
 from scipy.stats import kendalltau
+try:
+    from kubernetes.client import models as k8s
 
-from kubernetes.client import models as k8s
 
 from airflow import DAG, XComArg
 from airflow.models import Variable
