@@ -381,8 +381,8 @@ singleuser:
       volumeNameTemplate: volume-{username}{servername}
       storageAccessModes: [ReadWriteOnce]
   image:
-    name: jupyter/datascience-notebook
-    tag: latest
+    name: felipefrocha89/esufmg
+    tag: tcc-jupyter-${tag}
     pullPolicy:
     pullSecrets: []
   startTimeout: 300

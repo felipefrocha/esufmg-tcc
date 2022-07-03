@@ -57,13 +57,22 @@ resource "helm_release" "spark_operator" {
   ]
 }
 
+data "template_file" "jupyter_config" {
+  template = file("./data/helm/jupyterhub-values.yaml")
+  vars = {
+    tag = var.dag_tag
+  }
+}
+
+
 resource "helm_release" "jupyterhub" {
   name       = "jupyterhub"
   repository = "jupyterhub"
   chart      = "jupyterhub"
   # namespace = "default"
-  values = [
-    "${file("./data/helm/jupyterhub-values.yaml")}"
+
+    values = [
+    "${data.template_file.jupyter_config.rendered}"
   ]
 }
 
