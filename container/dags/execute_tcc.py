@@ -147,10 +147,10 @@ def azitromicina_consuption():
             tau,p_value = kendalltau(df_qtd["UF_VENDA"].replace(
                 UFS), df_result["QTD_VENDIDA"])
 
-            log.warn(f'tau: {tau}')
+            log.warn(f'tau: {tau}, p_valeu: {p_value}')
 
             df_tau = pd.DataFrame(
-                {"date": date_executed, "correlation": tau, "pvalue": p_value})
+                {"date": date_executed, "correlation": [tau], "pvalue": [p_value]})
 
             df_sum = df_qtd.groupby(
                 ["ANO_VENDA", "MES_VENDA", "UF_VENDA"]).sum()
