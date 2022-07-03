@@ -1,0 +1,9 @@
+boto3
+pandas
+pathlib2
+numpy
+scipy
+psycopg2
+sqlalchemy
+pyparsing
+urllib3
