@@ -16,9 +16,11 @@
 \usepackage{amsmath,amsfonts,amsthm,amssymb,mathrsfs}
 \allowdisplaybreaks[1]
 \usepackage{microtype}
+\usepackage{listings}
 \usepackage{mathtools}
 \usepackage{csquotes}
 \usepackage{tikz}
+\usepackage{animate}
 \usetikzlibrary{matrix}
 \usetikzlibrary{patterns}
 \usepackage{faktor}
@@ -225,8 +227,10 @@
 % -- 
 % Info
 % -- 
-\title[]{ANÁLISE DE DADOS UTILIZANDO CLUSTER DE BAIXO CUSTO}
-\subtitle{COMPARAÇÃO DE DESEMPENHO DE AMBIENTES VIRTUAIS}
+\title[]{ANÁLISE DE DADOS UTILIZANDO \emph{CLUSTER} DE BAIXO CUSTO}
+\subtitle{Tendências de consumo da
+azitromicina no Brasil antes e durante a
+pandemia da COVID-19}
 
 \institute[UFMG]{Universidade Federal de Minas Gerais}
 
@@ -240,7 +244,7 @@
 % --
 \AtBeginSubsection{%
   \begin{frame}
-    \tableofcontents[currentsection,sectionstyle=show/shaded,subsectionstyle=show/hide/hide]
+    \tableofcontents[currentsection=show,sectionstyle=show/shaded,subsectionstyle=show/shaded/hide]
   \end{frame}
 }
 % -- 
@@ -272,9 +276,10 @@
 % -- 
 \section{Contexto e Motivação}
 % -- 
-% Motivação
+% Motivação [allowframebreaks]
 % -- 
-\begin{frame}[allowframebreaks]{Contexto e Motivação}
+\subsection*{Contexto de Dados}
+\begin{frame}{Contexto de Dados - produção e uso}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -290,8 +295,9 @@
       \end{center}
     \end{column}
   \end{columns}
-  \framebreak
-  \begin{columns}
+\end{frame}  
+  \begin{frame}{Contexto de Dados - Área da Saúde}
+    \begin{columns}
     \begin{column}{0.5\textwidth}
     \begin{center}
       \includegraphics[width=.9\textwidth,height=.75\textheight]{growthhealth.png}
@@ -307,7 +313,8 @@
       \end{itemize}
     \end{column}
   \end{columns}
-  \framebreak
+\end{frame}
+\begin{frame}{Contexto de Dados - Desafios}
   \begin{columns}%\begin{center}
       \begin{column}{0.5\textwidth}
   \begin{itemize}
@@ -324,7 +331,7 @@
         \includegraphics[width=1\textwidth]{interdisciplinar.png}
       \end{center}
       \end{column}
-   %\item Necessário propor e validar estratégias que sejam viáveis e facilitem o processamento de analise de grande volume de dados produzido na área
+   %\item Necessário propor e validar estratégias que sejam viáveis e facilitem o processamento de análise de grande volume de dados produzido na área
   \end{columns}
  %\end{center}
  %\framebreak
@@ -342,13 +349,13 @@
 % -- 
 \subsection{Justificativa Social}
 
-\begin{frame}{Justificativa Social}
+\begin{frame}{Apoio a melhores decisões}
 
       \begin{itemize}
             \item Tomada de decisão em saúde
             \item Escala: $152$ \textbf{milhões} dependem exclusivamente do SUS
             \item Restrição: Gasto de $R\$3.83$ por pessoa por dia
-            \item Volume de dados disponibilizados 
+            \item Transformar dados em informação
             \item \textbf{Assertividade}
       \begin{itemize}
           \item Ações em saúde
@@ -360,11 +367,10 @@
 
 \subsection{Justificativa Econômica}
 
-\begin{frame}{Justificativa Econômica}
+\begin{frame}{Restrições de orçamento a ciência}
   \begin{columns}
     \begin{column}{0.5\textwidth}
               \begin{itemize}
-                \item Gasto na disponibilização dos dados
                 \item Diminuição de verbas para ciência e tecnologia -$2,32\%$
       \end{itemize}
     \end{column}
@@ -377,7 +383,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{Justificativa Econômica}
+\begin{frame}{Alterações de cenário econômico}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -395,14 +401,14 @@
 
 \subsection{Justificativa Técnica}
 
-\begin{frame}{Justificativa Técnica}
+\begin{frame}{Viabilização de alternativas}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
             \item Necessário ser interdisciplinar
             \item Avaliar alternativas de processamento de dados 
-            \item Amenizar questões orçamentárias
-            \item Melhorar uso dos recursos já existentes
+            \item Amenizar questões orçamentá\-rias
+            \item Melhorar uso dos recursos já exis\-tentes (e.g. inventário de universidades)
       \end{itemize}
   \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
@@ -419,22 +425,24 @@
 % Objetivos
 % -- 
 \section{Objetivo}
+\subsection*{Objetivos Gerais}
 %[allowframebreaks]
-\begin{frame}[allowframebreaks]{Objetivo}
+\begin{frame}{Objetivo}
   \begin{itemize}
     \item[] \textbf{Objetivos Geral:}
     \item[]
-          \begin{itemize}
-            \item[] Realizar a comparação de desempenho de orquestração de recursos em \emph{cluster} de baixo custo em ambientes virtualizados, para o processamento e a análise dos dados.
-          \end{itemize}
+      \begin{itemize}
+        \item[] Avaliar a viabilidade de orquestração de recursos em \emph{cluster} de baixo custo em ambientes containerizados, para o processamento e a análise dos dados.
+      \end{itemize}
     \item[] \textbf{Objetivos Específicos:}
-          \begin{itemize}
-            \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
-            \item Comparar o desempenho de clusters em ambientes virtualizados;
-            \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
-            \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
-          \end{itemize}
-          I\end{itemize}
+      \begin{itemize}
+        \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
+        \item Avaliar tempo de provisionamento, tempo de execução e disponibilidade do cluster;
+        \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
+        \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
+        \item Disponibilzar um cluster pronto para uso para UFMG, bem como ferramentas de auxilio no provisionamento;
+      \end{itemize}
+  \end{itemize}
 \end{frame}
 
 
@@ -446,21 +454,21 @@
 % -- 
 %  Análise de dados
 % -- 
-\subsection{Análise de dados}
+% \subsection{Análise de dados}
 
-\begin{frame}{Análise de dados}
-  \begin{itemize}
-    \item Descisões em saúde costumam ser complexas - precisam de suporte científico (dados) e avaliação de Contexto
-    \item Com o crescimento dos 3V's de dados na área da saúde (Big Data) processar e analisar esses dados tornouse fundamental para tomada de descisões adequadas
-    \item Desafios:
-          \begin{itemize}
-            \item complexidade dos dados obtidos
-            \item ausencia de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
-            \item custos de novos equipamentos capazes de analisar tal volume
-          \end{itemize}
-    \item Há grande oportunidade para a proposição de estratégias de processamento e anális de dados na área
-  \end{itemize}
-\end{frame}
+% \begin{frame}{Análise de dados}
+%   \begin{itemize}
+%     \item Descisões em saúde costumam ser complexas - precisam de suporte científico (dados) e avaliação de Contexto
+%     \item Com o crescimento dos 3V's de dados (Big Data), na área da saúde, processar e analisar esses dados tornou-se fundamental para tomada de descisões adequadas
+%     \item Desafios:
+%       \begin{itemize}
+%         \item complexidade dos dados obtidos
+%         \item ausência de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
+%         \item custos de novos equipamentos capazes de analisar tal volume
+%       \end{itemize}
+%     \item Há grande oportunidade para a proposição de estratégias de processamento e análise de dados nesse setor
+%   \end{itemize}
+% \end{frame}
 
 % -- 
 %  Alternativas open source
@@ -472,7 +480,9 @@
     \item Considerando
           \begin{itemize}
             \item O escopo deste trabalho
-            \item As estratégias para processamento e análise de dados disponíveis no mercado
+            \item Limitações de hardware
+            \item As estratégias para processamento
+            \item Ferramentas de análise de dados disponíveis no mercado
           \end{itemize}
     \item [] As soluções encontradas no mercado foram agrupadas em dois grupos:
           \begin{itemize}
@@ -502,15 +512,15 @@
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=0.5\textwidth]{containers.png}
-        \includegraphics[width=1\textwidth]{vmsContainer.png}
+        \includegraphics[width=1\textwidth]{containers.png}
+        % \includegraphics[width=1\textwidth]{vmsContainer.png}
       \end{center}
     \end{column}
   \end{columns}
 \end{frame}
 
 % -- 
-%  Cluster orquestrador de container
+% \emph{Cluster}orquestrador de container
 % -- 
 \subsection{Cluster orquestrador de container}
 
@@ -519,23 +529,34 @@
     \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item Kubernetes\textregistered:
+          \begin{itemize}
+            \item Origem de 15 anos de trabalho da Google (Borg) %\cite{verma_large-scale_2015}
+            \item Estrutura de objetos componentizados %\cite{kubernetes2022}
               \begin{itemize}
-                \item Origem de 15 anos de trabalho da Google (Borg) %\cite{verma_large-scale_2015}
-                \item Estrutura de objetos componentizados %\cite{kubernetes2022}
-                      \begin{itemize}
-                        \item Kube-apiserver
-                        \item Kube-scheduler
-                        \item Kube-controller-manager
-                        \item Kubelet
-                        \item Kube-proxy
-                        \item Pod
-                      \end{itemize}
+                \item Kube-apiserver
+                \item Kube-scheduler
+                \item Kube-controller-manager
+                \item Kubelet
+                \item Kube-proxy
+                \item Pod
               \end{itemize}
+          \end{itemize}
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=1\textwidth]{kubeadm-node.png}
+        \begin{overprint}
+          \onslide<1>\includegraphics[width=1\textwidth]{k8s-1.png}
+          \onslide<2>\includegraphics[width=1\textwidth]{k8s-2.png}
+          \onslide<3>\includegraphics[width=1\textwidth]{k8s-3.png}
+          \onslide<4>\includegraphics[width=1\textwidth]{k8s-4.png}
+          \onslide<5>\includegraphics[width=1\textwidth]{k8s-5.png}
+          \onslide<6>\includegraphics[width=1\textwidth]{k8s-6.png}
+          \onslide<7>\includegraphics[width=1\textwidth]{k8s-7.png}
+          \onslide<8>\includegraphics[width=1\textwidth]{k8s-8.png}
+          \onslide<9->\includegraphics[width=1\textwidth]{k8s-9.png}
+        \end{overprint}
+        % \animategraphics[loop,autoplay,width=\linewidth]{1}{k8s-}{1}{9}
       \end{center}
     \end{column}
   \end{columns}
@@ -550,34 +571,30 @@
 % Abordagem
 % --
 \subsection{Abordagem}
-\begin{frame}[allowframebreaks]{Abordagem}
-  Utilizar um Cluster Kubernetes como plataforma de orquestração de cargas de trabalho em ambiente virtual.
+\begin{frame}{Abordagem - Cluster e Análise}
+  Utilizar um \emph{Cluster} Kubernetes\textregistered\ como plataforma de orquestração de cargas de trabalho em computadores desktops.
   \begin{itemize}
     \item Cargas de trabalho:
           \begin{itemize}
-            \item Analise de tendencia de uso de azitromicina entre 2014 e 2021
+            \item Análise de tendência de uso de azitromicina entre 2014 e 2021
           \end{itemize}
-        \item Ambientes virtualizados (\emph{Host} do cluster):
-          \begin{itemize}
-            \item completa - \emph{Hypervisor} tipo 2
-            \item sistema operacional - contêineres
-        \end{itemize}
-    
-        \item máquinas subutilizadas
-        \item redução do CAPEX
+        \item Composição do cluster com computadores \emph{desktops} reaproveitados
+        \item Minimizar trabalho local e priorizar a possibilidade de provisionamneto remoto
+        \item redução do CAPEX e otimizar utilização de hardware ocioso ou subutilizado
+        \item reaproveitamento de maquinas
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Abordagem}
+\begin{frame}{Abordagem - Condução do projeto}
   O uso de conceitos e metodologias de DevOps:
   \begin{itemize}
-            \item CI (integração contínua)
-            \item CD (entrega contínua)
+            \item Versionamento (Git) 
+            \item CI (integração contínua) \texttt{make build}
+            \item CD (entrega contínua) \texttt{make deploy}
     \item Monitoramento
         \begin{itemize}
             \item método USE, parâmetros de utilização, saturação e erro 
-            \item métricas definidas por parâmetro
-            \item relaciona desempenho dos nós virtuais.
+            \item avaliação de utilização dos nós durante processamento
         \end{itemize}
   \end{itemize}
 \end{frame}
@@ -588,58 +605,47 @@
 \subsection{Especificações}
 
 \begin{frame}[allowframebreaks]{Especificações}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item Cluster:
               \begin{itemize}
-                \item Virtualização:
-                      \begin{itemize}
-                        \item Maquinas Virtuais (VMs) (\emph{Hypervisor} tipo 2)
-                        \item Contêineres Aninhados (Docker In Docker, ou DinD)
-                      \end{itemize}
+                \item Composição:
+                \begin{itemize}
+                    \item 1 computadores com 6 CPUs e 8GB de RAM (\emph{load balancer })
+                    \item 3 computadores com 6 CPUs e 8GB de RAM (\emph{control-plane})
+                    \item 4 computadores com 6 CPUs e 16GB de RAM (\emph{workers})
+                \end{itemize}
               \end{itemize}
         \begin{itemize}
-            \item Ambiente Virtual:
+            \item Containers para processamento e análise:
               \begin{itemize}
-              \item  arquitetura: \textbf{amd64}
+                \item 90 containers (1/mês de análise) [procesamento]
+                \item 1 container /  usuário [análise]
+                \item arquitetura: \textbf{amd64}
                 \item 1 vCPU
                 \item 2 GB de RAM
-                \item 6-8 máquinas
               \end{itemize}
         \end{itemize}
     \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}  %%<--- here
-      \begin{center}
-        \includegraphics[width=1\textwidth]{vms.png}
-      \end{center}
-    \end{column}
-  \end{columns}
-  
+    
   \framebreak
   
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
-    
       \begin{itemize}
-        \item Definição máquina \emph{host}:
+        \item Orquestração do processamento dos dados originias:
               \begin{itemize}
-                \item o \emph{host} será um laptop, contendo configuração de 4vCPUs e 16GB de RAM
-                \item Hospedará as maquinas virtualizadas, pertencentes ao cluster
-                      
+                \item Apache Airflow\textregistered\
+                \begin{itemize}
+                  \item Kubernetes executor (onde)
+                  \item Python Operators (como)
+                \end{itemize}
               \end{itemize}
-        \item Definição máquina \emph{guest}:
+        \item Consumo e análise de dados tratados:
               \begin{itemize}
-                \item como ja descrtio em 2 cenários: Virtualização completa, e em containers
-                \item Nós do Cluster kubernetes (objeto de monitoramento)
+                \item JupyterHub - Notebooks para multi-usuários (gerenciamento)
+                \item Jupyter Lab - Notebooks para análise dos dados (execução)
               \end{itemize}
       \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \includegraphics[width=1\textwidth]{SCKET.png}
-    \end{column}
-  \end{columns}
+  
+  
 \end{frame}
 
 
@@ -656,6 +662,7 @@
     \label{fig:k8s-arch}
 \end{figure}
 \end{frame}
+
 % -- 
 % Configuração e provisionamento do cluster
 % -- 
@@ -677,34 +684,45 @@
 \subsection{Monitoramento}
 
 \begin{frame}{Monitoramento}
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
   \begin{itemize}
-    \item \emph{OpenTelemetry}
-    \item \emph{Prometheus} Monitoramento de sistemas e Banco de dados de series temporais
+    \item \emph{Node Exporter} Expor métricas de Host
+    \item \emph{Prometheus} -  Monitoramento de sistemas e Banco de dados de series temporais
     \item \emph{Grafana} - Dashboard e observabilidade
-    \item Parametros de tempo, taxa de utilização de memoria e processamento
+    \item Airflow - Relatório de tempo de execução, falhas, tentativas
   \end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+  \begin{center}
+    \begin{figure}
+      \centering
+      \includegraphics[width=.9\textwidth]{report_execution_summary.png}
+      \caption{Airflow - Relatório de execução}
+    \end{figure}
+  \end{center}
+\end{column}
+\end{columns}
 \end{frame}
 
 
 % -- 
 % Comparação entre tipos de virtualização
 % -- 
-\subsection{Comparação entre tipos de virtualização}
+\subsection{Avaliação viabilidade}
 
-\begin{frame}[allowframebreaks]{Comparação entre tipos de virtualização}
+\begin{frame}[allowframebreaks]{Avaliação de utilização do cluster}
   
   \begin{itemize}
-      \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
+      \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execução
       \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
       \item Taxa de Utilização de CPU e Memória 
       \item Taxa de saturação de CPU e Memória
-      \item[] Métricas de APM:
-      \item Tempo Médio de todas as cargas de trabalho e variabilidade
+      \item[] Tempo de Implementação:
+      \item Tempo de configuração do cluster
       \item[] Método base utilizado para coleta de informações:
       \item Metodo USE de avaliação (Checklist Linux)
   \end{itemize}
-  
-  Caso base - comparação com processo de análise em \emph{bare metal} 4vCPU, 16 GB de RAM - totalizando o poder computacional total do \emph{cluster} proposto
 \end{frame}
 
 
@@ -717,18 +735,359 @@
   \begin{itemize}
     \item Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados
     \item $530 \cdot 10^{6}$ linhas com mais de 70 GB
-    \item Análise de tendência do consumo de azitromicina
+    \item Análise de tendência do consumo de azitromicina por região
+    \item Análise de tendência do consumo de azitromicina no país
+    \item Avaliação compartiva de 2 anos anteriores ao COVID-19
   \end{itemize}
 \end{frame}
 
 % -- 
 % Cronograma
 % -- 
-\subsection{Cronograma}
+% \subsection{Cronograma}
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \includegraphics[width=\paperwidth]{TCC cronograma - Sheet1.pdf}
+% \end{frame}
+
+
+% -- 
+% Disponibilidade dos recursos deste trabalho
+% -- 
+\section{Resultados}
+
+\begin{frame}{Disponibilidade dos recursos}
+  Todos os componentes definidos neste trabalho estarão contidos em um repositório público \href{https://github.com/felipefrocha/esufmg-tcc}{https://github.com/felipefrocha/esufmg-tcc}, sob a licença pública geral GNU versão 3, para livre acesso.
+\end{frame}
+
+\subsection{Provisionamento}
+
+\begin{frame}
+  \hspace*{-15mm}
+  \begin{figure}
+      \centering
+      \includegraphics[width=.9\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
+      \caption{Diagrama de deploy - OS e versões}
+      \label{fig:k8s-arch-deploy}
+  \end{figure}
+  \end{frame}
+
+\begin{frame}[plain]{NgRok - Acesso Remoto}
+  \hspace*{-10mm}
+  \begin{figure}
+    \includegraphics[width=.85\paperwidth]{ngroktcp.png}
+  \caption[Funcionamnto NgRok]{Funcionamento NgRok}
+  \end{figure}
+\end{frame}
+
+\begin{frame}[plain]{NgRok - Painel}
+ \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.5\paperwidth]{ngrok.png}
+\end{figure}
+\end{frame}
+
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \begin{figure}
+%     \centering  
+%     \includegraphics[height=0.6\paperwidth]{ssh.png}
+%     \caption[ssh config]{SSH config}
+%   \end{figure}
+% \end{frame}
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \begin{figure}
+%     \centering  
+%     \includegraphics[height=0.6\paperwidth]{ansible_inventory.png}
+%     \caption[Ansible inventory]{Ansible inventory}
+%   \end{figure}
+% \end{frame}
+\subsection{Configuração}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
-  \includegraphics[width=\paperwidth]{TCC cronograma - Sheet1.pdf}
+    \begin{figure}
+      \begin{center}
+        % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+        \begin{overprint}
+          \onslide<1>\includegraphics[width=1\textwidth]{seq-jupy-1.png}
+          \onslide<2>\includegraphics[width=1\textwidth]{seq-jupy-2.png}
+          \onslide<3>\includegraphics[width=1\textwidth]{seq-jupy-3.png}
+          \onslide<4>\includegraphics[width=1\textwidth]{seq-jupy-4.png}
+          \onslide<5>\includegraphics[width=1\textwidth]{seq-jupy-5.png}
+          \onslide<6>\includegraphics[width=1\textwidth]{seq-jupy-6.png}
+          \onslide<7>\includegraphics[width=1\textwidth]{seq-jupy-7.png}
+          \onslide<8->\includegraphics[width=1\textwidth]{seq-jupy-8.png}
+        \end{overprint}
+      \end{center}  
+      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+  % \includegraphics[width=0.85\paperwidth]{tcc_jupyter_deploy.png}
+  \begin{center}
+    % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+    \begin{overprint}
+      \onslide<1>\includegraphics[width=1\textwidth]{deploy-jupy-1.png}
+      \onslide<2>\includegraphics[width=1\textwidth]{deploy-jupy-2.png}
+      \onslide<3>\includegraphics[width=1\textwidth]{deploy-jupy-3.png}
+      \onslide<4>\includegraphics[width=1\textwidth]{deploy-jupy-4.png}
+      \onslide<5>\includegraphics[width=1\textwidth]{deploy-jupy-5.png}
+      \onslide<6>\includegraphics[width=1\textwidth]{deploy-jupy-6.png}
+      \onslide<7>\includegraphics[width=1\textwidth]{deploy-jupy-7.png}
+      \onslide<8>\includegraphics[width=1\textwidth]{deploy-jupy-8.png}
+      \onslide<9>\includegraphics[width=1\textwidth]{deploy-jupy-9.png}
+      \onslide<10>\includegraphics[width=1\textwidth]{deploy-jupy-10.png}
+      \onslide<11>\includegraphics[width=1\textwidth]{deploy-jupy-11.png}
+      \onslide<12->\includegraphics[width=1\textwidth]{deploy-jupy-12.png}
+    \end{overprint}
+  \end{center}  
+      \caption[Jupyter Deploy]{Jupyter - Diagrama de Deploy}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{airflow_sequence.png}
+      \caption[Airflow - Diagrama de Sequencia]{Airflow - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.85\paperwidth]{tcc_airflow_deloy.png}
+  \caption[AirFlow Deploy]{Ariflow - Diagrama de Deploy}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{tcc_monitoring_deploy.png}
+      \caption[Monitoramento deploy]{Monitoramento - Diagrama de Deploy}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{fluxo_processo.png}
+      \caption{Fluxo de Process - Diagrama de Fluxo}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \begin{center}
+      % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+      \begin{overprint}
+        \onslide<1>\includegraphics[width=1\textwidth]{flow-1.png}
+        \onslide<2>\includegraphics[width=1\textwidth]{flow-2.png}
+        \onslide<3>\includegraphics[width=1\textwidth]{flow-3.png}
+        \onslide<4>\includegraphics[width=1\textwidth]{flow-4.png}
+        \onslide<5>\includegraphics[width=1\textwidth]{flow-5.png}
+        \onslide<6>\includegraphics[width=1\textwidth]{flow-6.png}
+        \onslide<7->\includegraphics[width=1\textwidth]{flow-7.png}
+      \end{overprint}
+    \end{center}  
+      \caption{Processo ETL - Diagrama de Fluxo}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}{Resultados e discussões}
+  \begin{itemize}
+    \item Provisionamento
+    \begin{itemize}
+      \item Tempo de configuração inicial
+      \begin{itemize}
+        \item cloud-init: 2h (possivel redução  se utilizado imagens em rede)
+      \end{itemize}
+    \end{itemize}
+    \begin{itemize}
+      \item Tempo de configuração cluster
+        \begin{itemize}
+          \item automação de configuração Ansible: $20-35m$
+          \item Helm (deploy aplicação) + Terraform (orquestração de deploy): $10-25m$
+        \end{itemize}
+    \end{itemize}
+    \item execução dos job ($2GB$ de RAM e $1CPU$, $90$ pods):
+    \begin{itemize}
+        \item Tempo ingestão dos dados: $\approx 53m$ 
+    \end{itemize}
+    % \item Lead Time:
+    % \begin{itemize}
+    %     \item Tempo de deploy Airflow DAG: $3-6m$
+    %     \item Tempo de deploy JupyterLab: $4-10m$
+    % \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{s3_size.png}
+      \caption{S3 Lista de arquivos}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.5\paperwidth]{report_execution_summary.png}
+      \caption[Airflow relatório]{Relatório de orquestração}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{graph_execution.png}
+      \caption[Airflow relatório]{grafo DAG}
+  \end{figure}  
+\end{frame}
+
+
+\subsection{Resultados do Monitoramento}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.5\paperwidth]{report_execution_summary1.png}
+      \caption[Airflow relatório]{Relatório de Orquestração}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{etl_1_usage.png}
+      \caption[Monitoramento execução]{Monitoramento execução}
+  \end{figure}  
+\end{frame}
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.75\paperwidth]{etl_2_usage.png}
+%       \caption[Monitoramento execução 2]{Monitoramento execução 2}
+%   \end{figure}  
+% \end{frame}
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.75\paperwidth]{etl_3_usage.png}
+%       \caption[Monitoramento execução 3]{Monitoramento execução 3}
+%   \end{figure}  
+% \end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{jupyter_consumption.png}
+      \caption[Monitoramento Jupyter]{Monitoramento Jupyter}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{postgres_resource.png}
+      \caption[Monitoramento Postgres]{Monitoramento Postgres}
+  \end{figure}  
+\end{frame}
+
+\subsection{Resultados das Análises}
+\begin{frame}{Resultados das Análises}
+
+    \begin{itemize}
+      \item Total de prescrições 95.345.640 
+      % \item População:
+      % \begin{itemize}
+      %   \item Maioria sexo femnino: $53,62\%$
+      %   \item Idade: $\bar{x} = 32,75 \pm 2,04$
+      % \end{itemize}
+      \item Aumento de prescrições de $+32,1\%$ (2014-2020)
+      \item Prescrições por $1000 hab$: $+26,59\%$ (2014-2020)
+      
+      \item Regiões:
+        \begin{itemize}
+          \item Sudeste: $47,44\%$ $\{MG: 13,17,SP: 24,76\%\}$
+          \item Sul: $22,47\%$ $\{RS: 12,49\%\}$
+        \end{itemize}
+      \item Estados destaque para aumento:  Minas Gerais ($+125,38\%$), Rondônia ($+191,73\%$ e Roraima ($+168,27\%$))
+    \end{itemize}
+\end{frame}
+
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.6\paperwidth]{distribuicao_sexo.png}
+%       \caption{Pescrição por sexo por UF}
+%   \end{figure}  
+% \end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{distribuicao_presc_ano.png}
+      \caption{Presciçõe por ano}
+  \end{figure}  
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{distribuicao_presc_ano_estado.png}
+      \caption{Prescições por por ano por UF}
+  \end{figure}  
+\end{frame}
+
+    \begin{frame}{Resultados das Análises}
+
+
+  Relevância estatística ($p$ valor) para correlação por $\tau$ de Kendall:
+    \begin{table}[]
+      \begin{tabular}{ccc}
+      \hline
+      \multicolumn{1}{c}{\textbf{UF}} & \multicolumn{1}{c}{\textbf{$\tau$}} & \multicolumn{1}{c}{\textbf{$p$ valor}} \\ \hline
+      MT                              & 1.0                         & 0.003                            \\
+      RJ                              & 1.0                         & 0.003                            \\
+      RN                              & 1.0                         & 0.003                            \\
+      RO                              & 1.0                         & 0.003                            \\
+      TO                              & 0.87                         & 0.017                            \\ \hline
+      \end{tabular}
+      \end{table}
 \end{frame}
 
 % -- 
@@ -741,28 +1100,21 @@
     \item Entendimento da complexidade dos fatores considerados no processo de decisão em saúde
     \item Análise dos impactos sociais-econômicos relativos a restrição orçamentária na ciência
     \item Seleção de tecnologias com base em requisitos e restrições
+    \item Stack de tecnologia de mercado (maior suporte e melhores praáticas)
     \item Desenho de uma estratégia de extração de informações em saúde
-    \item Avaliação de diferentes tipos de virtualização e sua utilização
+    \item Avaliação da viabilidade de uso de clusters de baixo custo na processamento de dados
+    \item Interdisciplinariedade, especificidade e especialidade
+    \item Produção de conhecimento de suporte prático 
+    \item Viés politico nas descisões em saúde. 
+    \item Observabilidade dos dados em saúde
   \end{itemize}
-  Trabalhos futuros contemplarão a implementação, testes e coletas de dados para avaliação comparativa das virtualizações propostas. 
+\end{frame}
+\begin{frame}{Conclusão}
   
-  Baseado nesses resultados pode se evoluir essa discussão na forma de recrutamento de computadores para o \emph{cluster} de maneira a garantir o isolamento da maquina base.
+  Para trabalho futuro visa se a otimizaçao de estratégia de dimensionamento de recursos, avaliação comparativa de outras técnologias e técnicas para abordar o problema de processamneto paralelo e distribuído.
+  Ainda sugere-se, baseado nos resultados desse trabalho, discutir formas de recrutamento de computadores para o \emph{cluster} de outros laboratórios, de maneira a criar elasticidade para cargas de trabalho ainda mais extensas.
 \end{frame}
 
-
-% -- 
-% Disponibilidade dos recursos deste trabalho
-% -- 
-\section{Disponibilidade dos recursos deste trabalho}
-
-\begin{frame}{Disponibilidade dos recursos deste trabalho}
-  \begin{itemize}
-    \item \href{https://github.com/felipefrocha/esufmg-tcc}{Github - Monorepo}
-    \item \href{https://github.com/felipefrocha/esufmg-tcc/actions}{Pipeline}
-  \end{itemize}
-  Todos os componentes definidos neste trabalho estarão contidos em um ou mais repositórios públicos, sob a licença pública geral GNU versão 3, para livre acesso.
-  
-\end{frame}
 
 % -- 
 % Referências

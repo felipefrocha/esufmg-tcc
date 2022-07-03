@@ -84,19 +84,10 @@ resource_config = {
                                 'memory': "512Mi"
                             },
                             limits={
-                                'cpu': "512m",
+                                'cpu': "1000m",
                                 'memory': "2Gi"
                             }
-                        ),
-                        volume_mounts=[
-                                k8s.V1VolumeMount(mount_path="/tmp/", name="download-volume")
-                            ],
                         )
-                    ],
-                volumes=[
-                    k8s.V1Volume(
-                        name="example-kubernetes-test-volume",
-                        host_path=k8s.V1HostPathVolumeSource(path="/tmp/"),
                     )
                 ],
             ),
@@ -111,13 +102,13 @@ resource_config = {
      default_args=default_args)
 def azitromicina_consuption():
 
-    files = S3ListOperator(
-        task_id="get_input",
+    all_files = [S3ListOperator(
+        task_id=f"download_files_{year}",
         bucket=S3_BUCKET,
-        prefix='extended/EDA_Industrializados_20201',
-    )
+        prefix=f'extended/EDA_Industrializados_{year}',
+    ) for year in [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]]
 
-    @task(task_id='process_data_sets', executor_config=resource_config["analytics"])
+    @task(task_id='process_data_sets', executor_config=resource_config["analytics"],max_active_tis_per_dag=12)
     def run_process(aws_conn_id, bucket, file):
         import pandas as pd
         from pandas import DataFrame as df
@@ -128,13 +119,13 @@ def azitromicina_consuption():
 
         hook = S3Hook(aws_conn_id=aws_conn_id)
         file_name = f'./{file}'
- 
+
         date_executed = re.search("(20[0-9]{,})", file_name).group()
-   
+
         Path('./extended').mkdir(parents=True, exist_ok=True)
 
         dirname = os.path.dirname(os.path.abspath(file_name))
-        
+
         log.warn(file_name, dirname, date_executed)
 
         file_downloaded = hook.download_file(key=file, bucket_name=bucket)
@@ -153,45 +144,56 @@ def azitromicina_consuption():
             df_qtd = df_result[["ANO_VENDA", "MES_VENDA",
                                 "UF_VENDA", "QTD_VENDIDA"]].dropna()
 
-            tau,p_value = kendalltau(df_qtd["UF_VENDA"].replace(
+            tau, p_value = kendalltau(df_qtd["UF_VENDA"].replace(
                 UFS), df_result["QTD_VENDIDA"])
 
-            log.warn(f'tau: {tau}')
+            log.warn(f'tau: {tau}, p_valeu: {p_value}')
 
             df_tau = pd.DataFrame(
-                {"date": date_executed, "correlation": tau, "pvalue": p_value})
+                {"date": date_executed, "correlation": [tau], "pvalue": [p_value]})
 
             df_sum = df_qtd.groupby(
                 ["ANO_VENDA", "MES_VENDA", "UF_VENDA"]).sum()
 
-            conn_string = f'postgresql+psycopg2://postgres:N3w4dm1nS@postgres.default.svc.cluster.local:5432/tccanalytics'
+            try:
+                conn_string = f'postgresql+psycopg2://postgres:N3w4dm1nS@postgres.default.svc.cluster.local:5432/tccanalytics'
+                conn = create_engine(conn_string)
+                log.warn("Connection was successfull")
+            except Exception as ex:
+                log.error("Error durign connection")
+                raise ex
 
-            with create_engine(conn_string, pool_size=5, max_overflow=10) as conn:
-                df_result.to_sql("azitromicina_consuption", conn, if_exists="append",
-                                 index=False, chunksize=1000, method="multi")
-                df_tau.to_sql("correlation_per_month", conn, if_exists="append",
-                              index=False, chunksize=1000, method="multi")
-                df_result.to_sql("summary", conn, if_exists="append",
-                                 index=False, chunksize=1000, method="multi")
+            log.warn("Inserting azitromicina Results")
+            df_qtd.to_sql("azitromicina_consuption", conn, if_exists="append",
+                             index=False, chunksize=5000, method="multi")
+            
+            log.warn("Inserting Tau for period")
+            df_tau.to_sql("correlation_per_month", conn, if_exists="append",
+                          index=False, chunksize=5000, method="multi")
+                          
+            log.warn("Inserting Summary")
+            df_sum.to_sql("consuption_summary", conn, if_exists="append",
+                             index=True, chunksize=5000, method="multi")
+            
+            log.warn(f"Ended Processing period {date_executed}")
 
             return f'{date_executed} - {tau}'
 
         except Exception as ex:
             print(f'ERROR - processing {date_executed}:\n{ex} ')
             raise Exception("General error processing files")
-            
 
     @task
-    def resume(lines):
-        output = "".join([f'{line}\n' for line in lines])
+    def resume(all_lines):
+        output = "".join([f'{line}\n' for lines in all_lines for line in lines])
         print(output)
         return output
 
-    outputs = run_process.partial(aws_conn_id="aws_default", bucket=files.bucket).expand(
+    outputs = [run_process.partial(aws_conn_id="aws_default", bucket=files.bucket).expand(
         file=XComArg(files)
-    )
+    ) for files in all_files]
 
-    resume(lines=outputs)
+    resume(all_lines=outputs)
 
 
 if k8s:

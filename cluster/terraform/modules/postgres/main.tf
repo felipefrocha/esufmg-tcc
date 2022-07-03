@@ -89,13 +89,13 @@ resource "kubernetes_stateful_set" "postgres" {
 
           resources {
             limits = {
-              cpu    = "300m"
-              memory = "1500Mi"
+              cpu    = "2000m"
+              memory = "4Gi"
             }
 
             requests = {
-              cpu    = "200m"
-              memory = "1000Mi"
+              cpu    = "1000m"
+              memory = "2Gi"
             }
           }
           env {

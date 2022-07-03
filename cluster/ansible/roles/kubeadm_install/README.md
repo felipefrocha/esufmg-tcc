@@ -22,7 +22,7 @@ The secont one should be installed with `ansible-galaxy` and probabily will be i
 Role Variables
 --------------
 
-All variable descrived in default are from the k8s documentation for cluster installation
+All variable descrived in default are from the k8s documentation fo  cluster  nstallation
 The single on you can choose is `package.enabled` which can be `true` for install from ubuntu pkg manager
 or `false` for installation from source/binaries
 

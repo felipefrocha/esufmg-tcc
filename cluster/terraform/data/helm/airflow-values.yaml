@@ -55,7 +55,7 @@ airflowVersion: "2.2.5"
 images:
   airflow:
     repository: felipefrocha89/esufmg
-    tag: ${tag}
+    tag: tcc-airflow-${tag}
     pullPolicy: Always
   # To avoid images with user code, you can turn this to 'true' and
   # all the 'run-airflow-migrations' and 'wait-for-airflow-migrations' containers/jobs
