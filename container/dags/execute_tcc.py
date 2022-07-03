@@ -119,13 +119,13 @@ def azitromicina_consuption():
 
         hook = S3Hook(aws_conn_id=aws_conn_id)
         file_name = f'./{file}'
- 
+
         date_executed = re.search("(20[0-9]{,})", file_name).group()
-   
+
         Path('./extended').mkdir(parents=True, exist_ok=True)
 
         dirname = os.path.dirname(os.path.abspath(file_name))
-        
+
         log.warn(file_name, dirname, date_executed)
 
         file_downloaded = hook.download_file(key=file, bucket_name=bucket)
@@ -144,7 +144,7 @@ def azitromicina_consuption():
             df_qtd = df_result[["ANO_VENDA", "MES_VENDA",
                                 "UF_VENDA", "QTD_VENDIDA"]].dropna()
 
-            tau,p_value = kendalltau(df_qtd["UF_VENDA"].replace(
+            tau, p_value = kendalltau(df_qtd["UF_VENDA"].replace(
                 UFS), df_result["QTD_VENDIDA"])
 
             log.warn(f'tau: {tau}, p_valeu: {p_value}')
@@ -155,22 +155,26 @@ def azitromicina_consuption():
             df_sum = df_qtd.groupby(
                 ["ANO_VENDA", "MES_VENDA", "UF_VENDA"]).sum()
 
-            conn_string = f'postgresql+psycopg2://postgres:N3w4dm1nS@postgres.default.svc.cluster.local:5432/tccanalytics'
+            try:
+                conn_string = f'postgresql+psycopg2://postgres:N3w4dm1nS@postgres.default.svc.cluster.local:5432/tccanalytics'
+                conn = create_engine(conn_string)
+                log.warn("Connection was successfull")
+            except Exception as ex:
+                log.error("Error durign connection")
+                raise ex
 
-            with create_engine(conn_string, pool_size=5, max_overflow=10) as conn:
-                df_result.to_sql("azitromicina_consuption", conn, if_exists="append",
-                                 index=False, chunksize=1000, method="multi")
-                df_tau.to_sql("correlation_per_month", conn, if_exists="append",
-                              index=False, chunksize=1000, method="multi")
-                df_result.to_sql("summary", conn, if_exists="append",
-                                 index=False, chunksize=1000, method="multi")
+            df_result.to_sql("azitromicina_consuption", conn, if_exists="append",
+                             index=False, chunksize=1000, method="multi")
+            df_tau.to_sql("correlation_per_month", conn, if_exists="append",
+                          index=False, chunksize=1000, method="multi")
+            df_result.to_sql("summary", conn, if_exists="append",
+                             index=False, chunksize=1000, method="multi")
 
             return f'{date_executed} - {tau}'
 
         except Exception as ex:
             print(f'ERROR - processing {date_executed}:\n{ex} ')
             raise Exception("General error processing files")
-            
 
     @task
     def resume(lines):
