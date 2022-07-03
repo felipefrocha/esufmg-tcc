@@ -173,7 +173,7 @@ def azitromicina_consuption():
                           
             log.warn("Inserting Summary")
             df_sum.to_sql("consuption_summary", conn, if_exists="append",
-                             index=False, chunksize=5000, method="multi")
+                             index=True, chunksize=5000, method="multi")
             
             log.warn(f"Ended Processing period {date_executed}")
 
