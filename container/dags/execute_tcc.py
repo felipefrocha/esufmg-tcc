@@ -179,6 +179,7 @@ def azitromicina_consuption():
         except Exception as ex:
             print(f'ERROR - processing {date_executed}:\n{ex} ')
             raise Exception("General error processing files")
+            
 
     @task
     def resume(lines):
