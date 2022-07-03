@@ -17,7 +17,7 @@ clear_local:
 deploy_dag: 
 	@echo ${teste}
 	@git add .
-	@git commit -am "chore(docker): Create a new deployment with tag ${teste}"
+	@git commit -am "chore(docker): Create a new deployment with tag ${teste}" || git commit --amend -am "chore(docker): Create a new deployment with tag ${teste}"
 	@docker build -t felipefrocha89/esufmg:tcc-airflow-${teste} container/dags/
 	@echo "${PASSWD}" | docker login -u felipefrocha89 --password-stdin
 	@docker push felipefrocha89/esufmg:tcc-airflow-${teste} 
