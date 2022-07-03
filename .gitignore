@@ -278,3 +278,4 @@ TSWLatexianTemp*
 **/.vscode
 **/airflow_local/*
 !**/airflow_local/docker-compose.yaml
+**/.terraform*

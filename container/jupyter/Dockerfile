@@ -16,7 +16,7 @@ COPY --chown=jovyan:root requirements.txt /tmp/
 
 USER jovyan
 
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt 
 
 ENV AWS_ACCESS_KEY_ID=AKIARBH4BMKZMHIAYPLQ
 ENV AWS_SECRET_ACCESS_KEY=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
