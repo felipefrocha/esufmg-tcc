@@ -1,19 +1,6 @@
-from datetime import datetime
-
 import os
 import logging
 import re
-from typing import Callable
-import signal
-import sys
-import traceback
-import pandas as pd
-from pandas import DataFrame as df
-from pathlib2 import Path
-import psycopg2
-from sqlalchemy import create_engine
-import numpy as np
-from scipy.stats import kendalltau
 
 from airflow import DAG, XComArg
 from airflow.models import Variable
@@ -27,7 +14,8 @@ from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 
 log = logging.getLogger(__name__)
 
-worker_container_repository = conf.get('kubernetes', 'worker_container_repository')
+worker_container_repository = conf.get(
+    'kubernetes', 'worker_container_repository')
 worker_container_tag = conf.get('kubernetes', 'worker_container_tag')
 
 try:
@@ -79,7 +67,7 @@ default_args = {
     'email': ['feliperocha@ufmg.br'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 0,
 }
 
 resource_config = {
@@ -100,7 +88,16 @@ resource_config = {
                                 'memory': "2Gi"
                             }
                         ),
-                    ),
+                        volume_mounts=[
+                                k8s.V1VolumeMount(mount_path="/tmp/", name="download-volume")
+                            ],
+                        )
+                    ],
+                volumes=[
+                    k8s.V1Volume(
+                        name="example-kubernetes-test-volume",
+                        host_path=k8s.V1HostPathVolumeSource(path="/tmp/"),
+                    )
                 ],
             ),
         ),
@@ -122,23 +119,31 @@ def azitromicina_consuption():
 
     @task(task_id='process_data_sets', executor_config=resource_config["analytics"])
     def run_process(aws_conn_id, bucket, file):
+        import pandas as pd
+        from pandas import DataFrame as df
+        from pathlib2 import Path
+        from sqlalchemy import create_engine
+        import numpy as np
+        from scipy.stats import kendalltau
 
         hook = S3Hook(aws_conn_id=aws_conn_id)
-        file_name = f'/tmp/{file}'
-        dirname = os.path.dirname(os.path.abspath(file_name))
+        file_name = f'./{file}'
+ 
         date_executed = re.search("(20[0-9]{,})", file_name).group()
+   
+        Path('./extended').mkdir(parents=True, exist_ok=True)
 
-        log.info(file_name, dirname, date_executed)
+        dirname = os.path.dirname(os.path.abspath(file_name))
+        
+        log.warn(file_name, dirname, date_executed)
 
-        if not os.path.isdir(dirname):
-            Path(dirname).mkdir(parents=True, exist_ok=True)
-
-        hook.download_file(key=file, bucket_name=bucket, local_path='/tmp/')
+        file_downloaded = hook.download_file(key=file, bucket_name=bucket)
+        log.warn(file_downloaded)
 
         df_result = None
 
         try:
-            with open(file=file_name, mode='r', encoding='ISO-8859-1') as csv_file:
+            with open(file=file_downloaded, mode='r', encoding='ISO-8859-1') as csv_file:
                 df = pd.read_csv(csv_file, iterator=True,
                                  chunksize=5000, low_memory=True, delimiter=';')
 
@@ -148,11 +153,13 @@ def azitromicina_consuption():
             df_qtd = df_result[["ANO_VENDA", "MES_VENDA",
                                 "UF_VENDA", "QTD_VENDIDA"]].dropna()
 
-            tau = kendalltau(df_qtd["UF_VENDA"].replace(
+            tau,p_value = kendalltau(df_qtd["UF_VENDA"].replace(
                 UFS), df_result["QTD_VENDIDA"])
 
+            log.warn(f'tau: {tau}')
+
             df_tau = pd.DataFrame(
-                {"date": date_executed, "correlation": tau[0], "pvalue": tau[1]})
+                {"date": date_executed, "correlation": tau, "pvalue": p_value})
 
             df_sum = df_qtd.groupby(
                 ["ANO_VENDA", "MES_VENDA", "UF_VENDA"]).sum()
@@ -184,6 +191,7 @@ def azitromicina_consuption():
     )
 
     resume(lines=outputs)
+
 
 if k8s:
     dag = azitromicina_consuption()
