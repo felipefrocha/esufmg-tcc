@@ -84,7 +84,7 @@ resource_config = {
                                 'memory': "512Mi"
                             },
                             limits={
-                                'cpu': "512m",
+                                'cpu': "1000m",
                                 'memory': "2Gi"
                             }
                         )
@@ -102,13 +102,13 @@ resource_config = {
      default_args=default_args)
 def azitromicina_consuption():
 
-    files = S3ListOperator(
+    all_files = [S3ListOperator(
         task_id="get_input",
         bucket=S3_BUCKET,
-        prefix='extended/EDA_Industrializados_20201',
-    )
+        prefix=f'extended/EDA_Industrializados_{year}',
+    ) for year in [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]]
 
-    @task(task_id='process_data_sets', executor_config=resource_config["analytics"])
+    @task(task_id='process_data_sets', executor_config=resource_config["analytics"],max_active_tis_per_dag=12)
     def run_process(aws_conn_id, bucket, file):
         import pandas as pd
         from pandas import DataFrame as df
@@ -163,12 +163,19 @@ def azitromicina_consuption():
                 log.error("Error durign connection")
                 raise ex
 
-            df_result.to_sql("azitromicina_consuption", conn, if_exists="append",
-                             index=False, chunksize=1000, method="multi")
+            log.warn("Inserting azitromicina Results")
+            df_qtd.to_sql("azitromicina_consuption", conn, if_exists="append",
+                             index=False, chunksize=5000, method="multi")
+            
+            log.warn("Inserting Tau for period")
             df_tau.to_sql("correlation_per_month", conn, if_exists="append",
-                          index=False, chunksize=1000, method="multi")
-            df_result.to_sql("summary", conn, if_exists="append",
-                             index=False, chunksize=1000, method="multi")
+                          index=False, chunksize=5000, method="multi")
+                          
+            log.warn("Inserting Summary")
+            df_sum.to_sql("consuption_summary", conn, if_exists="append",
+                             index=False, chunksize=5000, method="multi")
+            
+            log.warn(f"Ended Processing period {date_executed}")
 
             return f'{date_executed} - {tau}'
 
@@ -177,16 +184,16 @@ def azitromicina_consuption():
             raise Exception("General error processing files")
 
     @task
-    def resume(lines):
-        output = "".join([f'{line}\n' for line in lines])
+    def resume(all_lines):
+        output = "".join([f'{line}\n' for lines in all_lines for line in lines])
         print(output)
         return output
 
-    outputs = run_process.partial(aws_conn_id="aws_default", bucket=files.bucket).expand(
+    outputs = [run_process.partial(aws_conn_id="aws_default", bucket=files.bucket).expand(
         file=XComArg(files)
-    )
+    ) for files in all_files]
 
-    resume(lines=outputs)
+    resume(all_lines=outputs)
 
 
 if k8s:
