@@ -23,4 +23,4 @@ ENV AWS_SECRET_ACCESS_KEY=1oFOhtmhtEe+C0eJtfGoL24cvnGu7eXLLNH9dTCl
 ENV S3_BUCKET='bancodoutorado'
 
 
-COPY --chown=jovyan:root *.py *.ipynb ./work/
+COPY --chown=jovyan:root . ./work/
