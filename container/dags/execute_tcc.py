@@ -87,16 +87,7 @@ resource_config = {
                                 'cpu': "512m",
                                 'memory': "2Gi"
                             }
-                        ),
-                        volume_mounts=[
-                                k8s.V1VolumeMount(mount_path="/tmp/", name="download-volume")
-                            ],
                         )
-                    ],
-                volumes=[
-                    k8s.V1Volume(
-                        name="example-kubernetes-test-volume",
-                        host_path=k8s.V1HostPathVolumeSource(path="/tmp/"),
                     )
                 ],
             ),
