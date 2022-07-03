@@ -23,8 +23,8 @@ deploy_k8s_config:
 	@echo "${PASSWD}" | docker login -u felipefrocha89 --password-stdin
 	@docker push felipefrocha89/esufmg:tcc-airflow-${datetime} 
 	@docker push felipefrocha89/esufmg:tcc-jupyter-${datetime} 
-	@cd cluster && make k8s tag=tcc-airflow-${datetime}
-	@cd cluster && make k8s tag=tcc-jupyter-${datetime}
+	@cd cluster && make k8s tag=${datetime}
+	@cd cluster && make k8s tag=${datetime}
 
 docs:
 	@(cd docs/apresentacao && make) & (cd docs/monografia && make) & wait
