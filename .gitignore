@@ -276,3 +276,5 @@ TSWLatexianTemp*
 *.lpz
 
 **/.vscode
+**/airflow_local/*
+!**/airflow_local/docker-compose.yaml
