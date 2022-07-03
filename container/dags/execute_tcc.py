@@ -103,7 +103,7 @@ resource_config = {
 def azitromicina_consuption():
 
     all_files = [S3ListOperator(
-        task_id="get_input",
+        task_id=f"download_files_{year}",
         bucket=S3_BUCKET,
         prefix=f'extended/EDA_Industrializados_{year}',
     ) for year in [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021]]
