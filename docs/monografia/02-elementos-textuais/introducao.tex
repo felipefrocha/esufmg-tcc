@@ -56,19 +56,19 @@ Essas limitações indiretas, impõem forte restrições no processo de avaliaç
 \begin{figure}[!h]
     \centering
     \includegraphics[width=0.8\textwidth]{04-figuras/dolar.png}
-    \caption{Evolução do dólar/real na última década (Fonte: Feito pelo autor)}
+    \caption[Evolução do dólar/real na última década ]{Evolução do dólar/real na última década (Fonte: Feito pelo autor)}
     \label{fig:dolar}
 \end{figure}
 \begin{figure}[!h]
     \centering
     \includegraphics[width=0.8\textwidth]{04-figuras/compartive.png}
-    \caption{Pagamento efetivo - Ministério da Ciência e Tecnologia (Fonte: Feito pelo autor)}
-    \label{fig:quedaorca}
+    \caption[Pagamento efetivo - Ministério da Ciência e Tecnologia ]{Pagamento efetivo - Ministério da Ciência e Tecnologia (Fonte: Feito pelo autor)}
+    \label{fig:quedaorca1}
 \end{figure}
 \begin{figure}[!h]
     \centering
     \includegraphics[width=0.8\textwidth]{04-figuras/compartive_last .png}
-    \caption{Pagamento efetivo - Relativos aos anos anteriores (Fonte: Feito pelo autor)}
+    \caption[Pagamento efetivo - Relativos aos anos anteriores ]{Pagamento efetivo - Relativos aos anos anteriores (Fonte: Feito pelo autor)}
     \label{fig:quedaorca}
 \end{figure}
 
@@ -94,8 +94,11 @@ Deste modo, espera-se demonstrar comparativamente a implementação de uma solu�
 \section{Definição e abordagem}
 \label{sec:abordagem}
 
-A proposta do trabalho visa comparar a utilização de \emph{cluster} de Kubernetes\textregistered como plataforma de orquestração de cargas de trabalho em dois tipos de ambientes virtualizados, utilizando como carga de trabalho a análise de tendência de consumo de azitromicina no Brasil entre os anos de 2014 e 2021. Pretende-se utilizar, como principal resultado, uma análise comparativa de desempenho dos ambientes e uma proposta de utilização dessa plataforma em computadores do tipo \emph{desktop} como alternativa a HPC.
-A utilização da plataforma visa validar seu uso para orquestração de tarefas em paralelo, durante a análise, permitindo o uso simultâneo de diversas máquinas. A comparação a ser realizada será em máquinas virtuais (VMs) e \emph{containers} aninhados, no caso deste trabalho 6, com capacidades de processamento semelhantes a computadores desktop de 2 GB (Gigabytes) de RAM (Random Access Memory) e 1 vCPU (virtual Central Process Unit). Essa restrição para ambiente virtualizado será realizada por configuração de API do hypervisor ou por restrição de \emph{cgroups}, permitindo que a análise de grandes massas de dados (maiores que 50 GB) possam ser feitas sem o uso de HPC.
+A proposta do trabalho visa avaliar a utilização de \emph{cluster} de Kubernetes\textregistered \ como plataforma de orquestração de cargas de trabalho para processamento de dados em\emph{clusters }compostos por computadores de baixo custo ou reaproveitados.
+
+Utilizando como carga de trabalho a análise de tendência de consumo de azitromicina no Brasil entre os anos de 2014 e 2021. Pretende-se utilizar, como principal resultado, a viabilidade de utilização de computadores do tipo \emph{desktop} para orquestração e análise de grades massas de dados como dados do SUS (Sistema Único de Saúde) garantindo assim viabilidade de trabalhos e proponto a utilização dessa plataforma em computadores menos específicos, como alternativa a HPC.
+
+A utilização da plataforma visa validar seu uso para orquestração de tarefas em paralelo e precessamneto distribuído de dados, durante a análise, permitindo o uso simultâneo de diversas máquinas. Utilizando inicialmente 8 computadores com capacidades de processamento semelhantes a computadores desktop de 8-16 GB (Gigabytes) de RAM (Random Access Memory) e 4-8 vCPU (virtual Central Process Unit). Essa restrição  permitiram que uma analise de viabilidade para que o processmaneto e análise de grandes massas de dados (maiores que 50 GB) possam ser feitas sem o uso de HPC.
 
 A abordagem de DevOps (BASS et al, 2015) para tornar o provisionamento, a integração e o \emph{deploy} da infra estrutura, bem como os componentes de análise desses utilizados neste trabalho incluem o conceito de CI (continuous integration), CD (continuous delivery).  IaC (Infrastructure as Code) visa tornar a configuração e disponibilização desse \emph{cluster} mais ágil, diminuindo assim a necessidade de operação e também de sua manutenção.
 
@@ -107,4 +110,14 @@ O trabalho não engloba a realização de interpretação da informação gerada
 \section{Organização do trabalho}
 \label{sec:organizacaoTrabalho}
 
-Este trabalho está dividido em 4 Capítulos. Esta Introdução apresentou o contexto geral do trabalho e tecnologias que serão avalias e citou possíveis problemáticas econômicas e sociais. O Capítulo 2 apresenta a fundamentação teórica e a revisão da literatura, discorrendo sobre as leituras que embasaram toda a construção do projeto, também aprofunda em conceitos necessários para as discussão e condução do trabalho. O Capítulo 3 apresenta a  metodologia utilizada para a construção dos componentes do projeto e a forma de avaliação de desempenho dos ambientes propostos bem como a forma de avaliação. No capitulo 4 apresenta-se as conclusões até a finalização dessa etapa, discorre sobre a próxima fase do TCC e também apresenta o que o aluno visualiza de possibilidade para a proposta do trabalho bem como conduzir o problema para outros horizontes. 
+Este trabalho está dividido em 6 Capítulos. Esta Introdução apresentou o contexto geral do trabalho e tecnologias que serão avalias e citou possíveis problemáticas econômicas e sociais. 
+
+O Capítulo 2 apresenta a fundamentação teórica e a revisão da literatura, discorrendo sobre as leituras que embasaram toda a construção do projeto, também aprofunda em conceitos necessários para as discussão e condução do trabalho. 
+
+O Capítulo 3 apresenta a  metodologia utilizada para a construção dos componentes do projeto e a forma de avaliação de desempenho dos ambientes propostos bem como a forma de avaliação. 
+
+O capitulo 4 apresenta os resultados obitidos tanto para orquestração das cargas de trabalho no ETL (extração, transformação e carga) e também os resultados obtidios apara a análise e processamento dos dados de consumo e prescrição obtidos para azitromicina no periodo descrito anteriormente.
+
+O capítulo 5 discute os resultados adquiridos para a orequestração e analise dos dados referentes ao capitulo 4, além de suas interprestações. 
+
+O capítulo 6 apresenta as conclusões até a finalização dessa etapa, discorre sobre as fases do TCC e também apresenta o que o aluno realizou ao longo da execussão do trabalho, se a proposta do trabalho atingiu a espectativa como solução ao problema  proposto, além de possibilidades para trabalhos futuros. 

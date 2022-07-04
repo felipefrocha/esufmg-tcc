@@ -5,15 +5,16 @@
 \chapter{Metodologia}
 \label{chap:metodologia}
 \section{Disponibilidade dos recursos deste trabalho}
+
 Todos os componentes definidos nesse trabalho estarão contidos em um ou mais repositórios públicos, garantindo a livre apreciação da comunidade não só científica, mas a todos os interessados na contribuição ou utilização sob a licença pública geral GNU versão 3 \cite{foss2022}.
 
 \section{Especificação dos nós integrantes do  \emph{cluster} de baixo custo}
 
-A formação do  \emph{cluster} será de máquinas virtuais (VMs) e/ou físicas que possuem custo e capacidade computacionais mais baixos, com configurações comumente encontradas em computadores do tipo desktops, como os utilizados em residências, escritórios e laboratórios de informática genéricos.
+A formação do  \emph{cluster} será de máquinas físicas que possuem custo e capacidade computacionais mais baixos, com configurações comumente encontradas em computadores do tipo desktops, como os utilizados em residências, escritórios e laboratórios de informática genéricos.
 
 A primeira versão dessa solução será realizada de maneira simulada, utilizando ambiente virtualizado com VMs que, por sua vez, serão provisionadas em \emph{hypervisors} do tipo 2 \cite{comer_cloud_2021} (\emph{hosted} \emph{hypervisor}), para garantir a simplicidade da implementação da primeira fase (TCC I) e validar o conceito de provisionamento, configuração e \emph{deploy} de aplicações testes e laboratório das ferramentas de monitoramento que serão utilizadas, a serem descritas na sessão \ref{cap:monitor}. 
 
-A versão final do projeto (ambas constarão no TCC II) visa o provisionamento do  \emph{cluster} nos ambientes de teste configurados como descrito na sessão \ref{sec:abordagem}, sendo que algumas premissas serão utilizadas, como o uso de mesmo sistema operacional e versão em cada um desses computadores, garantindo a redução de configuração necessária para a implementação. Outra premissa utilizada para esse estudo será a utilização de uma rede comum aos computadores. 
+A versão final do projeto visa o provisionamento do  \emph{cluster} nos ambientes de teste configurados como descrito na sessão \ref{sec:abordagem}, sendo que algumas premissas serão utilizadas, como o uso de mesmo sistema operacional e versão em cada um desses computadores, garantindo a redução de configuração necessária para a implementação. Outra premissa utilizada para esse estudo será a utilização de uma rede comum aos computadores. 
 
 O aproveitamento de computadores comuns já existentes e subutilizados, seja por uso abaixo de sua capacidade ou ainda intervalos de ociosidade, qualifica o baixo custo da formação do  \emph{cluster} em questão, apresentando CAPEX (capital expenditure),  ou investimento inicial mínimo, se não zero, necessitando da interdisciplinaridade sugerida e defendida dentro das instituições para as quais esse trabalho intenta apresentar uma alternativa.
 
@@ -26,7 +27,7 @@ Essa arquitetura (figura \ref{fig:kubeadmha} recomendada garante a alta disponib
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\textwidth]{04-figuras/kubeadm-ha-topology-stacked-etcd.png}
-    \caption{Kubernetes Arquitetura de alta disponibilidade (Fonte: The Linux Foundation\textregistered, 2021)}
+    \caption[Kubernetes Arquitetura de alta disponibilidade]{Kubernetes Arquitetura de alta disponibilidade (Fonte: The Linux Foundation\textregistered, 2021)}
     \label{fig:kubeadmha}
 \end{figure}
 
@@ -36,21 +37,55 @@ Para ciclo de vida da aplicação e configurações gerais da solução será ut
 
 
 \section{Configuração e provisionamento do  \emph{cluster}}
-Para provisionamento do \emph{cluster} será utilizado Ansible\textregistered, da empresa RedHat\textregistered que é  um sistema de gerenciamento de configuração (CMS). Sua adoção se deu pela característica minimalista de configuração inicial, facilidade de uso e uma característica fundamental que diminui o \emph{overhead} de operação necessária para sua utilização, não possuir agente instalado no inventário de máquinas gerenciadas. 
+
+Oito computadores foram utilizados na estruturaçao do cluster, somando 42 CPUs e 88 GB RAM. Nos quais foram inicialmente instalados com a versão LTS (\emph{long term support}) da distribuição de Linux\textregistered \ Ubuntu\textregistered \ Server {20.04.3}. Para facilidade de configuração, mantendo a segurança dos\emph{clusters}, todos foram configurados com chaves SSH para acesso remoto. O laboratório Winet do DCC UFMG, parceiro na realização desse trabalho, cedeu uma de suas subnets de comprimento /25 (CIDR, \emph{Classless Inter-Domain Routing}). 
+
+Para provisionamento do \emph{cluster} será utilizado Ansible\textregistered, da empresa RedHat\textregistered \ que é  um sistema de gerenciamento de configuração (CMS). Sua adoção se deu pela característica minimalista de configuração inicial, facilidade de uso e uma característica fundamental que diminui o \emph{overhead} de operação necessária para sua utilização, não possuir agente instalado no inventário de máquinas gerenciadas. 
 
 O principal ganho na utilização de CMS é a manutenção e replicabilidade de uma determinada configuração e, no caso do Ansible, não há necessidade de configuração prévia ou instalação de nenhum binário específico para sua utilização, reduzindo assim a complexidade de sua adoção.
 
 A configuração inicial é realizada pela disponibilidade de acesso via rede, python na máquina a ter sua configuração gerenciada (asset, ou recurso) e por meio de alguns tipos de autenticação (kerberos, WinRM, SSH etc), sendo no caso utilizado o protocolo SSH \cite{noauthor_rfc4254_nodate} por chaves assimétricas, o que garante um nível aceitável de segurança, especialmente quando é possível escolher os algoritmos de criptografia e suas possíveis variações como RSA e ED25519.
 
+\subsection{Orquestração do processamento de ingestão dos dados}
+
+Para obtenção e trabalho com os dados propostos, escolheu-se trabalhar com um fluxo conhecido de mercado aplicado tanto em rotinas de batelada (\emph{batch}) como em processos de continuos \emph{stream}. A extração, transformação e carga (ETL) dos dados foi obtida de uma fonte de armazenamento remota por requisição \emph{download} via endereço de URL (\emph{Uniform Resource Locators}) seguido da transformação (filtragem, sumarização) e carregado em um banco de dados relacional localizado n \emph{cluster} o caso PostgreSQL\textregistered.
+
+A orquestração das \emph{tasks} (tarefas), no conceito apresentado pela ferramenta {Apache Airflow}\textregistered \ \cite{airflowconcepts}, permite realizar a execussão em uma ordem especifica, essa estrutura é definida em uma DAG(\emph{direct aciclic graph}). Em execussões simultaneas e paralelas de tarefas, utilizou-se o modo de execussão associado a API (\emph{application programming interface}) do Kubernetes\textregistered. Dessa forma cada task é criada em um novo \emph{pod} com recursos definidos em sua especificação \emph{task} durante o paralelismo dinâmico dos processos(\emph{fanout pattern}).
+
+Essa técnica é comumente associada a padrões de execussão \emph{serveless} usualmente utilizando um processo de subscrição por mensagem dos novos processos. No caso do mapeamento dinâmico das tarefas orquestradas pelo Airflow, uma vez que são utilizados pods independentes por tarefa podemos estrapolar o termo. Para melhor entendimento pode-se fazer uma comparação com \emph{fork} de processos em processamento paralelo, salvo que no contexto do cluster, o pod (unidade onde a tarefa é executada) pode ou não ser instânciado na mesmo mesmo computador de origem do executor, e por meio de \emph{callback} com o \emph{scheduler} d \emph{cluster}  uma comunicação por um banco de metadados, o executor que cria gera os pods de execussão das tarefas controla o estado da tarefa e seu retorno.
+
 \section{Análise de dados}
 
 O banco de dados “Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados”, disponibilizado pelo governo brasileiro (via portal dados.gov.b), será utilizado nesse trabalho. Os anos correspondentes dos dados são no período entre 2014 e 2021 e o banco possui mais de 70 GB  e mais de 530 milhões de linhas, sendo portanto suficiente para ser utilizado como carga de trabalho ao se calcular uma regressão linear para consumo do medicamento de azitromicina.
-Como caso base para comparação e teste do modelo proposto, em termos de tempo para processamento da análise proposta acima, será utilizado um único computador (desktop) com capacidade equivalente a 8 computadores de menor capacidade (1vCPU e 2GB De RAM) designados com nós do  \emph{cluster}, portanto contendo recursos de  8 vCPUs e 16GB de RAM. 
+
+Um banco de dados contendo todas as prescrições de azitromicina dispensadas por farmácias privadas
+e drogarias brasileiras, no período de 2014 a 2021, será construído a partir dos dados processados dos
+bancos de “Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados”.
+A azitromicina foi escolhida como objeto de análise de consumo para os períodos pré e durante a
+pandemia da COVID-19, por se tratar do antimicrobiano – sujeito à venda controlada no Brasil – mais
+amplamente indicado para a prevenção ou tratamento da COVID-19, mesmo sem comprovação de
+eficácia \cite{santos2021kit}.
+
+As seguintes variáveis serão coletadas: apresentação, quantidade dispensada e unidade federativa (UF)
+de comercialização de cada medicamento; conselho profissional do prescritor; idade e sexo do paciente.
+Serão mensuradas as tendências de consumo por meio do número unidades dispensadas – caixas ou
+frascos –, que serão avaliadas usando o índice de correlação tau de Kendall para a quantidade de
+medicamento dispensado ao longo dos anos de 2014 a 2021. As mudanças no tamanho da população
+ao longo do tempo serão consideradas calculando a taxa de prescrição de azitromicina atendida por
+1000 pessoas, tendo como referência estimativas anuais da população (denominador), obtidas a partir
+de dados do Instituto Brasileiro de Geografia e Estatística (IBGE). Também serão comparados os
+consumos da azitromicina no período anterior a pandemia (2018 a 2019) e durante a pandemia (2020 a
+2021).
+
+Para identificar fatores socioeconômicos associados ao consumo da azitromicina nos períodos anteriores
+e posteriores à pandemia, serão analisados sexo e idade do paciente e o Índice de Desenvolvimento
+Humano (IDH) da Unidade Federativa (UF).
+
 
 \section{Monitoramento}
 \label{cap:monitor}
 
-Serão utilizados para monitoramento de execução das cargas de trabalho o Prometheus\textregistered  e para visualização dos dados Grafana\textregistered, ambos sendo configurados a partir do provisionamento do  \emph{cluster}, ainda com a ferramenta proposta inicialmente Ansible\textregistered. Dessa forma, será possível avaliar parâmetros de taxa de lotação das máquinas base, pelo parâmetro de processador e memória, operações de leitura e escrita no disco e também tráfego de rede. Por meio dessas ferramentas será possível, ainda, avaliar dados de tempo de execução de cargas de trabalho em ambos os ambientes propostos e, assim, poder compará-los quanto a eficiência de uso de hardware.
+Serão utilizados para monitoramento de execução das cargas de trabalho o Prometheus\textregistered \  e para visualização dos dados Grafana\textregistered, ambos sendo configurados a partir do provisionamento do  \emph{cluster}, ainda com a ferramenta proposta inicialmente Ansible\textregistered. Dessa forma, será possível avaliar parâmetros de taxa de lotação das máquinas base, pelo parâmetro de processador e memória, operações de leitura e escrita no disco e também tráfego de rede. Por meio dessas ferramentas será possível, ainda, avaliar dados de tempo de execução de cargas de trabalho em ambos os ambientes propostos e, assim, poder compará-los quanto a eficiência de uso de hardware.
 
 \section{Comparação entre tipos de virtualização}
 
@@ -61,13 +96,12 @@ O tipo de teste de aplicação será um macrobenchmark (system level benchmark) 
 
 Esse método USE (Usage, Saturation and Errors) \cite{greg2022} será utilizado para extrair e apresentar métricas e avaliar possíveis problemas. Destaca-se que esse não é o foco do trabalho, mas captura de forma adequada os parâmetros de hardware citados acima.
 
-O controle de tempo será por meio de ferramentas de APM (Application Performance Management) associadas à aplicação da carga de trabalho. Dessa forma, garante-se a avaliação de qualidade e possíveis problemas, além de tempos de execução, dentre outros possíveis problemas e métricas de performance da aplicação \cite{tang2021systematical}.
-
+O controle de tempo será por meio de ferramentas de orquestração {Apache Airflow}\textregistered. O que permite visualizar detalhadamente o tempo de execussão, inicio e finalização das tarefas.
 
 \section{Cronograma}
-A primeira parte do Trabalho de Conclusão de Curso consiste em um estudo dos métodos de virtualização, plataformas elegidas como possíveis soluções e a composição de arquitetura da plataforma de orquestração das cargas de trabalho. O TCCI também serviu para a elaboração de um modelo inicial e também para definição de uma arquitetura de referência a ser refinada no TCC II junto aos demais diagramas do sistema.
+A primeira parte do Trabalho de Conclusão de Curso consistiu em um estudo dos métodos de virtualização, plataformas elegidas como possíveis soluções e a composição de arquitetura da plataforma de orquestração das cargas de trabalho. O TCCI também serviu para a elaboração de um modelo inicial e também para definição de uma arquitetura de referência a ser refinada no TCC II junto aos demais diagramas do sistema.
 
-A solução proposta para realizar tanto a orquestração, como também a comparação das cargas de trabalho serão validadas durante a execução do TCC II.
+A solução proposta para realizar tanto a orquestração, como também a comparação das cargas de trabalho foram validadas durante a execução do TCC II.
 Na Figura \ref{fig:cronograma} é apresentado o cronograma completo do projeto.
 
 \begin{landscape}

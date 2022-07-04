@@ -32,6 +32,9 @@ deploy_k8s_config:
 	@cd cluster && make k8s tag=${datetime}
 
 
-docs:
-	@(cd docs/apresentacao && make) & (cd docs/monografia && make) & wait
+doc_mono:
+	@cd docs/monografia && timeout 14 make
+
+doc_apr:
+	@cd docs/apresentacao && make
 
