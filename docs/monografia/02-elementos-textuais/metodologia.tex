@@ -38,7 +38,7 @@ Para ciclo de vida da aplicação e configurações gerais da solução será ut
 
 \section{Configuração e provisionamento do  \emph{cluster}}
 
-Oito computadores foram utilizados na estruturaçao do cluster, somando 42 CPUs e 88 GB RAM. Nos quais foram inicialmente instalados com a versão LTS (\emph{long term support}) da distribuição de Linux\textregistered \ Ubuntu\textregistered \ Server {20.04.3}. Para facilidade de configuração, mantendo a segurança dos\emph{clusters}, todos foram configurados com chaves SSH para acesso remoto. O laboratório Winet do DCC UFMG, parceiro na realização desse trabalho, cedeu uma de suas subnets de comprimento /25 (CIDR, \emph{Classless Inter-Domain Routing}). 
+Oito computadores foram utilizados na estruturaçao do cluster, somando 42 CPUs e 88 GB RAM. Nos quais foram inicialmente instalados com a versão LTS (\emph{long term support}) da distribuição de Linux\textregistered \ Ubuntu\textregistered \ Server {20.04.3}. Para facilidade de configuração, mantendo a segurança dos \emph{clusters}, todos foram configurados com chaves SSH para acesso remoto. O laboratório Winet do DCC UFMG, parceiro na realização desse trabalho, cedeu uma de suas subnets de comprimento /25 (CIDR, \emph{Classless Inter-Domain Routing}). 
 
 Para provisionamento do \emph{cluster} será utilizado Ansible\textregistered, da empresa RedHat\textregistered \ que é  um sistema de gerenciamento de configuração (CMS). Sua adoção se deu pela característica minimalista de configuração inicial, facilidade de uso e uma característica fundamental que diminui o \emph{overhead} de operação necessária para sua utilização, não possuir agente instalado no inventário de máquinas gerenciadas. 
 
