@@ -3,9 +3,9 @@
 % -----------------------------------------------------------------------------
 
 \chapter{Análise e Discussão dos Resultados}
+\label{chap:provisionamento}
 
 \section{Provisionamento de infraestrutura}
-\label{sec:provisionamento}
 
 \subsection{Configuração Inicial}
 
@@ -84,7 +84,7 @@ A configuração do processo de ETL para ingestão dos dados do banco de medicam
     \label{fig:airflowdag}
 \end{figure}
 
-Apesar de não representado há uma etapa precessora, um \emph{operator} que lista os anos disponiveis para criação de grupos de \emph{mapper} de tarefas dinâmicas, é um \emph{fan-out} de duas etapas, lançando os arquivos que irão listar anos disponvieis em bucket S3 na AWS, outro que listará os arquivos disponiveis de cada ano, e seu download.
+Apesar de não representado, há uma etapa precessora, um \emph{operator} que lista os anos disponiveis para criação de grupos de \emph{mapper} de tarefas dinâmicas, é um \emph{fan-out} de duas etapas, lançando os arquivos que irão listar anos disponvieis em bucket S3 na AWS, outro que listará os arquivos disponiveis de cada ano, e seu download.
 
 Na etapa de processamento seguinte carrega os dados desses arquivos em memória, em um \emph{dataframe} do {pandas} (biblioteca python). Pelo tamanho dos arquivos, não é possivel fazer o carregamento de uma só vez e por tanto a opção de chunks foi usado, isso particiona os dados para garantir o processo por partes. Essa opção garante que diversas tarefas sejam executadas em parelelo sem sobrecarregar  \emph{cluster} em mesmmo causar eventos de OOM (\emph{out of memory}) causando assim que a tarefa entre na fila de \emph{retry}.
 
@@ -293,11 +293,3 @@ Considerando apenas os anos de 2019 e 2020, como períodos pré e durante a pand
         \label{fig:tau}
     \end{figure}
 
-    Pode se ainda traçar um paralelo entre os dados dispostos até o momento e a inclinação politica dos estados. Sendo o governo o maior promotor e divulgador do kit COVID, que continnha azitromicina como um medicamento anti-bacteriano para combate ao vírus do COVID-19.  Estados mais afetados como os da região norte, assim como regiões como centro-oeste que são regiões majoritariamente eleitoras do governo promotor da kit COVID e portanto apresentam também maior adoção e maior correlação de crescimento das prescrições de azitromicina no periodo da COVID-19.
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.8\linewidth]{04-figuras/estados_eleitores_atual_governo.png}
-        \caption[Divulgação do resultado da eleição presidencial de 2018]{Divulgação do resultado da eleição presidencial de 2018 (Fonte: Gazeta do Povo, 2018) }
-        \label{fig:tau}
-    \end{figure}
