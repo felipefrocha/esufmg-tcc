@@ -71,7 +71,7 @@ Para tornar a solução viável em termos de complexidade de configuração, dis
 
 \section{Disponibilização das imagens de container}
 
-Diversas dependencias para a execução das tarefas e logo apos a exploração visual e analise dos dados coletados pela orquestração devem ser incorporada as imagens base utilizadas para o Airflow e também Jupyter. Para controlar a entrega dessas imagens e disponibiliza-las para o servidor, foi publicado em um repositório de imagens publica, com credenciais que expiravam em 12horas. Essas imagens utilizaram uma estratégia tag para \emph{release} associada ao \emph{commit message} no repositório do git, podendo assim recuperar versões específicas e rastrear mudanças que possivelmente alteraram o comportamento esperado dos containers que as utilizarem. 
+Diversas dependencias para a execução das tarefas e logo apos a exploração visual e análise dos dados coletados pela orquestração devem ser incorporada as imagens base utilizadas para o Airflow e também Jupyter. Para controlar a entrega dessas imagens e disponibiliza-las para o servidor, foi publicado em um repositório de imagens publica, com credenciais que expiravam em 12horas. Essas imagens utilizaram uma estratégia tag para \emph{release} associada ao \emph{commit message} no repositório do git, podendo assim recuperar versões específicas e rastrear mudanças que possivelmente alteraram o comportamento esperado dos containers que as utilizarem. 
 
 Essa tag era então substituida por meio de variaveis no terraform e assim utilizadas para configuração dos recursos durante o tempo de deploy das aplicações com as novas tags. Essa estratégia garante um fluxo auditavel de mudanças e preconiza a imutabilidade uma premissa para uso de infraestrutura como código. 
 
@@ -129,7 +129,7 @@ Pode se inferir que o numero de execussões simultaneas representavam 24vCPUs e 
 
 
 
-\section{Analise de dados}
+\section{Análise de dados}
 Todas as análises foram executas em um jypter notebooks provisionado no cluster.
 
 Um total de 95.345.640 prescrições de azitromicina foram atendidas em farmácias e drogarias do Brasil, entre 2015 e 2021. A maioria dos pacientes para os quais foi dispensado o medicamento era do sexo feminino (53,62\%), com média de idade de 32,75 (± 2,04). Entre as regiões com maior venda de azitromicina destacam-se as regiões Sudeste (47,44\%) e Sul (22,47\%) e entre as UF, destacam-se São Paulo (24,76\%), Minas Gerais (13,17\%) e Rio Grande do Sul (12,49\%) Tabela \ref{table:base_desc}

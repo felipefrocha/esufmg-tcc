@@ -326,7 +326,7 @@ pandemia da COVID-19}
         \includegraphics[width=1\textwidth]{interdisciplinar.png}
       \end{center}
       \end{column}
-   %\item Necessário propor e validar estratégias que sejam viáveis e facilitem o processamento de analise de grande volume de dados produzido na área
+   %\item Necessário propor e validar estratégias que sejam viáveis e facilitem o processamento de análise de grande volume de dados produzido na área
   \end{columns}
  %\end{center}
  %\framebreak
@@ -454,14 +454,14 @@ pandemia da COVID-19}
 \begin{frame}{Análise de dados}
   \begin{itemize}
     \item Descisões em saúde costumam ser complexas - precisam de suporte científico (dados) e avaliação de Contexto
-    \item Com o crescimento dos 3V's de dados na área da saúde (Big Data) processar e analisar esses dados tornouse fundamental para tomada de descisões adequadas
+    \item Com o crescimento dos 3V's de dados na área da saúde (Big Data) processar e analisar esses dados tornou-se fundamental para tomada de descisões adequadas
     \item Desafios:
           \begin{itemize}
             \item complexidade dos dados obtidos
-            \item ausencia de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
+            \item ausência de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
             \item custos de novos equipamentos capazes de analisar tal volume
           \end{itemize}
-    \item Há grande oportunidade para a proposição de estratégias de processamento e anális de dados na área
+    \item Há grande oportunidade para a proposição de estratégias de processamento e análise de dados nesse setor
   \end{itemize}
 \end{frame}
 
@@ -554,11 +554,11 @@ pandemia da COVID-19}
 % --
 \subsection{Abordagem}
 \begin{frame}[allowframebreaks]{Abordagem}
-  Utilizar u \emph{Cluster} Kubernetes\textregistered\ como plataforma de orquestração de cargas de trabalho em computadores desktops.
+  Utilizar um \emph{Cluster} Kubernetes\textregistered\ como plataforma de orquestração de cargas de trabalho em computadores desktops.
   \begin{itemize}
     \item Cargas de trabalho:
           \begin{itemize}
-            \item Analise de tendencia de uso de azitromicina entre 2014 e 2021
+            \item Análise de tendência de uso de azitromicina entre 2014 e 2021
           \end{itemize}
         \item Composição do cluster com computadores \emph{desktops} reaproveitados
         \item Minimizar trabalho local e priorizar a possibilidade de provisionamneto remoto
@@ -586,14 +586,13 @@ pandemia da COVID-19}
 \subsection{Especificações}
 
 \begin{frame}[allowframebreaks]{Especificações}
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item Cluster:
               \begin{itemize}
                 \item Composição:
                 \begin{itemize}
-                    \item 4 computadores com 6 CPUs e 8GB de RAM (\emph{load balancer e control-plane})
+                    \item 1 computadores com 6 CPUs e 8GB de RAM (\emph{load balancer })
+                    \item 3 computadores com 6 CPUs e 8GB de RAM (\emph{control-plane})
                     \item 4 computadores com 6 CPUs e 16GB de RAM (\emph{workers})
                 \end{itemize}
               \end{itemize}
@@ -608,18 +607,9 @@ pandemia da COVID-19}
               \end{itemize}
         \end{itemize}
     \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}  %%<--- here
-      \begin{center}
-        \includegraphics[width=1\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
-      \end{center}
-    \end{column}
-  \end{columns}
-  
+    
   \framebreak
   
-  \begin{columns}
-    \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item Orquestração do processamento dos dados originias:
               \begin{itemize}
@@ -633,11 +623,8 @@ pandemia da COVID-19}
                 \item Jupyter Notebooks - análise dos dados
               \end{itemize}
       \end{itemize}
-    \end{column}
-    \begin{column}{0.5\textwidth}
-      \includegraphics[width=1\textwidth]{tcc_airflow_deloy.png}
-    \end{column}
-  \end{columns}
+  
+  
 \end{frame}
 
 
@@ -655,14 +642,6 @@ pandemia da COVID-19}
 \end{figure}
 \end{frame}
 
-\begin{frame}{Arquitetura Orquestrador}
-  \begin{figure}
-      \centering
-      \includegraphics[width=.9\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
-      %\caption{Caption}
-      \label{fig:k8s-arch-deploy}
-  \end{figure}
-  \end{frame}
 % -- 
 % Configuração e provisionamento do cluster
 % -- 
@@ -695,7 +674,11 @@ pandemia da COVID-19}
 \end{column}
 \begin{column}{0.5\textwidth}
   \begin{center}
-    \includegraphics[width=1\textwidth]{report_execution_summary.png}
+    \begin{figure}
+      \centering
+      \includegraphics[width=.9\textwidth]{report_execution_summary.png}
+      \caption{Airflow - Relatório de execução}
+    \end{figure}
   \end{center}
 \end{column}
 \end{columns}
@@ -740,12 +723,12 @@ pandemia da COVID-19}
 % -- 
 % Cronograma
 % -- 
-\subsection{Cronograma}
+% \subsection{Cronograma}
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-  \includegraphics[width=\paperwidth]{TCC cronograma - Sheet1.pdf}
-\end{frame}
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \includegraphics[width=\paperwidth]{TCC cronograma - Sheet1.pdf}
+% \end{frame}
 
 
 % -- 
@@ -753,58 +736,36 @@ pandemia da COVID-19}
 % -- 
 \section{Resultados}
 
-\begin{frame}{Resultados e discussões}
-  \begin{itemize}
-    \item Provisionamento
-    \begin{itemize}
-      \item Tempo de configuração inicial
-      \begin{itemize}
-        \item sem imagem personalizada: 2 dias
-        \item cloud-init: 2h (possivel redução  se utilizado imagens em rede)
-      \end{itemize}
-    \end{itemize}
-    \begin{itemize}
-      \item Tempo de configuração cluster
-        \begin{itemize}
-          \item configuração total manual: >> 12h
-          \item ansible: 15 min
-          \item helm (deploy aplicação) + terraform (orquestração de deploy): 10-20 min
-        \end{itemize}
-    \end{itemize}
-    \item Execussão dos job:
-    \begin{itemize}
-        \item Tempo serial com limite de 2GB de RAM e 1CPU 90 pods: ~1h 30m
-        \item Tempo com orquestrador em paralelo com limite de 2GB de RAM e 1CPU 90 pods: ~53m
-    \end{itemize}
-    \item Lead Time:
-    \begin{itemize}
-        \item Tempo de deploy Airflow DAG: 3-6 min
-        \item Tempo de deploy JupyterLab: 4-10 min
-    \end{itemize}
-    \item 
-  \end{itemize}
-  
-  
-\end{frame}
-
-\begin{frame}{Disponibilidade dos recursos deste trabalho}
+\begin{frame}{Disponibilidade dos recursos}
   Todos os componentes definidos neste trabalho estarão contidos em um repositório público \href{https://github.com/felipefrocha/esufmg-tcc}{Github}, sob a licença pública geral GNU versão 3, para livre acesso.
 \end{frame}
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-  \begin{figure}
-    \centering  
-  \includegraphics[width=0.5\paperwidth]{ngrok.png}
-\end{figure}
-\end{frame}
+\subsection{Provisionamento}
 
-\begin{frame}[plain]
+\begin{frame}
+  \hspace*{-15mm}
+  \begin{figure}
+      \centering
+      \includegraphics[width=.9\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
+      \caption{Diagrama de deploy - OS e versões}
+      \label{fig:k8s-arch-deploy}
+  \end{figure}
+  \end{frame}
+
+\begin{frame}[plain]{NgRok - Acesso Remoto}
   \hspace*{-10mm}
   \begin{figure}
     \includegraphics[width=.85\paperwidth]{ngroktcp.png}
   \caption[Funcionamnto NgRok]{Funcionamento NgRok}
   \end{figure}
+\end{frame}
+
+\begin{frame}[plain]{NgRok - Painel}
+ \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.5\paperwidth]{ngrok.png}
+\end{figure}
 \end{frame}
 
 
@@ -825,6 +786,7 @@ pandemia da COVID-19}
 %     \caption[Ansible inventory]{Ansible inventory}
 %   \end{figure}
 % \end{frame}
+\subsection{Configuração}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
@@ -837,10 +799,28 @@ pandemia da COVID-19}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{airflow_sequence.png}
+      \caption[Airflow - Diagrama de Sequencia]{Airflow - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
   \begin{figure}
     \centering  
   \includegraphics[width=0.85\paperwidth]{tcc_jupyter_deploy.png}
       \caption[Jupyter Deploy]{Jupyter - Diagrama de Deploy}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
   \end{figure}  
 \end{frame}
 
@@ -859,17 +839,85 @@ pandemia da COVID-19}
   \hspace*{-10mm}
   \begin{figure}
     \centering  
-  \includegraphics[width=.7\paperwidth]{report_execution_summary.png}
-      \caption[Airflow relatório]{Relatório de orquestração}
+  \includegraphics[width=.85\paperwidth]{fluxo_processo.png}
+      \caption{Fluxo de Process - Diagrama de Fluxo}
   \end{figure}  
 \end{frame}
-
 
 \begin{frame}[plain]
   \hspace*{-10mm}
   \begin{figure}
     \centering  
-  \includegraphics[width=.7\paperwidth]{report_execution_summary.png}
+  \includegraphics[width=.85\paperwidth]{etl_process.png}
+      \caption{Processo ETL - Diagrama de Fluxo}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}{Resultados e discussões}
+  \begin{itemize}
+    \item Provisionamento
+    \begin{itemize}
+      \item Tempo de configuração inicial
+      \begin{itemize}
+        \item sem imagem personalizada: 2 dias
+        \item cloud-init: 2h (possivel redução  se utilizado imagens em rede)
+      \end{itemize}
+    \end{itemize}
+    \begin{itemize}
+      \item Tempo de configuração cluster
+        \begin{itemize}
+          \item configuração total manual: $ >> 12h$
+          \item ansible: $20-35m$
+          \item helm (deploy aplicação) + terraform (orquestração de deploy): $10-25m$
+        \end{itemize}
+    \end{itemize}
+    \item Execussão dos job ($2GB$ de RAM e $1CPU$, $90$ pods):
+    \begin{itemize}
+        \item Tempo de execução serial: $\approx 18h$
+        \item Tempo de execução (orquestrador) em paralelo: $\approx 53m$ 
+    \end{itemize}
+    \item Lead Time:
+    \begin{itemize}
+        \item Tempo de deploy Airflow DAG: $3-6m$
+        \item Tempo de deploy JupyterLab: $4-10m$
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.5\paperwidth]{report_execution_summary.png}
+      \caption[Airflow relatório]{Relatório de orquestração}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{graph_execution.png}
+      \caption[Airflow relatório]{grafo DAG}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{s3_size.png}
+      \caption{S3 Lista de arquivos}
+  \end{figure}  
+\end{frame}
+
+\subsection{Resultados do Monitoramento}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.5\paperwidth]{report_execution_summary1.png}
       \caption[Airflow relatório]{Relatório de Orquestração}
   \end{figure}  
 \end{frame}
@@ -905,8 +953,8 @@ pandemia da COVID-19}
   \hspace*{-10mm}
     \begin{figure}
     \centering  
-  \includegraphics[width=.85\paperwidth]{etl_process.png}
-      \caption[Ansible inventory]{Ansible inventory}
+  \includegraphics[width=.6\paperwidth]{jupyter_consumption.png}
+      \caption[Monitoramento Jupyter]{Monitoramento Jupyter}
   \end{figure}  
 \end{frame}
 
@@ -914,8 +962,39 @@ pandemia da COVID-19}
   \hspace*{-10mm}
     \begin{figure}
     \centering  
-  \includegraphics[width=.85\paperwidth]{airflow_sequence.png}
-      \caption[Airflow - Diagrama de Sequencia]{Airflow - Diagrama de Sequencia}
+  \includegraphics[width=.6\paperwidth]{postgres_resource.png}
+      \caption[Monitoramento Postgres]{Monitoramento Postgres}
+  \end{figure}  
+\end{frame}
+
+\subsection{Resultados das Análises}
+\begin{frame}{Resultados das Análises}
+
+    \begin{itemize}
+      \item Total de prescrições 95.345.640 
+      \item População:
+      \begin{itemize}
+        \item Maioria sexo femnino: $53,62\%$
+        \item Idade: $\bar{x} = 32,75 \pm 2,04$
+      \end{itemize}
+      \item Regiões:
+        \begin{itemize}
+          \item Sudeste: $47,44\%$ $\{MG: 13,17,SP: 24,76\%\}$
+          \item Sul: $22,47\%$ $\{RS: 12,49\%\}$
+        \end{itemize}
+      \item Aumento de prescrições de $+32,1\%$ (2014-2020)
+      \item Prescrições por $1000 hab$: $+26,59\%$ (2014-2020)
+      \item Estados destaque para aumento:  Minas Gerais ($+125,38\%$), Rondônia ($+191,73\%$ e Roraima ($+168,27\%$))
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{distribuicao_sexo.png}
+      \caption{Pescrição por sexo por UF}
   \end{figure}  
 \end{frame}
 
@@ -923,9 +1002,37 @@ pandemia da COVID-19}
   \hspace*{-10mm}
     \begin{figure}
     \centering  
-  \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
-      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
+  \includegraphics[width=.6\paperwidth]{distribuicao_presc_ano.png}
+      \caption{Presciçõe por ano}
   \end{figure}  
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.6\paperwidth]{distribuicao_presc_ano_estado.png}
+      \caption{Prescições por por ano por UF}
+  \end{figure}  
+\end{frame}
+
+    \begin{frame}{Resultados das Análises}
+
+
+  Relevância estatística ($p$ valor) para correlação por $\tau$ de Kendall:
+    \begin{table}[]
+      \begin{tabular}{ccc}
+      \hline
+      \multicolumn{1}{c}{\textbf{UF}} & \multicolumn{1}{c}{\textbf{$\tau$}} & \multicolumn{1}{c}{\textbf{$p$ valor}} \\ \hline
+      MT                              & 1.0                         & 0.003                            \\
+      RJ                              & 1.0                         & 0.003                            \\
+      RN                              & 1.0                         & 0.003                            \\
+      RO                              & 1.0                         & 0.003                            \\
+      TO                              & 0.87                         & 0.017                            \\ \hline
+      \end{tabular}
+      \end{table}
+
 \end{frame}
 
 % -- 
@@ -938,12 +1045,19 @@ pandemia da COVID-19}
     \item Entendimento da complexidade dos fatores considerados no processo de decisão em saúde
     \item Análise dos impactos sociais-econômicos relativos a restrição orçamentária na ciência
     \item Seleção de tecnologias com base em requisitos e restrições
+    \item Stack de tecnologia de mercado (maior suporte e melhores praáticas)
     \item Desenho de uma estratégia de extração de informações em saúde
-    \item Avaliação 
+    \item Avaliação da viabilidade de uso de clusters de baixo custo na processamento de dados
+    \item Interdisciplinariedade, especificidade e especialidade
+    \item Produção de conhecimento de suporte prático 
+    \item Viés politico nas descisões em saúde. 
+    \item Observabilidade dos dados em saúde
   \end{itemize}
-  Trabalhos futuros contemplarão a implementação, testes e coletas de dados para avaliação comparativa das virtualizações propostas. 
+\end{frame}
+\begin{frame}{Conclusão}
   
-  Baseado nesses resultados pode se evoluir essa discussão na forma de recrutamento de computadores para o \emph{cluster} de maneira a garantir o isolamento da maquina base.
+  Para trabalho futuro visa se a otimizaçao de estratégia de dimensionamento de recursos, avaliação comparativa de outras técnologias e técnicas para abordar o problema de processamneto paralelo e distribuído.
+  Ainda sugere-se, baseado nos resultados desse trabalho, discutir formas de recrutamento de computadores para o \emph{cluster} de outros laboratórios, de maneira a criar elasticidade para cargas de trabalho ainda mais extensas.
 \end{frame}
 
 
