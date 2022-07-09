@@ -9,7 +9,7 @@
 
 \subsection{Configuração Inicial}
 
-Foi utilizado para o setup inicial uma imagem customizada do Ubuntu Server 20.04, que se valia de uma configuração prévia automatizada por meio de \href{https://cloudinit.readthedocs.io/en/latest/}{cloud-init}. Isso possibilitou a execussão de todas as máquinas mantendo a uniformidade de configurações inicias de SSH, usuário e permissões de {sudo} em 2 horas, considerando que a execussão foi a partir de uma única unidade de \emph{pen-drive}. A melhor opção seria disponibilizar em uma unidade de rede comum as máquinas que pudessem ser acessadas durante o boot inicial.
+Foi utilizado para o setup inicial uma imagem customizada do Ubuntu Server 20.04, que se valia de uma configuração prévia automatizada por meio de \href{https://cloudinit.readthedocs.io/en/latest/}{cloud-init}. Isso possibilitou a execução de todas as máquinas mantendo a uniformidade de configurações inicias de SSH, usuário e permissões de {sudo} em 2 horas, considerando que a execução foi a partir de uma única unidade de \emph{pen-drive}. A melhor opção seria disponibilizar em uma unidade de rede comum as máquinas que pudessem ser acessadas durante o boot inicial.
 
 Para assegurar um acesso seguro a rede do Winet foi selecionado um computador para servir como \emph{load balancer} em rede privada e \emph{bastion host} para acesso externo. Neste configuração local realizada foi instalação de um agente de tunelamento reverso de rede \href{https://ngrok.io}{ngrok} para expor a porta 22 em um endpoint com IP público, na qual uma comunicação SSH poderia ser estabelicida mediante a chave adequada. Essa configuração foi necessária para agilizar o desenvolvimento provisinamento de segurança, enquanto um usuário de VPN não foi provisionado, e como a solução é semelhante a um tunelamento reverso de pora, em um endpoint efêmero, as confgiurações de rede da UFMG não forma expostas e pouco risco foi acrescido. 
 
@@ -41,19 +41,19 @@ Juntamente a essa configuração foram realizados os seguintes configurações d
 
 
 \subsection{Configurações dos computadores }
-Uma vez que uma conexão SSH foi estabelicida e o \emph{firewall} todo  \emph{cluster} oi configurado utilizando o gerenciador de configurações (CMS) Ansible\textregistered. A configuração total d \emph{cluster} emora entre 20-35 minutos sendo que a configuração foi realizada mais de uma vez do zero para garantir que todo o \emph{playbook} (conjunto de configurações a serem executadas) fossem executados correta, considerando sua execussão do início ao final e considerando a maquina sem nenhuma das configurações até seu estado de pronta. A execussão idempotente não foi alcançada para as configuração dos nós mestres devido ao restrição de tempo e número de etapas a serem configuradas. Na figura \ref{fig:ansibleflow} pode se observar o diagrama de fluxo de execussão lógica do \emph{playbook}, porém essa não é a divisão modular do código, que é apresentado na forma de \emph{roles}. 
+Uma vez que uma conexão SSH foi estabelicida e o \emph{firewall} todo  \emph{cluster} oi configurado utilizando o gerenciador de configurações (CMS) Ansible\textregistered. A configuração total d \emph{cluster} emora entre 20-35 minutos sendo que a configuração foi realizada mais de uma vez do zero para garantir que todo o \emph{playbook} (conjunto de configurações a serem executadas) fossem executados correta, considerando sua execução do início ao final e considerando a maquina sem nenhuma das configurações até seu estado de pronta. A execução idempotente não foi alcançada para as configuração dos nós mestres devido ao restrição de tempo e número de etapas a serem configuradas. Na figura \ref{fig:ansibleflow} pode se observar o diagrama de fluxo de execução lógica do \emph{playbook}, porém essa não é a divisão modular do código, que é apresentado na forma de \emph{roles}. 
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\linewidth]{04-figuras/ansibleflow.png}
-    \caption{Fluxo de Execussão do Ansible Playbook}
+    \caption{Fluxo de execução do Ansible Playbook}
     \label{fig:ansibleflow}
 \end{figure}
 
-A formulação do inventário considera que os computadores a serem confiugrados estejam na mesma rede do bastion, sendo que toda a configuração passa por ele, garantindo assim a segurança da execussão apenas para outros computaodres que possam ser estabelicdas conexão a partir dele. Esse inventário também divide em grupos as maquinas, podendo assim ser executado o playbook novamente para novas maquinas a serem adicinadas a \emph{cluster}  que garante o recrutamento estático de novos nós para comporem o cluster, e virtualmete podendo chegar no limite de rede no qual os nós d \emph{cluster} stão agrupado sob. Para garantir a correta execussão o invetário pode ser referenciado explicitamente durante a execussão desde que tenha o mesmo formato do disponibilizado no repositório.
+A formulação do inventário considera que os computadores a serem confiugrados estejam na mesma rede do bastion, sendo que toda a configuração passa por ele, garantindo assim a segurança da execução apenas para outros computaodres que possam ser estabelicdas conexão a partir dele. Esse inventário também divide em grupos as maquinas, podendo assim ser executado o playbook novamente para novas maquinas a serem adicinadas a \emph{cluster}  que garante o recrutamento estático de novos nós para comporem o cluster, e virtualmete podendo chegar no limite de rede no qual os nós d \emph{cluster} stão agrupado sob. Para garantir a correta execução o invetário pode ser referenciado explicitamente durante a execução desde que tenha o mesmo formato do disponibilizado no repositório.
 
 \subsection{Configurações de infra do cluster}
-O provisionamento de novas cargas de trabalhos e \emph{stacks} de processamento de dados foram realizados utilizando terraform\textregistered \ que garantiu a correta gestão do estado recursos provisionados n \emph{cluster} m junção do helm\textregistered \ como ferramenta de \emph{deploy} de aplicações. Essa combinação garantiu a máxima eficiência, gerenciando as dependencias entre recursos e aplicações durante tempo de execussão e garantindo a imutabilidade dos recursos provisionados, o que diminui o \emph{drift} ou desvio de configurações, minimizando anti padrões como \emph{snowflake}\cite{snowflakeanti}
+O provisionamento de novas cargas de trabalhos e \emph{stacks} de processamento de dados foram realizados utilizando terraform\textregistered \ que garantiu a correta gestão do estado recursos provisionados n \emph{cluster} m junção do helm\textregistered \ como ferramenta de \emph{deploy} de aplicações. Essa combinação garantiu a máxima eficiência, gerenciando as dependencias entre recursos e aplicações durante tempo de execução e garantindo a imutabilidade dos recursos provisionados, o que diminui o \emph{drift} ou desvio de configurações, minimizando anti padrões como \emph{snowflake}\cite{snowflakeanti}
 
 \subsection{Gestão de armazenamento no cluster}
 StorageClass é a forma mais recomendada para gerenciamento de CSI (\emph{container storage interface}) de disponiblizar volumes compartilhados n \emph{cluster} e Kubernetes\textregistered, porém em \emph{clusters }\emph{bare-metal} e não existem muitas opções de \emph{provider} CSI que não necessitem de um software ou ainda hardware específico, como SANs (\emph{StorageAreaNetwork}) específícos. Sem CSI, as chamadas de \emph{filesystem} que são executados pelos containers que alocam PVC (\emph{persistent volumes claim}) podem incorrer em erros o que gera perda de dados ou ainda erros de IO. 
@@ -71,7 +71,7 @@ Para tornar a solução viável em termos de complexidade de configuração, dis
 
 \section{Disponibilização das imagens de container}
 
-Diversas dependencias para a execussão das tarefas e logo apos a exploração visual e analise dos dados coletados pela orquestração devem ser incorporada as imagens base utilizadas para o Airflow e também Jupyter. Para controlar a entrega dessas imagens e disponibiliza-las para o servidor, foi publicado em um repositório de imagens publica, com credenciais que expiravam em 12horas. Essas imagens utilizaram uma estratégia tag para \emph{release} associada ao \emph{commit message} no repositório do git, podendo assim recuperar versões específicas e rastrear mudanças que possivelmente alteraram o comportamento esperado dos containers que as utilizarem. 
+Diversas dependencias para a execução das tarefas e logo apos a exploração visual e analise dos dados coletados pela orquestração devem ser incorporada as imagens base utilizadas para o Airflow e também Jupyter. Para controlar a entrega dessas imagens e disponibiliza-las para o servidor, foi publicado em um repositório de imagens publica, com credenciais que expiravam em 12horas. Essas imagens utilizaram uma estratégia tag para \emph{release} associada ao \emph{commit message} no repositório do git, podendo assim recuperar versões específicas e rastrear mudanças que possivelmente alteraram o comportamento esperado dos containers que as utilizarem. 
 
 Essa tag era então substituida por meio de variaveis no terraform e assim utilizadas para configuração dos recursos durante o tempo de deploy das aplicações com as novas tags. Essa estratégia garante um fluxo auditavel de mudanças e preconiza a imutabilidade uma premissa para uso de infraestrutura como código. 
 
@@ -88,7 +88,7 @@ Apesar de não representado, há uma etapa precessora, um \emph{operator} que li
 
 Na etapa de processamento seguinte carrega os dados desses arquivos em memória, em um \emph{dataframe} do {pandas} (biblioteca python). Pelo tamanho dos arquivos, não é possivel fazer o carregamento de uma só vez e por tanto a opção de chunks foi usado, isso particiona os dados para garantir o processo por partes. Essa opção garante que diversas tarefas sejam executadas em parelelo sem sobrecarregar  \emph{cluster} em mesmmo causar eventos de OOM (\emph{out of memory}) causando assim que a tarefa entre na fila de \emph{retry}.
 
-O ponto de configuração dos containers foi de 1vCPU e 2GB de RAM para processar arquivos entre 0.5-0.7GB de dados por vez, como a tabela de escrita dos dados processado no PostgreSQL era a mesma para para garantir a consolidação dos dados, o pipeline de execussão de cada tarefa ficava entre entre 4 e 12 minutos desde o momento de início do \emph{download} até o completo carregamento em banco. Como a operação de escrita em banco também é uma atividade restrita, ou seja, não permite duas escritas simultaneas, esse com certeza era um ponto de restrição do fluxo de dados. A possivel solução para esse gargalo era a escrita dos dados pre-processados em tabelas distintas e em um passo seguinte a consolidação em tabela única. Porém para manter a estrutura de um ETL simples e validar o processamento no cluster, não foi necessário realizar essas etapas de otimização. 
+O ponto de configuração dos containers foi de 1vCPU e 2GB de RAM para processar arquivos entre 0.5-0.7GB de dados por vez, como a tabela de escrita dos dados processado no PostgreSQL era a mesma para para garantir a consolidação dos dados, o pipeline de execução de cada tarefa ficava entre entre 4 e 12 minutos desde o momento de início do \emph{download} até o completo carregamento em banco. Como a operação de escrita em banco também é uma atividade restrita, ou seja, não permite duas escritas simultaneas, esse com certeza era um ponto de restrição do fluxo de dados. A possivel solução para esse gargalo era a escrita dos dados pre-processados em tabelas distintas e em um passo seguinte a consolidação em tabela única. Porém para manter a estrutura de um ETL simples e validar o processamento no cluster, não foi necessário realizar essas etapas de otimização. 
 
 Mencionado as limitações ja observadas, é necssário indicar mais uma importante restrição que o banco também esta sendo executado n \emph{cluster} om 1,5GB de RAM e 0.3 vCPU, sendo um recurso compartilhado entre diversos outros recursos d \emph{cluster} or ter mais de um banco na mesma instância. E ainda utilizando CSI de NFS, que como mencionado anteriormente adiciona latência e conhecidamente não performa muito bem em usos intensos de escritas.
 
@@ -100,9 +100,9 @@ Mencionado as limitações ja observadas, é necssário indicar mais uma importa
 \end{figure}
 
 
-Considerando o tamanho e tempo de execussão das atividades podemos inferir que:
+Considerando o tamanho e tempo de execução das atividades podemos inferir que:
 \begin{itemize}
-    \item o tempo de execussão total dessas tarefas de forma serial, seria de aproximadamente $8 min\ *\ 90 arquivos = 96min$ para importar todos os arquivos
+    \item o tempo de execução total dessas tarefas de forma serial, seria de aproximadamente $8 min\ *\ 90 arquivos = 96min$ para importar todos os arquivos
     \item mesmo com as execussões simultaneas limitadas a 12, não utilizamos 50\% do cluster
 \end{itemize} . 
 
@@ -110,7 +110,7 @@ Considerando o tamanho e tempo de execussão das atividades podemos inferir que:
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=0.5\linewidth]{04-figuras/report_execution_summary1.png}
-    \caption{Relatório de execussão}
+    \caption{Relatório de execução}
     \label{fig:report}
 \end{figure}
 
@@ -125,7 +125,7 @@ Considerando o tamanho e tempo de execussão das atividades podemos inferir que:
 
 Porém o tempo total gasto foi de 53 min, segundo a figura \ref{fig:report}. O que representa 55\% do tempo esperado. Mesmo considerando as restrições de desempenho citadas anteriormente.
 
-Pode se inferir que o numero de execussões simultaneas representavam 24vCPUs e 48GB de memória por limite de tarefas em execussão, representando um servidor que sozinho custaria entre 20 e 40 mil reais, e nesse trabalho utilizou maquinas que não estavam sendo utilizadas do DCC UFMG.
+Pode se inferir que o numero de execussões simultaneas representavam 24vCPUs e 48GB de memória por limite de tarefas em execução, representando um servidor que sozinho custaria entre 20 e 40 mil reais, e nesse trabalho utilizou maquinas que não estavam sendo utilizadas do DCC UFMG.
 
 
 

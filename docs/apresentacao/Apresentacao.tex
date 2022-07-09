@@ -226,7 +226,9 @@
 % Info
 % -- 
 \title[]{ANÁLISE DE DADOS UTILIZAND \emph{CLUSTER} E BAIXO CUSTO}
-\subtitle{COMPARAÇÃO DE DESEMPENHO DE AMBIENTES VIRTUAIS}
+\subtitle{Tendências de consumo da
+azitromicina no Brasil antes e durante a
+pandemia da COVID-19}
 
 \institute[UFMG]{Universidade Federal de Minas Gerais}
 
@@ -425,14 +427,15 @@
     \item[] \textbf{Objetivos Geral:}
     \item[]
           \begin{itemize}
-            \item[] Realizar a comparação de desempenho de orquestração de recursos em \emph{cluster} de baixo custo em ambientes virtualizados, para o processamento e a análise dos dados.
+            \item[] Avaliar a viabilidade de orquestração de recursos em \emph{cluster} de baixo custo em ambientes containerizados, para o processamento e a análise dos dados.
           \end{itemize}
     \item[] \textbf{Objetivos Específicos:}
           \begin{itemize}
             \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
-            \item Comparar o desempenho de \emph{clusters} bem ambientes virtualizados;
+            \item Avaliar tempo de provisionamento, tempo de execução e disponibilidade do cluster;
             \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
             \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
+            \item Disponibilzar um cluster pronto para uso para UFMG, bem como ferramentas de auxilio no provisionamento;
           \end{itemize}
           I\end{itemize}
 \end{frame}
@@ -551,33 +554,28 @@
 % --
 \subsection{Abordagem}
 \begin{frame}[allowframebreaks]{Abordagem}
-  Utilizar u \emph{Cluster} ubernetes como plataforma de orquestração de cargas de trabalho em ambiente virtual.
+  Utilizar u \emph{Cluster} Kubernetes\textregistered\ como plataforma de orquestração de cargas de trabalho em computadores desktops.
   \begin{itemize}
     \item Cargas de trabalho:
           \begin{itemize}
             \item Analise de tendencia de uso de azitromicina entre 2014 e 2021
           \end{itemize}
-        \item Ambientes virtualizados (\emph{Host} do cluster):
-          \begin{itemize}
-            \item completa - \emph{Hypervisor} tipo 2
-            \item sistema operacional - contêineres
-        \end{itemize}
-    
-        \item máquinas subutilizadas
-        \item redução do CAPEX
+        \item Composição do cluster com computadores \emph{desktops} reaproveitados
+        \item Minimizar trabalho local e priorizar a possibilidade de provisionamneto remoto
+        \item redução do CAPEX e otimizar utilização de hardware ocioso ou subutilizado
+        \item reaproveitamento de maquinas
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Abordagem}
   O uso de conceitos e metodologias de DevOps:
   \begin{itemize}
-            \item CI (integração contínua)
+            \item CI (integração contínua) 
             \item CD (entrega contínua)
     \item Monitoramento
         \begin{itemize}
             \item método USE, parâmetros de utilização, saturação e erro 
-            \item métricas definidas por parâmetro
-            \item relaciona desempenho dos nós virtuais.
+            \item avaliação de utilização dos nós durante processamento
         \end{itemize}
   \end{itemize}
 \end{frame}
@@ -593,26 +591,27 @@
       \begin{itemize}
         \item Cluster:
               \begin{itemize}
-                \item Virtualização:
-                      \begin{itemize}
-                        \item Maquinas Virtuais (VMs) (\emph{Hypervisor} tipo 2)
-                        \item Contêineres Aninhados (Docker In Docker, ou DinD)
-                      \end{itemize}
+                \item Composição:
+                \begin{itemize}
+                    \item 4 computadores com 6 CPUs e 8GB de RAM (\emph{load balancer e control-plane})
+                    \item 4 computadores com 6 CPUs e 16GB de RAM (\emph{workers})
+                \end{itemize}
               \end{itemize}
         \begin{itemize}
-            \item Ambiente Virtual:
+            \item Containers para processamento e análise:
               \begin{itemize}
               \item  arquitetura: \textbf{amd64}
                 \item 1 vCPU
                 \item 2 GB de RAM
-                \item 6-8 máquinas
+                \item 90 containers (1/mês de análise) [procesamento]
+                \item 1 container /  usuário [análise]
               \end{itemize}
         \end{itemize}
     \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=1\textwidth]{vms.png}
+        \includegraphics[width=1\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
       \end{center}
     \end{column}
   \end{columns}
@@ -621,23 +620,22 @@
   
   \begin{columns}
     \begin{column}{0.5\textwidth}
-    
       \begin{itemize}
-        \item Definição máquina \emph{host}:
+        \item Orquestração do processamento dos dados originias:
               \begin{itemize}
-                \item o \emph{host} será um laptop, contendo configuração de 4vCPUs e 16GB de RAM
-                \item Hospedará as maquinas virtualizadas, pertencentes ao cluster
-                      
+                \item Apache Airflow\textregistered\
+                \item Kubernetes executor
+                \item Python Operators
               \end{itemize}
-        \item Definição máquina \emph{guest}:
+        \item Consumo e análise de dados tratados:
               \begin{itemize}
-                \item como ja descrtio em 2 cenários: Virtualização completa, e em containers
-                \item Nós d \emph{Cluster} ubernetes (objeto de monitoramento)
+                \item JupyterHub - gerenciamento de notebooks
+                \item Jupyter Notebooks - análise dos dados
               \end{itemize}
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}
-      \includegraphics[width=1\textwidth]{SCKET.png}
+      \includegraphics[width=1\textwidth]{tcc_airflow_deloy.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -656,6 +654,15 @@
     \label{fig:k8s-arch}
 \end{figure}
 \end{frame}
+
+\begin{frame}{Arquitetura Orquestrador}
+  \begin{figure}
+      \centering
+      \includegraphics[width=.9\textwidth]{TCC - Kubenertes-Cluster Deplyment.drawio.png}
+      %\caption{Caption}
+      \label{fig:k8s-arch-deploy}
+  \end{figure}
+  \end{frame}
 % -- 
 % Configuração e provisionamento do cluster
 % -- 
@@ -677,34 +684,41 @@
 \subsection{Monitoramento}
 
 \begin{frame}{Monitoramento}
+    \begin{columns}
+      \begin{column}{0.5\textwidth}
   \begin{itemize}
-    \item \emph{OpenTelemetry}
-    \item \emph{Prometheus} Monitoramento de sistemas e Banco de dados de series temporais
+    \item \emph{Node Exporter} Expor métricas de Host
+    \item \emph{Prometheus} -  Monitoramento de sistemas e Banco de dados de series temporais
     \item \emph{Grafana} - Dashboard e observabilidade
-    \item Parametros de tempo, taxa de utilização de memoria e processamento
+    \item Airflow - Relatório de tempo de execução, falhas, tentativas
   \end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+  \begin{center}
+    \includegraphics[width=1\textwidth]{report_execution_summary.png}
+  \end{center}
+\end{column}
+\end{columns}
 \end{frame}
 
 
 % -- 
 % Comparação entre tipos de virtualização
 % -- 
-\subsection{Comparação entre tipos de virtualização}
+\subsection{Avaliação viabilidade}
 
-\begin{frame}[allowframebreaks]{Comparação entre tipos de virtualização}
+\begin{frame}[allowframebreaks]{Avaliação de utilização do cluster}
   
   \begin{itemize}
-      \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execussão
+      \item macrobenchmark (system level benchmark) - Teste utizando uma solução avaliando tempo de execução
       \item[] métricas de Desempenho (nós do cluster, \emph{guests}):
       \item Taxa de Utilização de CPU e Memória 
       \item Taxa de saturação de CPU e Memória
-      \item[] Métricas de APM:
-      \item Tempo Médio de todas as cargas de trabalho e variabilidade
+      \item[] Tempo de Implementação:
+      \item Tempo de configuração do cluster
       \item[] Método base utilizado para coleta de informações:
       \item Metodo USE de avaliação (Checklist Linux)
   \end{itemize}
-  
-  Caso base - comparação com processo de análise em \emph{bare metal} 4vCPU, 16 GB de RAM - totalizando o poder computacional total do \emph{cluster} proposto
 \end{frame}
 
 
@@ -717,7 +731,9 @@
   \begin{itemize}
     \item Vendas de Medicamentos Controlados e Antimicrobianos - Medicamentos Industrializados
     \item $530 \cdot 10^{6}$ linhas com mais de 70 GB
-    \item Análise de tendência do consumo de azitromicina
+    \item Análise de tendência do consumo de azitromicina por região
+    \item Análise de tendência do consumo de azitromicina no país
+    \item Avaliação compartiva de 2 anos anteriores ao COVID-19
   \end{itemize}
 \end{frame}
 
@@ -731,6 +747,187 @@
   \includegraphics[width=\paperwidth]{TCC cronograma - Sheet1.pdf}
 \end{frame}
 
+
+% -- 
+% Disponibilidade dos recursos deste trabalho
+% -- 
+\section{Resultados}
+
+\begin{frame}{Resultados e discussões}
+  \begin{itemize}
+    \item Provisionamento
+    \begin{itemize}
+      \item Tempo de configuração inicial
+      \begin{itemize}
+        \item sem imagem personalizada: 2 dias
+        \item cloud-init: 2h (possivel redução  se utilizado imagens em rede)
+      \end{itemize}
+    \end{itemize}
+    \begin{itemize}
+      \item Tempo de configuração cluster
+        \begin{itemize}
+          \item configuração total manual: >> 12h
+          \item ansible: 15 min
+          \item helm (deploy aplicação) + terraform (orquestração de deploy): 10-20 min
+        \end{itemize}
+    \end{itemize}
+    \item Execussão dos job:
+    \begin{itemize}
+        \item Tempo serial com limite de 2GB de RAM e 1CPU 90 pods: ~1h 30m
+        \item Tempo com orquestrador em paralelo com limite de 2GB de RAM e 1CPU 90 pods: ~53m
+    \end{itemize}
+    \item Lead Time:
+    \begin{itemize}
+        \item Tempo de deploy Airflow DAG: 3-6 min
+        \item Tempo de deploy JupyterLab: 4-10 min
+    \end{itemize}
+    \item 
+  \end{itemize}
+  
+  
+\end{frame}
+
+\begin{frame}{Disponibilidade dos recursos deste trabalho}
+  Todos os componentes definidos neste trabalho estarão contidos em um repositório público \href{https://github.com/felipefrocha/esufmg-tcc}{Github}, sob a licença pública geral GNU versão 3, para livre acesso.
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.5\paperwidth]{ngrok.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \includegraphics[width=.85\paperwidth]{ngroktcp.png}
+  \caption[Funcionamnto NgRok]{Funcionamento NgRok}
+  \end{figure}
+\end{frame}
+
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \begin{figure}
+%     \centering  
+%     \includegraphics[height=0.6\paperwidth]{ssh.png}
+%     \caption[ssh config]{SSH config}
+%   \end{figure}
+% \end{frame}
+
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%   \begin{figure}
+%     \centering  
+%     \includegraphics[height=0.6\paperwidth]{ansible_inventory.png}
+%     \caption[Ansible inventory]{Ansible inventory}
+%   \end{figure}
+% \end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.85\paperwidth]{tcc_airflow_deloy.png}
+  \caption[AirFlow Deploy]{Ariflow - Diagrama de Deploy}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=0.85\paperwidth]{tcc_jupyter_deploy.png}
+      \caption[Jupyter Deploy]{Jupyter - Diagrama de Deploy}
+  \end{figure}  
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{tcc_monitoring_deploy.png}
+      \caption[Monitoramento deploy]{Monitoramento - Diagrama de Deploy}
+  \end{figure}  
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.7\paperwidth]{report_execution_summary.png}
+      \caption[Airflow relatório]{Relatório de orquestração}
+  \end{figure}  
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.7\paperwidth]{report_execution_summary.png}
+      \caption[Airflow relatório]{Relatório de Orquestração}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{etl_1_usage.png}
+      \caption[Monitoramento execução]{Monitoramento execução}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{etl_2_usage.png}
+      \caption[Monitoramento execução 2]{Monitoramento execução 2}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{etl_3_usage.png}
+      \caption[Monitoramento execução 3]{Monitoramento execução 3}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{etl_process.png}
+      \caption[Ansible inventory]{Ansible inventory}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{airflow_sequence.png}
+      \caption[Airflow - Diagrama de Sequencia]{Airflow - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+    \begin{figure}
+    \centering  
+  \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
 % -- 
 % Conclusão
 % -- 
@@ -742,27 +939,13 @@
     \item Análise dos impactos sociais-econômicos relativos a restrição orçamentária na ciência
     \item Seleção de tecnologias com base em requisitos e restrições
     \item Desenho de uma estratégia de extração de informações em saúde
-    \item Avaliação de diferentes tipos de virtualização e sua utilização
+    \item Avaliação 
   \end{itemize}
   Trabalhos futuros contemplarão a implementação, testes e coletas de dados para avaliação comparativa das virtualizações propostas. 
   
   Baseado nesses resultados pode se evoluir essa discussão na forma de recrutamento de computadores para o \emph{cluster} de maneira a garantir o isolamento da maquina base.
 \end{frame}
 
-
-% -- 
-% Disponibilidade dos recursos deste trabalho
-% -- 
-\section{Disponibilidade dos recursos deste trabalho}
-
-\begin{frame}{Disponibilidade dos recursos deste trabalho}
-  \begin{itemize}
-    \item \href{https://github.com/felipefrocha/esufmg-tcc}{Github - Monorepo}
-    \item \href{https://github.com/felipefrocha/esufmg-tcc/actions}{Pipeline}
-  \end{itemize}
-  Todos os componentes definidos neste trabalho estarão contidos em um ou mais repositórios públicos, sob a licença pública geral GNU versão 3, para livre acesso.
-  
-\end{frame}
 
 % -- 
 % Referências

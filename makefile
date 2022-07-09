@@ -36,5 +36,5 @@ doc_mono:
 	@cd docs/monografia && timeout 14 make
 
 doc_apr:
-	@cd docs/apresentacao && make
+	@cd docs/apresentacao && timeout 14 make
 
