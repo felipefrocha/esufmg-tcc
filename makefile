@@ -20,7 +20,7 @@ clear_local:
 	@docker-compose -f container/airflow_local/docker-compose.yaml down -v
 	@cd container/airflow_local && sudo rm -rf logs dags tmp plugins
 
-deploy_k8s_config: 
+deploy: 
 	@echo ${datetime}
 	@git add .
 	@git commit -am "chore(docker): Create a new deployment with tag ${datetime}" || git commit --amend -am "chore(docker): Create a new deployment with tag ${datetime}"
@@ -28,7 +28,7 @@ deploy_k8s_config:
 	@docker build -t felipefrocha89/esufmg:tcc-jupyter-${datetime} container/jupyter/
 	@echo "${PASSWD}" | docker login -u felipefrocha89 --password-stdin
 	@docker push felipefrocha89/esufmg:tcc-airflow-${datetime} 
-	@docker push felipefrocha89/esufmg:tcc-jupyter-${datetime} 
+	@docker push felipefrocha89/esufmg:tcc-jupyter-${datetime}
 	@cd cluster && make k8s tag=${datetime}
 
 

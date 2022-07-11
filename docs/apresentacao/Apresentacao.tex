@@ -16,9 +16,11 @@
 \usepackage{amsmath,amsfonts,amsthm,amssymb,mathrsfs}
 \allowdisplaybreaks[1]
 \usepackage{microtype}
+\usepackage{listings}
 \usepackage{mathtools}
 \usepackage{csquotes}
 \usepackage{tikz}
+\usepackage{animate}
 \usetikzlibrary{matrix}
 \usetikzlibrary{patterns}
 \usepackage{faktor}
@@ -242,7 +244,7 @@ pandemia da COVID-19}
 % --
 \AtBeginSubsection{%
   \begin{frame}
-    \tableofcontents[currentsection,sectionstyle=show/shaded,subsectionstyle=show/hide/hide]
+    \tableofcontents[currentsection=show,sectionstyle=show/shaded,subsectionstyle=show/shaded/hide]
   \end{frame}
 }
 % -- 
@@ -274,9 +276,10 @@ pandemia da COVID-19}
 % -- 
 \section{Contexto e Motivação}
 % -- 
-% Motivação
+% Motivação [allowframebreaks]
 % -- 
-\begin{frame}[allowframebreaks]{Contexto e Motivação}
+\subsection*{Contexto de Dados}
+\begin{frame}{Contexto de Dados - produção e uso}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -292,8 +295,9 @@ pandemia da COVID-19}
       \end{center}
     \end{column}
   \end{columns}
-  \framebreak
-  \begin{columns}
+\end{frame}  
+  \begin{frame}{Contexto de Dados - Área da Saúde}
+    \begin{columns}
     \begin{column}{0.5\textwidth}
     \begin{center}
       \includegraphics[width=.9\textwidth,height=.75\textheight]{growthhealth.png}
@@ -309,7 +313,8 @@ pandemia da COVID-19}
       \end{itemize}
     \end{column}
   \end{columns}
-  \framebreak
+\end{frame}
+\begin{frame}{Contexto de Dados - Desafios}
   \begin{columns}%\begin{center}
       \begin{column}{0.5\textwidth}
   \begin{itemize}
@@ -344,7 +349,7 @@ pandemia da COVID-19}
 % -- 
 \subsection{Justificativa Social}
 
-\begin{frame}{Justificativa Social}
+\begin{frame}{Apoio a melhores decisões}
 
       \begin{itemize}
             \item Tomada de decisão em saúde
@@ -362,7 +367,7 @@ pandemia da COVID-19}
 
 \subsection{Justificativa Econômica}
 
-\begin{frame}{Justificativa Econômica}
+\begin{frame}{Restrições de orçamento a ciência}
   \begin{columns}
     \begin{column}{0.5\textwidth}
               \begin{itemize}
@@ -379,7 +384,7 @@ pandemia da COVID-19}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Justificativa Econômica}
+\begin{frame}{Alterações de cenário econômico}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
@@ -397,14 +402,14 @@ pandemia da COVID-19}
 
 \subsection{Justificativa Técnica}
 
-\begin{frame}{Justificativa Técnica}
+\begin{frame}{Viabilização de alternativas}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
             \item Necessário ser interdisciplinar
             \item Avaliar alternativas de processamento de dados 
-            \item Amenizar questões orçamentárias
-            \item Melhorar uso dos recursos já existentes
+            \item Amenizar questões orçamentá\-rias
+            \item Melhorar uso dos recursos já exis\-tentes (e.g. inventário de universidades)
       \end{itemize}
   \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
@@ -421,23 +426,24 @@ pandemia da COVID-19}
 % Objetivos
 % -- 
 \section{Objetivo}
+\subsection*{Objetivos Gerais}
 %[allowframebreaks]
-\begin{frame}[allowframebreaks]{Objetivo}
+\begin{frame}{Objetivo}
   \begin{itemize}
     \item[] \textbf{Objetivos Geral:}
     \item[]
-          \begin{itemize}
-            \item[] Avaliar a viabilidade de orquestração de recursos em \emph{cluster} de baixo custo em ambientes containerizados, para o processamento e a análise dos dados.
-          \end{itemize}
+      \begin{itemize}
+        \item[] Avaliar a viabilidade de orquestração de recursos em \emph{cluster} de baixo custo em ambientes containerizados, para o processamento e a análise dos dados.
+      \end{itemize}
     \item[] \textbf{Objetivos Específicos:}
-          \begin{itemize}
-            \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
-            \item Avaliar tempo de provisionamento, tempo de execução e disponibilidade do cluster;
-            \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
-            \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
-            \item Disponibilzar um cluster pronto para uso para UFMG, bem como ferramentas de auxilio no provisionamento;
-          \end{itemize}
-          I\end{itemize}
+      \begin{itemize}
+        \item Realizar a orquestração de recursos em \emph{cluster} de baixo custo;
+        \item Avaliar tempo de provisionamento, tempo de execução e disponibilidade do cluster;
+        \item Validar o uso de um \emph{cluster} de utilização compartilhada para processamento de dados distribuídos;
+        \item Propor um método de análise em \emph{cluster} Kubernetes com uso de computadores desktops;
+        \item Disponibilzar um cluster pronto para uso para UFMG, bem como ferramentas de auxilio no provisionamento;
+      \end{itemize}
+  \end{itemize}
 \end{frame}
 
 
@@ -454,13 +460,13 @@ pandemia da COVID-19}
 \begin{frame}{Análise de dados}
   \begin{itemize}
     \item Descisões em saúde costumam ser complexas - precisam de suporte científico (dados) e avaliação de Contexto
-    \item Com o crescimento dos 3V's de dados na área da saúde (Big Data) processar e analisar esses dados tornou-se fundamental para tomada de descisões adequadas
+    \item Com o crescimento dos 3V's de dados (Big Data), na área da saúde, processar e analisar esses dados tornou-se fundamental para tomada de descisões adequadas
     \item Desafios:
-          \begin{itemize}
-            \item complexidade dos dados obtidos
-            \item ausência de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
-            \item custos de novos equipamentos capazes de analisar tal volume
-          \end{itemize}
+      \begin{itemize}
+        \item complexidade dos dados obtidos
+        \item ausência de validação de sistemas, métodos e ferramentas para o tratamento de dados na área
+        \item custos de novos equipamentos capazes de analisar tal volume
+      \end{itemize}
     \item Há grande oportunidade para a proposição de estratégias de processamento e análise de dados nesse setor
   \end{itemize}
 \end{frame}
@@ -475,7 +481,9 @@ pandemia da COVID-19}
     \item Considerando
           \begin{itemize}
             \item O escopo deste trabalho
-            \item As estratégias para processamento e análise de dados disponíveis no mercado
+            \item Limitações de hardware
+            \item As estratégias para processamento
+            \item Ferramentas de análise de dados disponíveis no mercado
           \end{itemize}
     \item [] As soluções encontradas no mercado foram agrupadas em dois grupos:
           \begin{itemize}
@@ -505,8 +513,8 @@ pandemia da COVID-19}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=0.5\textwidth]{containers.png}
-        \includegraphics[width=1\textwidth]{vmsContainer.png}
+        \includegraphics[width=1\textwidth]{containers.png}
+        % \includegraphics[width=1\textwidth]{vmsContainer.png}
       \end{center}
     \end{column}
   \end{columns}
@@ -522,23 +530,34 @@ pandemia da COVID-19}
     \begin{column}{0.5\textwidth}
       \begin{itemize}
         \item Kubernetes\textregistered:
+          \begin{itemize}
+            \item Origem de 15 anos de trabalho da Google (Borg) %\cite{verma_large-scale_2015}
+            \item Estrutura de objetos componentizados %\cite{kubernetes2022}
               \begin{itemize}
-                \item Origem de 15 anos de trabalho da Google (Borg) %\cite{verma_large-scale_2015}
-                \item Estrutura de objetos componentizados %\cite{kubernetes2022}
-                      \begin{itemize}
-                        \item Kube-apiserver
-                        \item Kube-scheduler
-                        \item Kube-controller-manager
-                        \item Kubelet
-                        \item Kube-proxy
-                        \item Pod
-                      \end{itemize}
+                \item Kube-apiserver
+                \item Kube-scheduler
+                \item Kube-controller-manager
+                \item Kubelet
+                \item Kube-proxy
+                \item Pod
               \end{itemize}
+          \end{itemize}
       \end{itemize}
     \end{column}
     \begin{column}{0.5\textwidth}  %%<--- here
       \begin{center}
-        \includegraphics[width=1\textwidth]{kubeadm-node.png}
+        \begin{overprint}
+          \onslide<1>\includegraphics[width=1\textwidth]{k8s-1.png}
+          \onslide<2>\includegraphics[width=1\textwidth]{k8s-2.png}
+          \onslide<3>\includegraphics[width=1\textwidth]{k8s-3.png}
+          \onslide<4>\includegraphics[width=1\textwidth]{k8s-4.png}
+          \onslide<5>\includegraphics[width=1\textwidth]{k8s-5.png}
+          \onslide<6>\includegraphics[width=1\textwidth]{k8s-6.png}
+          \onslide<7>\includegraphics[width=1\textwidth]{k8s-7.png}
+          \onslide<8>\includegraphics[width=1\textwidth]{k8s-8.png}
+          \onslide<9->\includegraphics[width=1\textwidth]{k8s-9.png}
+        \end{overprint}
+        % \animategraphics[loop,autoplay,width=\linewidth]{1}{k8s-}{1}{9}
       \end{center}
     \end{column}
   \end{columns}
@@ -553,7 +572,7 @@ pandemia da COVID-19}
 % Abordagem
 % --
 \subsection{Abordagem}
-\begin{frame}[allowframebreaks]{Abordagem}
+\begin{frame}{Abordagem - Cluster e Análise}
   Utilizar um \emph{Cluster} Kubernetes\textregistered\ como plataforma de orquestração de cargas de trabalho em computadores desktops.
   \begin{itemize}
     \item Cargas de trabalho:
@@ -567,11 +586,12 @@ pandemia da COVID-19}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Abordagem}
+\begin{frame}{Abordagem - Condução do projeto}
   O uso de conceitos e metodologias de DevOps:
   \begin{itemize}
-            \item CI (integração contínua) 
-            \item CD (entrega contínua)
+            \item Versionamento (Git) 
+            \item CI (integração contínua) \texttt{make build}
+            \item CD (entrega contínua) \texttt{make deploy}
     \item Monitoramento
         \begin{itemize}
             \item método USE, parâmetros de utilização, saturação e erro 
@@ -599,11 +619,11 @@ pandemia da COVID-19}
         \begin{itemize}
             \item Containers para processamento e análise:
               \begin{itemize}
-              \item  arquitetura: \textbf{amd64}
-                \item 1 vCPU
-                \item 2 GB de RAM
                 \item 90 containers (1/mês de análise) [procesamento]
                 \item 1 container /  usuário [análise]
+                \item arquitetura: \textbf{amd64}
+                \item 1 vCPU
+                \item 2 GB de RAM
               \end{itemize}
         \end{itemize}
     \end{itemize}
@@ -614,13 +634,15 @@ pandemia da COVID-19}
         \item Orquestração do processamento dos dados originias:
               \begin{itemize}
                 \item Apache Airflow\textregistered\
-                \item Kubernetes executor
-                \item Python Operators
+                \begin{itemize}
+                  \item Kubernetes executor (onde)
+                  \item Python Operators (como)
+                \end{itemize}
               \end{itemize}
         \item Consumo e análise de dados tratados:
               \begin{itemize}
-                \item JupyterHub - gerenciamento de notebooks
-                \item Jupyter Notebooks - análise dos dados
+                \item JupyterHub - Notebooks para multi-usuários (gerenciamento)
+                \item Jupyter Lab - Notebooks para análise dos dados (execução)
               \end{itemize}
       \end{itemize}
   
@@ -790,11 +812,47 @@ pandemia da COVID-19}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
+    \begin{figure}
+      \begin{center}
+        % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+        \begin{overprint}
+          \onslide<1>\includegraphics[width=1\textwidth]{seq-jupy-1.png}
+          \onslide<2>\includegraphics[width=1\textwidth]{seq-jupy-2.png}
+          \onslide<3>\includegraphics[width=1\textwidth]{seq-jupy-3.png}
+          \onslide<4>\includegraphics[width=1\textwidth]{seq-jupy-4.png}
+          \onslide<5>\includegraphics[width=1\textwidth]{seq-jupy-5.png}
+          \onslide<6>\includegraphics[width=1\textwidth]{seq-jupy-6.png}
+          \onslide<7>\includegraphics[width=1\textwidth]{seq-jupy-7.png}
+          \onslide<8->\includegraphics[width=1\textwidth]{seq-jupy-8.png}
+        \end{overprint}
+      \end{center}  
+      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
+  \end{figure}  
+\end{frame}
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
   \begin{figure}
-    \centering  
-  \includegraphics[width=0.85\paperwidth]{tcc_airflow_deloy.png}
-  \caption[AirFlow Deploy]{Ariflow - Diagrama de Deploy}
-\end{figure}
+  % \includegraphics[width=0.85\paperwidth]{tcc_jupyter_deploy.png}
+  \begin{center}
+    % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+    \begin{overprint}
+      \onslide<1>\includegraphics[width=1\textwidth]{deploy-jupy-1.png}
+      \onslide<2>\includegraphics[width=1\textwidth]{deploy-jupy-2.png}
+      \onslide<3>\includegraphics[width=1\textwidth]{deploy-jupy-3.png}
+      \onslide<4>\includegraphics[width=1\textwidth]{deploy-jupy-4.png}
+      \onslide<5>\includegraphics[width=1\textwidth]{deploy-jupy-5.png}
+      \onslide<6>\includegraphics[width=1\textwidth]{deploy-jupy-6.png}
+      \onslide<7>\includegraphics[width=1\textwidth]{deploy-jupy-7.png}
+      \onslide<8>\includegraphics[width=1\textwidth]{deploy-jupy-8.png}
+      \onslide<9>\includegraphics[width=1\textwidth]{deploy-jupy-9.png}
+      \onslide<10>\includegraphics[width=1\textwidth]{deploy-jupy-10.png}
+      \onslide<11>\includegraphics[width=1\textwidth]{deploy-jupy-11.png}
+      \onslide<12->\includegraphics[width=1\textwidth]{deploy-jupy-12.png}
+    \end{overprint}
+  \end{center}  
+      \caption[Jupyter Deploy]{Jupyter - Diagrama de Deploy}
+  \end{figure}  
 \end{frame}
 
 \begin{frame}[plain]
@@ -810,20 +868,10 @@ pandemia da COVID-19}
   \hspace*{-10mm}
   \begin{figure}
     \centering  
-  \includegraphics[width=0.85\paperwidth]{tcc_jupyter_deploy.png}
-      \caption[Jupyter Deploy]{Jupyter - Diagrama de Deploy}
-  \end{figure}  
+  \includegraphics[width=0.85\paperwidth]{tcc_airflow_deloy.png}
+  \caption[AirFlow Deploy]{Ariflow - Diagrama de Deploy}
+\end{figure}
 \end{frame}
-
-\begin{frame}[plain]
-  \hspace*{-10mm}
-    \begin{figure}
-    \centering  
-  \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
-      \caption[Jupyter - Diagrama de Sequencia]{Jupyter - Diagrama de Sequencia}
-  \end{figure}  
-\end{frame}
-
 
 \begin{frame}[plain]
   \hspace*{-10mm}
@@ -833,7 +881,6 @@ pandemia da COVID-19}
       \caption[Monitoramento deploy]{Monitoramento - Diagrama de Deploy}
   \end{figure}  
 \end{frame}
-
 
 \begin{frame}[plain]
   \hspace*{-10mm}
@@ -847,8 +894,18 @@ pandemia da COVID-19}
 \begin{frame}[plain]
   \hspace*{-10mm}
   \begin{figure}
-    \centering  
-  \includegraphics[width=.85\paperwidth]{etl_process.png}
+    \begin{center}
+      % \includegraphics[width=.85\paperwidth]{jupyter_sequence.png}
+      \begin{overprint}
+        \onslide<1>\includegraphics[width=1\textwidth]{flow-1.png}
+        \onslide<2>\includegraphics[width=1\textwidth]{flow-2.png}
+        \onslide<3>\includegraphics[width=1\textwidth]{flow-3.png}
+        \onslide<4>\includegraphics[width=1\textwidth]{flow-4.png}
+        \onslide<5>\includegraphics[width=1\textwidth]{flow-5.png}
+        \onslide<6>\includegraphics[width=1\textwidth]{flow-6.png}
+        \onslide<7->\includegraphics[width=1\textwidth]{flow-7.png}
+      \end{overprint}
+    \end{center}  
       \caption{Processo ETL - Diagrama de Fluxo}
   \end{figure}  
 \end{frame}
@@ -859,29 +916,36 @@ pandemia da COVID-19}
     \begin{itemize}
       \item Tempo de configuração inicial
       \begin{itemize}
-        \item sem imagem personalizada: 2 dias
         \item cloud-init: 2h (possivel redução  se utilizado imagens em rede)
       \end{itemize}
     \end{itemize}
     \begin{itemize}
       \item Tempo de configuração cluster
         \begin{itemize}
-          \item configuração total manual: $ >> 12h$
-          \item ansible: $20-35m$
-          \item helm (deploy aplicação) + terraform (orquestração de deploy): $10-25m$
+          \item automação de configuração Ansible: $20-35m$
+          \item Helm (deploy aplicação) + Terraform (orquestração de deploy): $10-25m$
         \end{itemize}
     \end{itemize}
     \item Execussão dos job ($2GB$ de RAM e $1CPU$, $90$ pods):
     \begin{itemize}
-        \item Tempo de execução serial: $\approx 18h$
-        \item Tempo de execução (orquestrador) em paralelo: $\approx 53m$ 
+        \item Tempo ingestão dos dados: $\approx 53m$ 
     \end{itemize}
-    \item Lead Time:
-    \begin{itemize}
-        \item Tempo de deploy Airflow DAG: $3-6m$
-        \item Tempo de deploy JupyterLab: $4-10m$
-    \end{itemize}
+    % \item Lead Time:
+    % \begin{itemize}
+    %     \item Tempo de deploy Airflow DAG: $3-6m$
+    %     \item Tempo de deploy JupyterLab: $4-10m$
+    % \end{itemize}
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}[plain]
+  \hspace*{-10mm}
+  \begin{figure}
+    \centering  
+  \includegraphics[width=.75\paperwidth]{s3_size.png}
+      \caption{S3 Lista de arquivos}
+  \end{figure}  
 \end{frame}
 
 \begin{frame}[plain]
@@ -902,14 +966,6 @@ pandemia da COVID-19}
   \end{figure}  
 \end{frame}
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-  \begin{figure}
-    \centering  
-  \includegraphics[width=.75\paperwidth]{s3_size.png}
-      \caption{S3 Lista de arquivos}
-  \end{figure}  
-\end{frame}
 
 \subsection{Resultados do Monitoramento}
 
@@ -931,23 +987,23 @@ pandemia da COVID-19}
   \end{figure}  
 \end{frame}
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-    \begin{figure}
-    \centering  
-  \includegraphics[width=.75\paperwidth]{etl_2_usage.png}
-      \caption[Monitoramento execução 2]{Monitoramento execução 2}
-  \end{figure}  
-\end{frame}
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.75\paperwidth]{etl_2_usage.png}
+%       \caption[Monitoramento execução 2]{Monitoramento execução 2}
+%   \end{figure}  
+% \end{frame}
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-    \begin{figure}
-    \centering  
-  \includegraphics[width=.75\paperwidth]{etl_3_usage.png}
-      \caption[Monitoramento execução 3]{Monitoramento execução 3}
-  \end{figure}  
-\end{frame}
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.75\paperwidth]{etl_3_usage.png}
+%       \caption[Monitoramento execução 3]{Monitoramento execução 3}
+%   \end{figure}  
+% \end{frame}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
@@ -972,31 +1028,32 @@ pandemia da COVID-19}
 
     \begin{itemize}
       \item Total de prescrições 95.345.640 
-      \item População:
-      \begin{itemize}
-        \item Maioria sexo femnino: $53,62\%$
-        \item Idade: $\bar{x} = 32,75 \pm 2,04$
-      \end{itemize}
+      % \item População:
+      % \begin{itemize}
+      %   \item Maioria sexo femnino: $53,62\%$
+      %   \item Idade: $\bar{x} = 32,75 \pm 2,04$
+      % \end{itemize}
+      \item Aumento de prescrições de $+32,1\%$ (2014-2020)
+      \item Prescrições por $1000 hab$: $+26,59\%$ (2014-2020)
+      
       \item Regiões:
         \begin{itemize}
           \item Sudeste: $47,44\%$ $\{MG: 13,17,SP: 24,76\%\}$
           \item Sul: $22,47\%$ $\{RS: 12,49\%\}$
         \end{itemize}
-      \item Aumento de prescrições de $+32,1\%$ (2014-2020)
-      \item Prescrições por $1000 hab$: $+26,59\%$ (2014-2020)
       \item Estados destaque para aumento:  Minas Gerais ($+125,38\%$), Rondônia ($+191,73\%$ e Roraima ($+168,27\%$))
     \end{itemize}
 \end{frame}
 
 
-\begin{frame}[plain]
-  \hspace*{-10mm}
-    \begin{figure}
-    \centering  
-  \includegraphics[width=.6\paperwidth]{distribuicao_sexo.png}
-      \caption{Pescrição por sexo por UF}
-  \end{figure}  
-\end{frame}
+% \begin{frame}[plain]
+%   \hspace*{-10mm}
+%     \begin{figure}
+%     \centering  
+%   \includegraphics[width=.6\paperwidth]{distribuicao_sexo.png}
+%       \caption{Pescrição por sexo por UF}
+%   \end{figure}  
+% \end{frame}
 
 \begin{frame}[plain]
   \hspace*{-10mm}
@@ -1032,7 +1089,6 @@ pandemia da COVID-19}
       TO                              & 0.87                         & 0.017                            \\ \hline
       \end{tabular}
       \end{table}
-
 \end{frame}
 
 % -- 
